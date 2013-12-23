@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
+        caption="msg://editCaption"
+        class="akkount.gui.category.CategoryEdit"
+        datasource="categoryDs"
+        messagesPack="akkount.gui.category">
+    <dsContext>
+        <datasource id="categoryDs"
+                    class="akkount.entity.Category"
+                    view="_local"/>
+    </dsContext>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="categoryDs">
+            <field id="name"
+                   width="250px"/>
+            <field id="description"
+                   width="250px"/>
+        </fieldGroup>
+        <iframe id="windowActions"
+                height="100%"
+                screen="editWindowActions"/>
+    </layout>
+</window>

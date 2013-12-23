@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<screen-config xmlns="http://schemas.haulmont.com/cuba/5.0/screens.xsd">
+    <screen id="akk$Currency.lookup"
+            template="akkount/gui/currency/currency-browse.xml"/>
+    <screen id="akk$Currency.edit"
+            template="akkount/gui/currency/currency-edit.xml"/>
+    <screen id="akk$Category.lookup"
+            template="akkount/gui/category/category-browse.xml"/>
+    <screen id="akk$Category.edit"
+            template="akkount/gui/category/category-edit.xml"/>
+</screen-config>

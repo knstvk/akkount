@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             version="1.0">
+    <persistence-unit name="akkount"
+                      transaction-type="RESOURCE_LOCAL">
+        <class>akkount.entity.Account</class>
+        <class>akkount.entity.Trans</class>
+        <class>akkount.entity.Currency</class>
+        <class>akkount.entity.Balance</class>
+        <class>akkount.entity.Category</class>
+    </persistence-unit>
+</persistence>

@@ -1,0 +1,8 @@
+.gradle
+*.ipr
+*.iml
+*.iws
+build/*
+modules/*/build/*
+out
+test-run

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
+        caption="msg://editCaption"
+        class="akkount.gui.currency.CurrencyEdit"
+        datasource="currencyDs"
+        messagesPack="akkount.gui.currency">
+    <dsContext>
+        <datasource id="currencyDs"
+                    class="akkount.entity.Currency"
+                    view="_local"/>
+    </dsContext>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="currencyDs">
+            <field id="code"
+                   width="250px"/>
+            <field id="name"
+                   width="250px"/>
+        </fieldGroup>
+        <iframe id="windowActions"
+                height="100%"
+                screen="editWindowActions"/>
+    </layout>
+</window>

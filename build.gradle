@@ -1,0 +1,194 @@
+
+allprojects {
+    ext.artifactGroup = 'akkount'
+    ext.artifactVersion = '0.1'
+    ext.isSnapshot = true
+    ext.tomcatDir = "$rootDir/build/tomcat"
+    ext.copyright = "Copyright (c) 2013 akkount" // Copyright Notice for IDEA project
+    // ext.vcs = 'svn' // VCS for IDEA project
+}
+
+buildscript {
+    ext.cubaVersion = '5.0.10'
+    repositories {
+        maven {
+            url 'https://repo.cuba-platform.com/content/groups/work'
+            credentials {
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
+            }
+        }
+    }
+    dependencies {
+        classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
+    }
+}
+
+def globalModule = project(':app-global')
+def coreModule = project(':app-core')
+def guiModule = project(':app-gui')
+def webModule = project(':app-web')
+
+
+
+def hsql = 'org.hsqldb:hsqldb:2.2.9'
+def servletApi = 'org.apache.tomcat:servlet-api:6.0.20'
+
+
+apply(plugin: 'idea')
+apply(plugin: 'cuba')
+
+configure([globalModule, coreModule, guiModule, webModule]) {
+    apply(plugin: 'java')
+    apply(plugin: 'maven')
+    apply(plugin: 'idea')
+    apply(plugin: 'cuba')
+
+    dependencies {
+        testCompile('junit:junit:4.5')
+    }
+
+    task sourceJar(type: Jar) {
+        from file('src')
+        classifier = 'sources'
+    }
+
+    artifacts {
+        archives sourceJar
+    }
+}
+
+configure(globalModule) {
+    dependencies {
+        compile("com.haulmont.cuba:cuba-global:$cubaVersion")
+
+    }
+
+    task enhance(type: CubaEnhancing) {
+        persistenceXml = "$globalModule.projectDir/src/persistence.xml"
+    }
+}
+
+configure(coreModule) {
+
+    configurations {
+        jdbc
+        dbscripts
+    }
+
+    dependencies {
+        compile(globalModule)
+        provided(servletApi)
+        jdbc(hsql)
+        testRuntime(hsql)
+        compile("com.haulmont.cuba:cuba-core:$cubaVersion")
+        testCompile("com.haulmont.cuba:cuba-core:$cubaVersion:tests")
+        testCompile("com.haulmont.cuba:cuba-shared-lib:$cubaVersion")
+        dbscripts("com.haulmont.cuba:cuba-core:$cubaVersion:db@zip")
+
+    }
+
+    task deploy(dependsOn: assemble, type: CubaDeployment) {
+        appName = 'app-core'
+        appJars('cuba-core', 'cuba-global', 
+                'app-global', 'app-core')
+    }
+
+    task createDb(dependsOn: assemble, description: 'Creates local database', type: CubaDbCreation) {
+        dbms = 'hsql'
+        host = 'localhost'
+        dbName = 'akk'
+        dbUser = 'sa'
+        dbPassword = ''
+    }
+
+    task updateDb(dependsOn: assemble, description: 'Updates local database', type: CubaDbUpdate) {
+        dbms = 'hsql'
+        host = 'localhost'
+        dbName = 'akk'
+        dbUser = 'sa'
+        dbPassword = ''
+    }
+}
+
+configure(guiModule) {
+    dependencies {
+        compile(globalModule)
+        compile("com.haulmont.cuba:cuba-client:$cubaVersion")
+        compile("com.haulmont.cuba:cuba-gui:$cubaVersion")
+
+    }
+
+    task deployConf(type: Copy) {
+        from file('src')
+        include "akkount/**"
+        into "$tomcatDir/conf/app"
+    }
+}
+
+configure(webModule) {
+    configurations {
+        webcontent
+    }
+
+    dependencies {
+        provided(servletApi)
+        compile(globalModule)
+        compile(guiModule)
+        compile("com.haulmont.cuba:cuba-web:$cubaVersion")
+        webcontent("com.haulmont.cuba:cuba-web:$cubaVersion:web@zip")
+        webcontent("com.haulmont.cuba:cuba-web-toolkit:$cubaVersion:web@zip")
+
+    }
+
+    task webArchive(type: Zip) {
+        from file('web')
+        classifier = 'web'
+    }
+
+    artifacts {
+        archives webArchive
+    }
+
+    task deployConf(type: Copy) {
+        from file('src')
+        include "akkount/**"
+        into "$tomcatDir/conf/app"
+    }
+
+    task cleanConf(description: 'Cleans up conf directory') << {
+        def dir = new File(tomcatDir, '/conf/app')
+        if (dir.isDirectory()) {
+            ant.delete(includeemptydirs: true) {
+                fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
+            }
+        }
+    }
+
+    task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
+        appName = 'app'
+        appJars('cuba-web', 'cuba-client', 'cuba-gui', 'cuba-global', 
+                'app-global', 'app-gui', 'app-web')
+    }
+}
+
+
+
+task undeploy(type: Delete, dependsOn: ':app-web:cleanConf') {
+    delete("$tomcatDir/shared")
+    delete("$tomcatDir/webapps/app-core")
+    delete("$tomcatDir/webapps/app")
+}
+
+task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
+    ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
+        not {
+            socket(server: 'localhost', port: '8787')
+        }
+    }
+    start.execute()
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}
