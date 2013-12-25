@@ -49,6 +49,7 @@ create table AKK_BALANCE (
     BALANCE_DATE timestamp not null,
     ACCOUNT_ID varchar(36) not null,
     AMOUNT decimal(19, 2),
+    NEXT_ID varchar(36),
     --
     primary key (ID)
 )^
@@ -70,8 +71,9 @@ create table AKK_CATEGORY (
     primary key (ID)
 )^
 -- end AKK_CATEGORY
--- begin AKK_TRANS
-create table AKK_TRANS (
+
+-- begin AKK_OPERATION
+create table AKK_OPERATION (
     ID varchar(36) not null,
     CREATE_TS timestamp,
     CREATED_BY varchar(50),
@@ -81,7 +83,8 @@ create table AKK_TRANS (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    TX_DATE timestamp not null,
+    OP_TYPE varchar(50) not null,
+    OP_DATE timestamp not null,
     ACC1_ID varchar(36),
     ACC2_ID varchar(36),
     AMOUNT1 decimal(19, 2),
@@ -91,4 +94,4 @@ create table AKK_TRANS (
     --
     primary key (ID)
 )^
--- end AKK_TRANS
+-- end AKK_OPERATION

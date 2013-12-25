@@ -5,6 +5,8 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
+
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToOne;
 @NamePattern("%s|name")
 @Table(name = "AKK_ACCOUNT")
 @Entity(name = "akk$Account")
+@Listeners("akkount.core.entitylisteners.AccountEntityListener")
 public class Account extends StandardEntity {
     @Column(name = "NAME", nullable = false, length = 20)
     protected String name;

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
+        caption="msg://browseCaption"
+        class="akkount.gui.account.AccountBrowse"
+        lookupComponent="accountTable"
+        messagesPack="akkount.gui.account">
+    <dsContext>
+        <collectionDatasource id="accountDs"
+                              class="akkount.entity.Account"
+                              view="account-with-currency">
+            <query>
+                <![CDATA[select e from akk$Account e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <layout expand="accountTable"
+            spacing="true">
+        <filter id="filter"
+                datasource="accountDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="accountTable"
+               height="100%"
+               width="100%">
+            <rows datasource="accountDs"/>
+            <columns>
+                <column id="name"/>
+                <column id="description"/>
+                <column id="currencyCode"/>
+            </columns>
+            <rowsCount/>
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="accountTable.create"/>
+                <button id="editBtn"
+                        action="accountTable.edit"/>
+                <button id="removeBtn"
+                        action="accountTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

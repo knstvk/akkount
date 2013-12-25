@@ -12,12 +12,15 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@Table(name = "AKK_TRANS")
-@Entity(name = "akk$Trans")
-public class Trans extends StandardEntity {
+@Table(name = "AKK_OPERATION")
+@Entity(name = "akk$Operation")
+public class Operation extends StandardEntity {
+    @Column(name = "OP_TYPE", nullable = false)
+    protected String opType;
+
     @Temporal(TemporalType.DATE)
-    @Column(name = "TX_DATE", nullable = false)
-    protected Date date;
+    @Column(name = "OP_DATE", nullable = false)
+    protected Date opDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACC1_ID")
@@ -41,6 +44,22 @@ public class Trans extends StandardEntity {
     protected String comments;
 
     private static final long serialVersionUID = 7040817103549067673L;
+
+    public void setOpType(OperationType opType) {
+        this.opType = opType == null ? null : opType.getId();
+    }
+
+    public OperationType getOpType() {
+        return opType == null ? null : OperationType.fromId(opType);
+    }
+
+    public void setOpDate(Date opDate) {
+        this.opDate = opDate;
+    }
+
+    public Date getOpDate() {
+        return opDate;
+    }
 
     public void setComments(String comments) {
         this.comments = comments;
@@ -91,15 +110,5 @@ public class Trans extends StandardEntity {
     public BigDecimal getAmount2() {
         return amount2;
     }
-
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
 
 }

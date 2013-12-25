@@ -4,7 +4,7 @@
     <persistence-unit name="akkount"
                       transaction-type="RESOURCE_LOCAL">
         <class>akkount.entity.Account</class>
-        <class>akkount.entity.Trans</class>
+        <class>akkount.entity.Operation</class>
         <class>akkount.entity.Currency</class>
         <class>akkount.entity.Balance</class>
         <class>akkount.entity.Category</class>

@@ -8,4 +8,12 @@
             template="akkount/gui/category/category-browse.xml"/>
     <screen id="akk$Category.edit"
             template="akkount/gui/category/category-edit.xml"/>
+    <screen id="akk$Account.lookup"
+            template="akkount/gui/account/account-browse.xml"/>
+    <screen id="akk$Account.edit"
+            template="akkount/gui/account/account-edit.xml"/>
+    <screen id="akk$Operation.lookup"
+            template="akkount/gui/operation/operation-browse.xml"/>
+    <screen id="akk$Operation.edit"
+            template="akkount/gui/operation/operation-edit.xml"/>
 </screen-config>

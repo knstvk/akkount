@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
+        caption="msg://editCaption"
+        class="akkount.gui.operation.OperationEdit"
+        datasource="operationDs"
+        messagesPack="akkount.gui.operation">
+    <dsContext>
+        <datasource id="operationDs"
+                    class="akkount.entity.Operation"
+                    view="operation-edit"/>
+        <collectionDatasource id="categoriesDs"
+                              class="akkount.entity.Category"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from akk$Category e order by e.name]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="accountsDs"
+                              class="akkount.entity.Account"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from akk$Account e order by e.name]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <layout expand="windowActions"
+            spacing="true">
+        <dateField/>
+        <tabSheet id="tabSheet"
+                  width="100%">
+            <tab id="expenseTab"
+                 caption="msg://expenseTab"
+                 margin="true"
+                 spacing="true">
+                <grid spacing="true">
+                    <columns count="2"/>
+                    <rows>
+                        <row>
+                            <label value="msg://amount"/>
+                            <hbox spacing="true">
+                                <textField id="amount1Field"
+                                           datasource="operationDs"
+                                           property="amount1"/>
+                                <label id="currency1Lab"
+                                       align="MIDDLE_LEFT"
+                                       datasource="operationDs"
+                                       property="acc1.currencyCode"/>
+                            </hbox>
+                        </row>
+                        <row>
+                            <label value="msg://category"/>
+                            <lookupPickerField datasource="operationDs"
+                                               optionsDatasource="categoriesDs"
+                                               property="category">
+                                <actions>
+                                    <action id="lookup"/>
+                                    <action id="open"/>
+                                </actions>
+                            </lookupPickerField>
+                        </row>
+                        <row>
+                            <label value="msg://account"/>
+                            <lookupPickerField datasource="operationDs"
+                                               optionsDatasource="accountsDs"
+                                               property="acc1">
+                                <actions>
+                                    <action id="lookup"/>
+                                    <action id="open"/>
+                                </actions>
+                            </lookupPickerField>
+                        </row>
+                        <row>
+                            <label value="msg://comment"/>
+                            <textArea rows="2"/>
+                        </row>
+                    </rows>
+                </grid>
+            </tab>
+            <tab id="incomeTab"
+                 caption="msg://incomeTab"/>
+            <tab id="transferTab"
+                 caption="msg://transferTab"/>
+            <tab id="debtTab"
+                 caption="msg://debtTab"/>
+        </tabSheet>
+        <iframe id="windowActions"
+                height="100%"
+                screen="editWindowActions"/>
+    </layout>
+</window>

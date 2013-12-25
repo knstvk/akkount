@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/5.0/menu.xsd">
+    <menu id="operations"
+          insertBefore="administration">
+        <item id="akk$Operation.lookup"/>
+    </menu>
     <menu id="reference"
           insertBefore="administration">
         <item id="akk$Currency.lookup"/>
         <item id="akk$Category.lookup"/>
+        <item id="akk$Account.lookup"/>
     </menu>
 </menu-config>
