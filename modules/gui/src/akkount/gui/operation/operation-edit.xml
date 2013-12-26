@@ -24,37 +24,47 @@
         </collectionDatasource>
     </dsContext>
     <layout expand="windowActions"
+            margin="true"
             spacing="true">
-        <dateField/>
+        <dateField datasource="operationDs"
+                   property="opDate"/>
         <tabSheet id="tabSheet"
-                  width="100%">
+                  width="397px">
             <tab id="expenseTab"
                  caption="msg://expenseTab"
                  margin="true"
                  spacing="true">
-                <grid spacing="true">
-                    <columns count="2"/>
+                <grid spacing="true"
+                      width="100%">
+                    <columns>
+                        <column flex="0.0"/>
+                        <column flex="1.0"/>
+                    </columns>
                     <rows>
                         <row>
                             <label value="msg://amount"/>
-                            <hbox spacing="true">
+                            <hbox expand="amount1Field"
+                                  spacing="true"
+                                  width="100%">
                                 <textField id="amount1Field"
                                            datasource="operationDs"
-                                           property="amount1"/>
+                                           property="amount1"
+                                           width="100%"/>
                                 <label id="currency1Lab"
                                        align="MIDDLE_LEFT"
                                        datasource="operationDs"
-                                       property="acc1.currencyCode"/>
+                                       property="acc1.currencyCode"
+                                       width="30px"/>
                             </hbox>
                         </row>
                         <row>
                             <label value="msg://category"/>
                             <lookupPickerField datasource="operationDs"
                                                optionsDatasource="categoriesDs"
-                                               property="category">
+                                               property="category"
+                                               width="100%">
                                 <actions>
                                     <action id="lookup"/>
-                                    <action id="open"/>
                                 </actions>
                             </lookupPickerField>
                         </row>
@@ -62,16 +72,17 @@
                             <label value="msg://account"/>
                             <lookupPickerField datasource="operationDs"
                                                optionsDatasource="accountsDs"
-                                               property="acc1">
+                                               property="acc1"
+                                               width="100%">
                                 <actions>
                                     <action id="lookup"/>
-                                    <action id="open"/>
                                 </actions>
                             </lookupPickerField>
                         </row>
                         <row>
                             <label value="msg://comment"/>
-                            <textArea rows="2"/>
+                            <textArea rows="3"
+                                      width="100%"/>
                         </row>
                     </rows>
                 </grid>

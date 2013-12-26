@@ -13,12 +13,7 @@
             </query>
         </collectionDatasource>
     </dsContext>
-    <layout expand="categoryTable"
-            spacing="true">
-        <filter id="filter"
-                datasource="categoryDs">
-            <properties include=".*"/>
-        </filter>
+    <layout spacing="true">
         <table id="categoryTable"
                height="100%"
                width="100%">
@@ -32,6 +27,7 @@
                 <action id="create"/>
                 <action id="edit"/>
                 <action id="remove"/>
+                <action id="refresh"/>
             </actions>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
@@ -41,6 +37,8 @@
                         action="categoryTable.edit"/>
                 <button id="removeBtn"
                         action="categoryTable.remove"/>
+                <button id="refreshBtn"
+                        action="categoryTable.refresh"/>
             </buttonsPanel>
         </table>
     </layout>

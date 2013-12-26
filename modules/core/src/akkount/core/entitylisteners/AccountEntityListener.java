@@ -17,11 +17,15 @@ public class AccountEntityListener
 
     @Override
     public void onBeforeInsert(Account entity) {
-
+        setCurrencyCode(entity);
     }
 
     @Override
     public void onBeforeUpdate(Account entity) {
+        setCurrencyCode(entity);
+    }
 
+    private void setCurrencyCode(Account account) {
+        account.setCurrencyCode(account.getCurrency().getCode());
     }
 }

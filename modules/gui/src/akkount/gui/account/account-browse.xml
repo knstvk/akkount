@@ -13,12 +13,7 @@
             </query>
         </collectionDatasource>
     </dsContext>
-    <layout expand="accountTable"
-            spacing="true">
-        <filter id="filter"
-                datasource="accountDs">
-            <properties include=".*"/>
-        </filter>
+    <layout spacing="true">
         <table id="accountTable"
                height="100%"
                width="100%">
@@ -33,6 +28,7 @@
                 <action id="create"/>
                 <action id="edit"/>
                 <action id="remove"/>
+                <action id="refresh"/>
             </actions>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
@@ -42,6 +38,8 @@
                         action="accountTable.edit"/>
                 <button id="removeBtn"
                         action="accountTable.remove"/>
+                <button id="refreshBtn"
+                        action="accountTable.refresh"/>
             </buttonsPanel>
         </table>
     </layout>
