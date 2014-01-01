@@ -8,12 +8,15 @@ import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
+
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Table(name = "AKK_OPERATION")
 @Entity(name = "akk$Operation")
+@Listeners("akkount.core.entitylisteners.OperationEntityListener")
 public class Operation extends StandardEntity {
     @Column(name = "OP_TYPE", nullable = false)
     protected String opType;
@@ -31,10 +34,10 @@ public class Operation extends StandardEntity {
     protected Account acc2;
 
     @Column(name = "AMOUNT1")
-    protected BigDecimal amount1;
+    protected BigDecimal amount1 = BigDecimal.ZERO;
 
     @Column(name = "AMOUNT2")
-    protected BigDecimal amount2;
+    protected BigDecimal amount2 = BigDecimal.ZERO;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")

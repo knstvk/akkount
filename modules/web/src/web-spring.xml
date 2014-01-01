@@ -1,27 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:task="http://www.springframework.org/schema/task"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
-        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
-
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task">
     <!-- Annotation-based beans -->
     <context:component-scan base-package="akkount"/>
-
     <!-- Background Tasks -->
-
     <!--<bean id="backgroundWorkerScheduler" class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">-->
-        <!--<property name="daemon" value="true"/>-->
-        <!--<property name="poolSize" value="1"/>-->
+    <!--<property name="daemon" value="true"/>-->
+    <!--<property name="poolSize" value="1"/>-->
     <!--</bean>-->
-
     <!--<task:scheduled-tasks scheduler="backgroundWorkerScheduler">-->
-        <!--<task:scheduled ref="cuba_BackgroundWorker_WatchDog" method="cleanupTasks" fixed-delay="2000"/>-->
+    <!--<task:scheduled ref="cuba_BackgroundWorker_WatchDog" method="cleanupTasks" fixed-delay="2000"/>-->
     <!--</task:scheduled-tasks>-->
-
+    <bean class="com.haulmont.cuba.web.sys.remoting.WebRemoteProxyBeanCreator">
+        <property name="clusterInvocationSupport"
+                  ref="cuba_clusterInvocationSupport"/>
+        <property name="remoteServices">
+            <map>
+                <entry key="akk_BalanceService"
+                       value="akkount.service.BalanceService"/>
+            </map>
+        </property>
+    </bean>
 </beans>

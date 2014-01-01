@@ -26,8 +26,11 @@
     <layout expand="windowActions"
             margin="true"
             spacing="true">
-        <dateField datasource="operationDs"
-                   property="opDate"/>
+        <hbox spacing="true">
+            <label value="msg://dateLab"/>
+            <dateField datasource="operationDs"
+                       property="opDate"/>
+        </hbox>
         <tabSheet id="tabSheet"
                   width="397px">
             <tab id="expenseTab"

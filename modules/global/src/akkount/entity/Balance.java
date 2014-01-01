@@ -24,7 +24,7 @@ public class Balance extends StandardEntity {
     protected Account account;
 
     @Column(name = "AMOUNT")
-    protected BigDecimal amount;
+    protected BigDecimal amount = BigDecimal.ZERO;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "NEXT_ID")
