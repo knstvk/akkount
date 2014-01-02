@@ -76,6 +76,11 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         }
     }
 
+    private static void checkEquality(BigDecimal expected, BigDecimal actual) {
+        assertTrue(String.format("%s expected, %s actual", expected.toString(), actual.toString()),
+                expected.compareTo(actual) == 0);
+    }
+
     private void checkBalanceRecord(Date day, BigDecimal amount) {
         Transaction tx = persistence.createTransaction();
         try {
@@ -86,7 +91,7 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
             query.setParameter(2, day);
             Balance balance = query.getFirstResult();
             assertNotNull("Balance record doesn't exist", balance);
-            assertTrue(amount.compareTo(balance.getAmount()) == 0);
+            checkEquality(amount, balance.getAmount());
 
             tx.commit();
         } finally {
@@ -100,28 +105,45 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         BigDecimal balance = balanceService.getBalance(accountId, date("2014-01-01"));
         assertEquals(BigDecimal.ZERO, balance);
 
+        ///////////////////////////////////////////////////
+
         income(date("2014-01-01"), BigDecimal.TEN);
         checkBalanceRecord(date("2014-02-01"), BigDecimal.TEN);
 
         balance = balanceService.getBalance(accountId, date("2014-01-02"));
-        assertTrue(BigDecimal.TEN.compareTo(balance) == 0);
+        checkEquality(BigDecimal.TEN, balance);
 
         balance = balanceService.getBalance(accountId, date("2014-02-01"));
-        assertTrue(BigDecimal.TEN.compareTo(balance) == 0);
+        checkEquality(BigDecimal.TEN, balance);
 
         balance = balanceService.getBalance(accountId, date("2014-02-02"));
-        assertTrue(BigDecimal.TEN.compareTo(balance) == 0);
+        checkEquality(BigDecimal.TEN, balance);
+
+        ///////////////////////////////////////////////////
 
         expense(date("2014-01-01"), BigDecimal.ONE);
 
         balance = balanceService.getBalance(accountId, date("2014-01-02"));
-        assertTrue(new BigDecimal("9").compareTo(balance) == 0);
+        checkEquality(new BigDecimal("9"), balance);
 
         balance = balanceService.getBalance(accountId, date("2014-02-01"));
-        assertTrue(new BigDecimal("9").compareTo(balance) == 0);
+        checkEquality(new BigDecimal("9"), balance);
 
         balance = balanceService.getBalance(accountId, date("2014-02-02"));
-        assertTrue(new BigDecimal("9").compareTo(balance) == 0);
+        checkEquality(new BigDecimal("9"), balance);
 
+        ///////////////////////////////////////////////////
+
+        income(date("2014-02-05"), BigDecimal.TEN);
+        checkBalanceRecord(date("2014-03-01"), new BigDecimal("19"));
+
+        balance = balanceService.getBalance(accountId, date("2014-02-04"));
+        checkEquality(new BigDecimal("9"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-02-05"));
+        checkEquality(new BigDecimal("19"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-04-10"));
+        checkEquality(new BigDecimal("19"), balance);
     }
 }

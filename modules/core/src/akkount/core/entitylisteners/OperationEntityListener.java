@@ -4,6 +4,7 @@
 
 package akkount.core.entitylisteners;
 
+import akkount.entity.Account;
 import akkount.entity.Balance;
 import akkount.entity.Operation;
 import com.haulmont.cuba.core.EntityManager;
@@ -14,6 +15,7 @@ import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 import org.apache.commons.lang.time.DateUtils;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -55,7 +57,8 @@ public class OperationEntityListener
         if (list.isEmpty()) {
             Balance balance = new Balance();
             balance.setAccount(operation.getAcc1());
-            balance.setAmount(operation.getAmount1().negate());
+            balance.setAmount(operation.getAmount1().negate()
+                    .add(previousBalanceAmount(operation.getAcc1(), operation.getOpDate())));
             balance.setBalanceDate(nextBalanceDate(operation.getOpDate()));
             em.persist(balance);
         } else {
@@ -78,7 +81,8 @@ public class OperationEntityListener
         if (list.isEmpty()) {
             Balance balance = new Balance();
             balance.setAccount(operation.getAcc2());
-            balance.setAmount(operation.getAmount2());
+            balance.setAmount(operation.getAmount2()
+                    .add(previousBalanceAmount(operation.getAcc2(), operation.getOpDate())));
             balance.setBalanceDate(nextBalanceDate(operation.getOpDate()));
             em.persist(balance);
         } else {
@@ -86,6 +90,17 @@ public class OperationEntityListener
                 balance.setAmount(balance.getAmount().add(operation.getAmount2()));
             }
         }
+    }
+
+    private BigDecimal previousBalanceAmount(Account account, Date opDate) {
+        Date prevBalanceDate = DateUtils.addMonths(DateUtils.ceiling(opDate, Calendar.MONTH), -1);
+        EntityManager em = persistence.getEntityManager();
+        TypedQuery<Balance> query = em.createQuery("select b from akk$Balance b " +
+                "where b.account.id = ?1 and b.balanceDate = ?2", Balance.class);
+        query.setParameter(1, account.getId());
+        query.setParameter(2, prevBalanceDate);
+        Balance prevBalance = query.getFirstResult();
+        return prevBalance == null ? BigDecimal.ZERO : prevBalance.getAmount();
     }
 
     private Date nextBalanceDate(Date opDate) {
