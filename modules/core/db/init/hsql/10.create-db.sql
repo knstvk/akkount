@@ -13,10 +13,10 @@ create table AKK_ACCOUNT (
     DESCRIPTION varchar(100),
     CURRENCY_ID varchar(36) not null,
     CURRENCY_CODE varchar(3) not null,
+    ACTIVE boolean,
     --
     primary key (ID)
-)^
--- end AKK_ACCOUNT
+)^-- end AKK_ACCOUNT
 
 -- begin AKK_CURRENCY
 create table AKK_CURRENCY (
@@ -49,7 +49,6 @@ create table AKK_BALANCE (
     BALANCE_DATE timestamp not null,
     ACCOUNT_ID varchar(36) not null,
     AMOUNT decimal(19, 2),
-    NEXT_ID varchar(36),
     --
     primary key (ID)
 )^

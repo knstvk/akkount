@@ -17,7 +17,7 @@
         </collectionDatasource>
         <collectionDatasource id="accountsDs"
                               class="akkount.entity.Account"
-                              view="_minimal">
+                              view="_local">
             <query>
                 <![CDATA[select e from akk$Account e order by e.name]]>
             </query>
@@ -37,63 +37,23 @@
                  caption="msg://expenseTab"
                  margin="true"
                  spacing="true">
-                <grid spacing="true"
-                      width="100%">
-                    <columns>
-                        <column flex="0.0"/>
-                        <column flex="1.0"/>
-                    </columns>
-                    <rows>
-                        <row>
-                            <label value="msg://amount"/>
-                            <hbox expand="amount1Field"
-                                  spacing="true"
-                                  width="100%">
-                                <textField id="amount1Field"
-                                           datasource="operationDs"
-                                           property="amount1"
-                                           width="100%"/>
-                                <label id="currency1Lab"
-                                       align="MIDDLE_LEFT"
-                                       datasource="operationDs"
-                                       property="acc1.currencyCode"
-                                       width="30px"/>
-                            </hbox>
-                        </row>
-                        <row>
-                            <label value="msg://category"/>
-                            <lookupPickerField datasource="operationDs"
-                                               optionsDatasource="categoriesDs"
-                                               property="category"
-                                               width="100%">
-                                <actions>
-                                    <action id="lookup"/>
-                                </actions>
-                            </lookupPickerField>
-                        </row>
-                        <row>
-                            <label value="msg://account"/>
-                            <lookupPickerField datasource="operationDs"
-                                               optionsDatasource="accountsDs"
-                                               property="acc1"
-                                               width="100%">
-                                <actions>
-                                    <action id="lookup"/>
-                                </actions>
-                            </lookupPickerField>
-                        </row>
-                        <row>
-                            <label value="msg://comment"/>
-                            <textArea rows="3"
-                                      width="100%"/>
-                        </row>
-                    </rows>
-                </grid>
+                <iframe id="expenseFrame"
+                        screen="expense-frame"/>
             </tab>
             <tab id="incomeTab"
-                 caption="msg://incomeTab"/>
+                 caption="msg://incomeTab"
+                 margin="true"
+                 spacing="true">
+                <iframe id="incomeFrame"
+                        screen="income-frame"/>
+            </tab>
             <tab id="transferTab"
-                 caption="msg://transferTab"/>
+                 caption="msg://transferTab"
+                 margin="true"
+                 spacing="true">
+                <iframe id="transferFrame"
+                        screen="transfer-frame"/>
+            </tab>
             <tab id="debtTab"
                  caption="msg://debtTab"/>
         </tabSheet>

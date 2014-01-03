@@ -29,7 +29,19 @@ public class Account extends StandardEntity {
     @Column(name = "CURRENCY_CODE", nullable = false, length = 3)
     protected String currencyCode;
 
+    @Column(name = "ACTIVE")
+    protected Boolean active = true;
+
     private static final long serialVersionUID = 1024314820562143050L;
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
 
     public void setCurrency(Currency currency) {
         this.currency = currency;

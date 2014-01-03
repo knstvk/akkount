@@ -22,6 +22,7 @@
                 <column id="name"/>
                 <column id="description"/>
                 <column id="currencyCode"/>
+                <column id="active"/>
             </columns>
             <rowsCount/>
             <actions>

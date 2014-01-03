@@ -6,8 +6,6 @@ create index IDX_AKK_ACCOUNT_CURRENCY on AKK_ACCOUNT (CURRENCY_ID)^
 
 -- begin AKK_BALANCE
 alter table AKK_BALANCE add constraint FK_AKK_BALANCE_ACCOUNT_ID foreign key (ACCOUNT_ID) references AKK_ACCOUNT(ID)^
-alter table AKK_BALANCE add constraint FK_AKK_BALANCE_NEXT_ID foreign key (NEXT_ID) references AKK_BALANCE(ID)^
-create index IDX_AKK_BALANCE_NEXT on AKK_BALANCE (NEXT_ID)^
 create index IDX_AKK_BALANCE_ACCOUNT on AKK_BALANCE (ACCOUNT_ID)^
 -- end AKK_BALANCE
 

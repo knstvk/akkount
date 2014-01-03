@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
+        caption=""
+        class="akkount.gui.operation.TransferFrame"
+        messagesPack="akkount.gui.operation">
+    <dsContext/>
+    <layout>
+        <grid spacing="true"
+              width="100%">
+            <columns>
+                <column flex="0.0"/>
+                <column flex="1.0"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="msg://account1"/>
+                    <lookupPickerField id="account1Field"
+                                       datasource="operationDs"
+                                       optionsDatasource="accountsDs"
+                                       property="acc1"
+                                       width="100%">
+                        <actions>
+                            <action id="lookup"/>
+                        </actions>
+                    </lookupPickerField>
+                </row>
+                <row>
+                    <label value="msg://amount1"/>
+                    <hbox expand="amount1Field"
+                          spacing="true"
+                          width="100%">
+                        <textField id="amount1Field"
+                                   datasource="operationDs"
+                                   property="amount1"
+                                   width="100%"/>
+                        <label id="currency1Lab"
+                               align="MIDDLE_LEFT"
+                               width="30px"/>
+                    </hbox>
+                </row>
+                <row>
+                    <label value="msg://account2"/>
+                    <lookupPickerField id="account2Field"
+                                       datasource="operationDs"
+                                       optionsDatasource="accountsDs"
+                                       property="acc2"
+                                       width="100%">
+                        <actions>
+                            <action id="lookup"/>
+                        </actions>
+                    </lookupPickerField>
+                </row>
+                <row>
+                    <label value="msg://amount2"/>
+                    <hbox expand="amount2Field"
+                          spacing="true"
+                          width="100%">
+                        <textField id="amount2Field"
+                                   datasource="operationDs"
+                                   property="amount2"
+                                   width="100%"/>
+                        <label id="currency2Lab"
+                               align="MIDDLE_LEFT"
+                               width="30px"/>
+                    </hbox>
+                </row>
+                <row>
+                    <label value="msg://comment"/>
+                    <textArea datasource="operationDs"
+                              property="comments"
+                              rows="3"
+                              width="100%"/>
+                </row>
+            </rows>
+        </grid>
+    </layout>
+</window>

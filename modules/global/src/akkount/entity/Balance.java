@@ -26,19 +26,9 @@ public class Balance extends StandardEntity {
     @Column(name = "AMOUNT")
     protected BigDecimal amount = BigDecimal.ZERO;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "NEXT_ID")
-    protected Balance next;
-
     private static final long serialVersionUID = 918143020139005638L;
 
-    public void setNext(Balance next) {
-        this.next = next;
-    }
 
-    public Balance getNext() {
-        return next;
-    }
 
 
     public void setBalanceDate(Date balanceDate) {

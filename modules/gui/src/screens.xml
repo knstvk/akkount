@@ -16,4 +16,10 @@
             template="akkount/gui/operation/operation-browse.xml"/>
     <screen id="akk$Operation.edit"
             template="akkount/gui/operation/operation-edit.xml"/>
+    <screen id="transfer-frame"
+            template="akkount/gui/operation/transfer-frame.xml"/>
+    <screen id="expense-frame"
+            template="akkount/gui/operation/expense-frame.xml"/>
+    <screen id="income-frame"
+            template="akkount/gui/operation/income-frame.xml"/>
 </screen-config>
