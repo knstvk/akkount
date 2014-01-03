@@ -1,6 +1,5 @@
-package akkount.gui.operation;
+package akkount.web.operation;
 
-import com.haulmont.cuba.gui.components.AbstractWindow;
 import java.util.Map;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 

@@ -1,4 +1,4 @@
-package akkount.gui.category;
+package akkount.web.currency;
 
 import java.util.Map;
 
@@ -9,12 +9,12 @@ import com.haulmont.cuba.gui.components.actions.EditAction;
 
 import javax.inject.Named;
 
-public class CategoryBrowse extends AbstractLookup {
+public class CurrencyBrowse extends AbstractLookup {
 
-    @Named("categoryTable.create")
+    @Named("currencyTable.create")
     private CreateAction createAction;
 
-    @Named("categoryTable.edit")
+    @Named("currencyTable.edit")
     private EditAction editAction;
 
     @Override

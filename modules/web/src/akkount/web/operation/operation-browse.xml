@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
         caption="msg://browseCaption"
-        class="akkount.gui.operation.OperationBrowse"
+        class="akkount.web.operation.OperationBrowse"
         lookupComponent="operationTable"
-        messagesPack="akkount.gui.operation">
+        messagesPack="akkount.web.operation">
     <dsContext>
         <collectionDatasource id="operationDs"
                               class="akkount.entity.Operation"

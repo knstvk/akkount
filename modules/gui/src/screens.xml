@@ -1,25 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <screen-config xmlns="http://schemas.haulmont.com/cuba/5.0/screens.xsd">
-    <screen id="akk$Currency.lookup"
-            template="akkount/gui/currency/currency-browse.xml"/>
-    <screen id="akk$Currency.edit"
-            template="akkount/gui/currency/currency-edit.xml"/>
-    <screen id="akk$Category.lookup"
-            template="akkount/gui/category/category-browse.xml"/>
-    <screen id="akk$Category.edit"
-            template="akkount/gui/category/category-edit.xml"/>
-    <screen id="akk$Account.lookup"
-            template="akkount/gui/account/account-browse.xml"/>
-    <screen id="akk$Account.edit"
-            template="akkount/gui/account/account-edit.xml"/>
-    <screen id="akk$Operation.lookup"
-            template="akkount/gui/operation/operation-browse.xml"/>
-    <screen id="akk$Operation.edit"
-            template="akkount/gui/operation/operation-edit.xml"/>
-    <screen id="transfer-frame"
-            template="akkount/gui/operation/transfer-frame.xml"/>
-    <screen id="expense-frame"
-            template="akkount/gui/operation/expense-frame.xml"/>
-    <screen id="income-frame"
-            template="akkount/gui/operation/income-frame.xml"/>
+
 </screen-config>

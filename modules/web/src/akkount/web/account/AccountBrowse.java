@@ -1,4 +1,4 @@
-package akkount.gui.account;
+package akkount.web.account;
 
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;

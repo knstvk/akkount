@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
         caption="msg://browseCaption"
-        class="akkount.gui.account.AccountBrowse"
-        lookupComponent="accountTable"
-        messagesPack="akkount.gui.account">
+        class="akkount.web.currency.CurrencyBrowse"
+        lookupComponent="currencyTable"
+        messagesPack="akkount.web.currency">
     <dsContext>
-        <collectionDatasource id="accountDs"
-                              class="akkount.entity.Account"
-                              view="account-with-currency">
+        <collectionDatasource id="currencyDs"
+                              class="akkount.entity.Currency"
+                              view="_local">
             <query>
-                <![CDATA[select e from akk$Account e]]>
+                <![CDATA[select e from akk$Currency e]]>
             </query>
         </collectionDatasource>
     </dsContext>
     <layout spacing="true">
-        <table id="accountTable"
+        <table id="currencyTable"
                height="100%"
                width="100%">
-            <rows datasource="accountDs"/>
+            <rows datasource="currencyDs"/>
             <columns>
+                <column id="code"/>
                 <column id="name"/>
-                <column id="description"/>
-                <column id="currencyCode"/>
-                <column id="active"/>
             </columns>
             <rowsCount/>
             <actions>
@@ -34,13 +32,13 @@
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"
-                        action="accountTable.create"/>
+                        action="currencyTable.create"/>
                 <button id="editBtn"
-                        action="accountTable.edit"/>
+                        action="currencyTable.edit"/>
                 <button id="removeBtn"
-                        action="accountTable.remove"/>
+                        action="currencyTable.remove"/>
                 <button id="refreshBtn"
-                        action="accountTable.refresh"/>
+                        action="currencyTable.refresh"/>
             </buttonsPanel>
         </table>
     </layout>

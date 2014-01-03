@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
         caption="msg://browseCaption"
-        class="akkount.gui.currency.CurrencyBrowse"
-        lookupComponent="currencyTable"
-        messagesPack="akkount.gui.currency">
+        class="akkount.web.category.CategoryBrowse"
+        lookupComponent="categoryTable"
+        messagesPack="akkount.web.category">
     <dsContext>
-        <collectionDatasource id="currencyDs"
-                              class="akkount.entity.Currency"
+        <collectionDatasource id="categoryDs"
+                              class="akkount.entity.Category"
                               view="_local">
             <query>
-                <![CDATA[select e from akk$Currency e]]>
+                <![CDATA[select e from akk$Category e]]>
             </query>
         </collectionDatasource>
     </dsContext>
     <layout spacing="true">
-        <table id="currencyTable"
+        <table id="categoryTable"
                height="100%"
                width="100%">
-            <rows datasource="currencyDs"/>
+            <rows datasource="categoryDs"/>
             <columns>
-                <column id="code"/>
                 <column id="name"/>
+                <column id="description"/>
             </columns>
             <rowsCount/>
             <actions>
@@ -32,13 +32,13 @@
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"
-                        action="currencyTable.create"/>
+                        action="categoryTable.create"/>
                 <button id="editBtn"
-                        action="currencyTable.edit"/>
+                        action="categoryTable.edit"/>
                 <button id="removeBtn"
-                        action="currencyTable.remove"/>
+                        action="categoryTable.remove"/>
                 <button id="refreshBtn"
-                        action="currencyTable.refresh"/>
+                        action="categoryTable.refresh"/>
             </buttonsPanel>
         </table>
     </layout>

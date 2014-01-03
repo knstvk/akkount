@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
         caption="msg://browseCaption"
-        class="akkount.gui.category.CategoryBrowse"
-        lookupComponent="categoryTable"
-        messagesPack="akkount.gui.category">
+        class="akkount.web.account.AccountBrowse"
+        lookupComponent="accountTable"
+        messagesPack="akkount.web.account">
     <dsContext>
-        <collectionDatasource id="categoryDs"
-                              class="akkount.entity.Category"
-                              view="_local">
+        <collectionDatasource id="accountDs"
+                              class="akkount.entity.Account"
+                              view="account-with-currency">
             <query>
-                <![CDATA[select e from akk$Category e]]>
+                <![CDATA[select e from akk$Account e]]>
             </query>
         </collectionDatasource>
     </dsContext>
     <layout spacing="true">
-        <table id="categoryTable"
+        <table id="accountTable"
                height="100%"
                width="100%">
-            <rows datasource="categoryDs"/>
+            <rows datasource="accountDs"/>
             <columns>
                 <column id="name"/>
                 <column id="description"/>
+                <column id="currencyCode"/>
+                <column id="active"/>
             </columns>
             <rowsCount/>
             <actions>
@@ -32,13 +34,13 @@
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"
-                        action="categoryTable.create"/>
+                        action="accountTable.create"/>
                 <button id="editBtn"
-                        action="categoryTable.edit"/>
+                        action="accountTable.edit"/>
                 <button id="removeBtn"
-                        action="categoryTable.remove"/>
+                        action="accountTable.remove"/>
                 <button id="refreshBtn"
-                        action="categoryTable.refresh"/>
+                        action="accountTable.refresh"/>
             </buttonsPanel>
         </table>
     </layout>

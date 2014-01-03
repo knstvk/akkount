@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
         caption="msg://editCaption"
-        class="akkount.gui.currency.CurrencyEdit"
+        class="akkount.web.currency.CurrencyEdit"
         datasource="currencyDs"
-        messagesPack="akkount.gui.currency">
+        messagesPack="akkount.web.currency">
     <dsContext>
         <datasource id="currencyDs"
                     class="akkount.entity.Currency"

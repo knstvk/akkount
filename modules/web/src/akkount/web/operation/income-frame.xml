@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
         caption=""
-        class="akkount.gui.operation.IncomeFrame"
-        messagesPack="akkount.gui.operation">
+        class="akkount.web.operation.IncomeFrame"
+        messagesPack="akkount.web.operation">
     <dsContext/>
     <layout>
         <grid spacing="true"

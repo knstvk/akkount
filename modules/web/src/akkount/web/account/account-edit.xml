@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
         caption="msg://editCaption"
-        class="akkount.gui.account.AccountEdit"
+        class="akkount.web.account.AccountEdit"
         datasource="accountDs"
-        messagesPack="akkount.gui.account">
+        messagesPack="akkount.web.account">
     <dsContext>
         <datasource id="accountDs"
                     class="akkount.entity.Account"

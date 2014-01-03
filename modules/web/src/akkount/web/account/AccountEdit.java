@@ -1,4 +1,4 @@
-package akkount.gui.account;
+package akkount.web.account;
 
 import java.util.Map;
 import com.haulmont.cuba.gui.components.AbstractEditor;

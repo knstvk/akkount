@@ -1,10 +1,10 @@
-package akkount.gui.currency;
+package akkount.web.category;
 
 import java.util.Map;
 import com.haulmont.cuba.gui.components.AbstractEditor;
-import akkount.entity.Currency;
+import akkount.entity.Category;
 
-public class CurrencyEdit extends AbstractEditor<Currency> {
+public class CategoryEdit extends AbstractEditor<Category> {
 
     @Override
     public void init(Map<String, Object> params) {

@@ -1,4 +1,4 @@
-package akkount.gui.operation;
+package akkount.web.operation;
 
 import java.util.Calendar;
 import java.util.Map;
