@@ -30,4 +30,12 @@
         <property name="category"
                   view="_minimal"/>
     </view>
+    <view class="akkount.entity.Operation"
+          extends="_local"
+          name="operation-with-accounts">
+        <property name="acc1"
+                  view="_minimal"/>
+        <property name="acc2"
+                  view="_minimal"/>
+    </view>
 </views>

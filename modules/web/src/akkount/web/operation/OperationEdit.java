@@ -1,21 +1,25 @@
 package akkount.web.operation;
 
-import java.util.Calendar;
-import java.util.Map;
-
+import akkount.entity.Operation;
 import akkount.entity.OperationType;
-import com.haulmont.cuba.core.global.DevelopmentException;
+import akkount.web.App;
+import akkount.web.LeftPanel;
+import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.components.*;
-import akkount.entity.Operation;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.DsContext;
 import com.haulmont.cuba.gui.data.impl.DsListenerAdapter;
 import org.apache.commons.lang.time.DateUtils;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Calendar;
+import java.util.Map;
+import java.util.Set;
 
 public class OperationEdit extends AbstractEditor<Operation> {
 
@@ -66,28 +70,6 @@ public class OperationEdit extends AbstractEditor<Operation> {
 
     @Override
     public void init(Map<String, Object> params) {
-        tabSheet.addListener(new TabSheet.TabChangeListener() {
-            @Override
-            public void tabChanged(TabSheet.Tab newTab) {
-                switch (newTab.getName()) {
-                    case "expenseTab":
-                        getItem().setOpType(OperationType.EXPENSE);
-                        break;
-                    case "incomeTab":
-                        getItem().setOpType(OperationType.INCOME);
-                        break;
-                    case "transferTab":
-                        getItem().setOpType(OperationType.TRANSFER);
-                        break;
-                    case "debtTab":
-                        getItem().setOpType(OperationType.DEBT);
-                        break;
-                    default:
-                        throw new DevelopmentException("Invalid tab id: " + newTab.getName());
-                }
-            }
-        });
-
         operationDs.addListener(new DsListenerAdapter<Operation>() {
             @Override
             public void valueChanged(Operation source, String property, @Nullable Object prevValue, @Nullable Object value) {
@@ -104,16 +86,18 @@ public class OperationEdit extends AbstractEditor<Operation> {
                 if ("opType".equals(property)) {
                     OperationType opType = (OperationType) value;
                     if (opType != null) {
-                        account1Field.setRequired(opType == OperationType.EXPENSE);
-                        amount1Field.setRequired(opType == OperationType.EXPENSE);
-                        account2Field.setRequired(opType == OperationType.INCOME);
-                        amount2Field.setRequired(opType == OperationType.INCOME);
-                        transAccount1Field.setRequired(opType == OperationType.TRANSFER);
-                        transAmount1Field.setRequired(opType == OperationType.TRANSFER);
-                        transAccount2Field.setRequired(opType == OperationType.TRANSFER);
-                        transAmount2Field.setRequired(opType == OperationType.TRANSFER);
+                        initRequiredFields(opType);
                     }
                 }
+            }
+        });
+
+        getDsContext().addListener(new DsContext.CommitListenerAdapter() {
+            @Override
+            public void afterCommit(CommitContext context, Set<Entity> result) {
+                LeftPanel leftPanel = App.getLeftPanel();
+                if (leftPanel != null)
+                    leftPanel.refreshBalance();
             }
         });
     }
@@ -123,6 +107,31 @@ public class OperationEdit extends AbstractEditor<Operation> {
         if (PersistenceHelper.isNew(item)) {
             item.setOpType(OperationType.EXPENSE);
             item.setOpDate(DateUtils.truncate(timeSource.currentTimestamp(), Calendar.DAY_OF_MONTH));
+        } else {
+            tabSheet.setTab(item.getOpType().name());
         }
+        initRequiredFields(item.getOpType());
+    }
+
+    @Override
+    protected void postInit() {
+        tabSheet.addListener(new TabSheet.TabChangeListener() {
+            @Override
+            public void tabChanged(TabSheet.Tab newTab) {
+                getItem().setOpType(OperationType.valueOf(newTab.getName()));
+            }
+        });
+
+    }
+
+    private void initRequiredFields(OperationType opType) {
+        account1Field.setRequired(opType == OperationType.EXPENSE);
+        amount1Field.setRequired(opType == OperationType.EXPENSE);
+        account2Field.setRequired(opType == OperationType.INCOME);
+        amount2Field.setRequired(opType == OperationType.INCOME);
+        transAccount1Field.setRequired(opType == OperationType.TRANSFER);
+        transAmount1Field.setRequired(opType == OperationType.TRANSFER);
+        transAccount2Field.setRequired(opType == OperationType.TRANSFER);
+        transAmount2Field.setRequired(opType == OperationType.TRANSFER);
     }
 }

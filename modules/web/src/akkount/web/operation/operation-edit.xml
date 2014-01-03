@@ -33,28 +33,28 @@
         </hbox>
         <tabSheet id="tabSheet"
                   width="397px">
-            <tab id="expenseTab"
+            <tab id="EXPENSE"
                  caption="msg://expenseTab"
                  margin="true"
                  spacing="true">
                 <iframe id="expenseFrame"
                         screen="expense-frame"/>
             </tab>
-            <tab id="incomeTab"
+            <tab id="INCOME"
                  caption="msg://incomeTab"
                  margin="true"
                  spacing="true">
                 <iframe id="incomeFrame"
                         screen="income-frame"/>
             </tab>
-            <tab id="transferTab"
+            <tab id="TRANSFER"
                  caption="msg://transferTab"
                  margin="true"
                  spacing="true">
                 <iframe id="transferFrame"
                         screen="transfer-frame"/>
             </tab>
-            <tab id="debtTab"
+            <tab id="DEBT"
                  caption="msg://debtTab"/>
         </tabSheet>
         <iframe id="windowActions"

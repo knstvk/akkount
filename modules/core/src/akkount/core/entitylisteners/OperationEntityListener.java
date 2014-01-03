@@ -9,8 +9,10 @@ import akkount.entity.Balance;
 import akkount.entity.Operation;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.TypedQuery;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.listener.BeforeDeleteEntityListener;
 import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 import org.apache.commons.lang.time.DateUtils;
@@ -19,13 +21,16 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author krivopustov
  * @version $Id$
  */
-public class OperationEntityListener
-        implements BeforeInsertEntityListener<Operation>, BeforeUpdateEntityListener<Operation> {
+public class OperationEntityListener implements
+        BeforeInsertEntityListener<Operation>,
+        BeforeUpdateEntityListener<Operation>,
+        BeforeDeleteEntityListener<Operation> {
 
     private Persistence persistence = AppBeans.get(Persistence.class);
 
@@ -34,60 +39,97 @@ public class OperationEntityListener
 
     @Override
     public void onBeforeInsert(Operation entity) {
-        updateBalance1(entity);
-        updateBalance2(entity);
+        addOperation(entity);
     }
 
     @Override
     public void onBeforeUpdate(Operation entity) {
-        updateBalance1(entity);
-        updateBalance2(entity);
+        removeOperation(getOldOperation(entity.getId()));
+        addOperation(entity);
     }
 
-    private void updateBalance1(Operation operation) {
-        if (operation.getAcc1() == null)
-            return;
+    private Operation getOldOperation(UUID operationId) {
+        Operation operation;
+        // Get old operation state in separate transaction
+        Transaction tx = persistence.createTransaction();
+        try {
+            EntityManager em = persistence.getEntityManager();
+            operation = em.find(Operation.class, operationId, "operation-with-accounts");
 
+            tx.commit();
+        } finally {
+            tx.end();
+        }
+        return operation;
+    }
+
+    @Override
+    public void onBeforeDelete(Operation entity) {
+        removeOperation(entity);
+    }
+
+    private void removeOperation(Operation operation) {
         EntityManager em = persistence.getEntityManager();
-
         TypedQuery<Balance> query = em.createQuery(BALANCE_QUERY, Balance.class);
-        query.setParameter(1, operation.getAcc1().getId()).setParameter(2, operation.getOpDate());
-        List<Balance> list = query.getResultList();
 
-        if (list.isEmpty()) {
-            Balance balance = new Balance();
-            balance.setAccount(operation.getAcc1());
-            balance.setAmount(operation.getAmount1().negate()
-                    .add(previousBalanceAmount(operation.getAcc1(), operation.getOpDate())));
-            balance.setBalanceDate(nextBalanceDate(operation.getOpDate()));
-            em.persist(balance);
-        } else {
-            for (Balance balance : list) {
-                balance.setAmount(balance.getAmount().subtract(operation.getAmount1()));
+        if (operation.getAcc1() != null) {
+            query.setParameter(1, operation.getAcc1().getId()).setParameter(2, operation.getOpDate());
+            List<Balance> list = query.getResultList();
+            if (!list.isEmpty()) {
+                for (Balance balance : list) {
+                    balance.setAmount(balance.getAmount().add(operation.getAmount1()));
+                }
+            }
+        }
+
+        if (operation.getAcc2() != null) {
+            query.setParameter(1, operation.getAcc2().getId()).setParameter(2, operation.getOpDate());
+            List<Balance> list = query.getResultList();
+            if (!list.isEmpty()) {
+                for (Balance balance : list) {
+                    balance.setAmount(balance.getAmount().subtract(operation.getAmount2()));
+                }
             }
         }
     }
 
-    private void updateBalance2(Operation operation) {
-        if (operation.getAcc2() == null)
-            return;
-
+    private void addOperation(Operation operation) {
         EntityManager em = persistence.getEntityManager();
-
         TypedQuery<Balance> query = em.createQuery(BALANCE_QUERY, Balance.class);
-        query.setParameter(1, operation.getAcc2().getId()).setParameter(2, operation.getOpDate());
-        List<Balance> list = query.getResultList();
 
-        if (list.isEmpty()) {
-            Balance balance = new Balance();
-            balance.setAccount(operation.getAcc2());
-            balance.setAmount(operation.getAmount2()
-                    .add(previousBalanceAmount(operation.getAcc2(), operation.getOpDate())));
-            balance.setBalanceDate(nextBalanceDate(operation.getOpDate()));
-            em.persist(balance);
-        } else {
-            for (Balance balance : list) {
-                balance.setAmount(balance.getAmount().add(operation.getAmount2()));
+        if (operation.getAcc1() != null) {
+            query.setParameter(1, operation.getAcc1().getId()).setParameter(2, operation.getOpDate());
+            List<Balance> list = query.getResultList();
+
+            if (list.isEmpty()) {
+                Balance balance = new Balance();
+                balance.setAccount(operation.getAcc1());
+                balance.setAmount(operation.getAmount1().negate()
+                        .add(previousBalanceAmount(operation.getAcc1(), operation.getOpDate())));
+                balance.setBalanceDate(nextBalanceDate(operation.getOpDate()));
+                em.persist(balance);
+            } else {
+                for (Balance balance : list) {
+                    balance.setAmount(balance.getAmount().subtract(operation.getAmount1()));
+                }
+            }
+        }
+
+        if (operation.getAcc2() != null) {
+            query.setParameter(1, operation.getAcc2().getId()).setParameter(2, operation.getOpDate());
+            List<Balance> list = query.getResultList();
+
+            if (list.isEmpty()) {
+                Balance balance = new Balance();
+                balance.setAccount(operation.getAcc2());
+                balance.setAmount(operation.getAmount2()
+                        .add(previousBalanceAmount(operation.getAcc2(), operation.getOpDate())));
+                balance.setBalanceDate(nextBalanceDate(operation.getOpDate()));
+                em.persist(balance);
+            } else {
+                for (Balance balance : list) {
+                    balance.setAmount(balance.getAmount().add(operation.getAmount2()));
+                }
             }
         }
     }

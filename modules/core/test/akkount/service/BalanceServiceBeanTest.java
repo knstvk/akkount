@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author krivopustov
@@ -38,12 +39,14 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         }
     }
 
-    private void income(Date day, BigDecimal amount) {
+    private UUID income(Date day, BigDecimal amount) {
+        UUID operationId;
         Transaction tx = persistence.createTransaction();
         try {
             EntityManager em = persistence.getEntityManager();
 
             Operation operation = new Operation();
+            operationId = operation.getId();
             operation.setOpType(OperationType.INCOME);
             operation.setOpDate(day);
             operation.setAcc2(em.getReference(Account.class, accountId));
@@ -55,20 +58,81 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         } finally {
             tx.end();
         }
+        return operationId;
     }
 
-    private void expense(Date day, BigDecimal amount) {
+    private UUID expense(Date day, BigDecimal amount) {
+        UUID operationId;
         Transaction tx = persistence.createTransaction();
         try {
             EntityManager em = persistence.getEntityManager();
 
             Operation operation = new Operation();
-            operation.setOpType(OperationType.INCOME);
+            operationId = operation.getId();
+            operation.setOpType(OperationType.EXPENSE);
             operation.setOpDate(day);
             operation.setAcc1(em.getReference(Account.class, accountId));
             operation.setAmount1(amount);
 
             em.persist(operation);
+
+            tx.commit();
+        } finally {
+            tx.end();
+        }
+        return operationId;
+    }
+
+    private void expenseUpdate(UUID operationId, Date day, BigDecimal amount) {
+        Transaction tx = persistence.createTransaction();
+        try {
+            EntityManager em = persistence.getEntityManager();
+
+            Operation operation = em.find(Operation.class, operationId);
+            assertNotNull(operation);
+            operation.setOpType(OperationType.EXPENSE);
+            operation.setOpDate(day);
+            operation.setAcc1(em.getReference(Account.class, accountId));
+            operation.setAcc2(null);
+            operation.setAmount1(amount);
+            operation.setAmount2(BigDecimal.ZERO);
+
+            em.persist(operation);
+
+            tx.commit();
+        } finally {
+            tx.end();
+        }
+    }
+
+    private void incomeUpdate(UUID operationId, Date day, BigDecimal amount) {
+        Transaction tx = persistence.createTransaction();
+        try {
+            EntityManager em = persistence.getEntityManager();
+
+            Operation operation = em.find(Operation.class, operationId);
+            assertNotNull(operation);
+            operation.setOpType(OperationType.INCOME);
+            operation.setOpDate(day);
+            operation.setAcc1(null);
+            operation.setAcc2(em.getReference(Account.class, accountId));
+            operation.setAmount1(BigDecimal.ZERO);
+            operation.setAmount2(amount);
+
+            em.persist(operation);
+
+            tx.commit();
+        } finally {
+            tx.end();
+        }
+    }
+
+    private void removeOperation(UUID operationId) {
+        Transaction tx = persistence.createTransaction();
+        try {
+            EntityManager em = persistence.getEntityManager();
+            Operation operation = em.find(Operation.class, operationId);
+            em.remove(operation);
 
             tx.commit();
         } finally {
@@ -108,6 +172,7 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         ///////////////////////////////////////////////////
 
         income(date("2014-01-01"), BigDecimal.TEN);
+
         checkBalanceRecord(date("2014-02-01"), BigDecimal.TEN);
 
         balance = balanceService.getBalance(accountId, date("2014-01-02"));
@@ -121,7 +186,9 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
 
         ///////////////////////////////////////////////////
 
-        expense(date("2014-01-01"), BigDecimal.ONE);
+        UUID expenseId = expense(date("2014-01-01"), BigDecimal.ONE);
+
+        checkBalanceRecord(date("2014-02-01"), new BigDecimal("9"));
 
         balance = balanceService.getBalance(accountId, date("2014-01-02"));
         checkEquality(new BigDecimal("9"), balance);
@@ -134,7 +201,8 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
 
         ///////////////////////////////////////////////////
 
-        income(date("2014-02-05"), BigDecimal.TEN);
+        UUID incomeId = income(date("2014-02-05"), BigDecimal.TEN);
+
         checkBalanceRecord(date("2014-03-01"), new BigDecimal("19"));
 
         balance = balanceService.getBalance(accountId, date("2014-02-04"));
@@ -145,5 +213,74 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
 
         balance = balanceService.getBalance(accountId, date("2014-04-10"));
         checkEquality(new BigDecimal("19"), balance);
+
+        ///////////////////////////////////////////////////
+
+        removeOperation(incomeId);
+
+        checkBalanceRecord(date("2014-03-01"), new BigDecimal("9"));
+
+        balance = balanceService.getBalance(accountId, date("2014-02-05"));
+        checkEquality(new BigDecimal("9"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-04-10"));
+        checkEquality(new BigDecimal("9"), balance);
+
+        ///////////////////////////////////////////////////
+
+        expenseUpdate(expenseId, date("2014-01-01"), new BigDecimal("2"));
+
+        checkBalanceRecord(date("2014-02-01"), new BigDecimal("8"));
+        checkBalanceRecord(date("2014-03-01"), new BigDecimal("8"));
+
+        balance = balanceService.getBalance(accountId, date("2014-01-02"));
+        checkEquality(new BigDecimal("8"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-02-01"));
+        checkEquality(new BigDecimal("8"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-02-02"));
+        checkEquality(new BigDecimal("8"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-04-10"));
+        checkEquality(new BigDecimal("8"), balance);
+
+        ///////////////////////////////////////////////////
+
+        incomeUpdate(expenseId, date("2014-01-01"), new BigDecimal("20"));
+
+        checkBalanceRecord(date("2014-02-01"), new BigDecimal("30"));
+        checkBalanceRecord(date("2014-03-01"), new BigDecimal("30"));
+
+        balance = balanceService.getBalance(accountId, date("2014-01-02"));
+        checkEquality(new BigDecimal("30"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-02-01"));
+        checkEquality(new BigDecimal("30"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-02-02"));
+        checkEquality(new BigDecimal("30"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-04-10"));
+        checkEquality(new BigDecimal("30"), balance);
+
+        ///////////////////////////////////////////////////
+
+        incomeUpdate(expenseId, date("2014-02-02"), new BigDecimal("20"));
+
+        checkBalanceRecord(date("2014-02-01"), new BigDecimal("10"));
+        checkBalanceRecord(date("2014-03-01"), new BigDecimal("30"));
+
+        balance = balanceService.getBalance(accountId, date("2014-01-02"));
+        checkEquality(new BigDecimal("10"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-02-01"));
+        checkEquality(new BigDecimal("10"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-02-02"));
+        checkEquality(new BigDecimal("30"), balance);
+
+        balance = balanceService.getBalance(accountId, date("2014-04-10"));
+        checkEquality(new BigDecimal("30"), balance);
     }
 }
