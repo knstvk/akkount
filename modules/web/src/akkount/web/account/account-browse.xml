@@ -23,6 +23,7 @@
                 <column id="description"/>
                 <column id="currencyCode"/>
                 <column id="active"/>
+                <column id="includeInTotal"/>
             </columns>
             <rowsCount/>
             <actions>

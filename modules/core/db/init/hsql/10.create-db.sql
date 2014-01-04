@@ -14,6 +14,7 @@ create table AKK_ACCOUNT (
     CURRENCY_ID varchar(36) not null,
     CURRENCY_CODE varchar(3) not null,
     ACTIVE boolean,
+    INCLUDE_IN_TOTAL boolean,
     --
     primary key (ID)
 )^-- end AKK_ACCOUNT

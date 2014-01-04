@@ -29,6 +29,8 @@
                    width="250px"/>
             <field id="active"
                    width="250px"/>
+            <field id="includeInTotal"
+                   width="250px"/>
         </fieldGroup>
         <iframe id="windowActions"
                 height="100%"
