@@ -14,8 +14,7 @@
             <rows>
                 <row>
                     <label value="msg://account"/>
-                    <lookupPickerField id="account1Field"
-                                       datasource="operationDs"
+                    <lookupPickerField datasource="operationDs"
                                        optionsDatasource="accountsDs"
                                        property="acc1"
                                        required="true"
@@ -27,15 +26,13 @@
                 </row>
                 <row>
                     <label value="msg://amount"/>
-                    <hbox expand="amount1Field"
-                          spacing="true"
+                    <hbox spacing="true"
                           width="100%">
-                        <textField id="amount1Field"
-                                   datasource="operationDs"
+                        <textField datasource="operationDs"
                                    property="amount1"
                                    required="true"
                                    width="100%"/>
-                        <label id="currency1Lab"
+                        <label id="currencyLab"
                                align="MIDDLE_LEFT"
                                width="30px"/>
                     </hbox>

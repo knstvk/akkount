@@ -6,8 +6,7 @@ public enum OperationType implements EnumClass<String>{
 
     EXPENSE("E"),
     INCOME("I"),
-    TRANSFER("T"),
-    DEBT("D");
+    TRANSFER("T");
 
     private String id;
 

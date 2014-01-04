@@ -2,7 +2,8 @@
 <menu-config xmlns="http://schemas.haulmont.com/cuba/5.0/menu.xsd">
     <menu id="operations"
           insertBefore="administration">
-        <item id="akk$Operation.lookup"/>
+        <item id="akk$Operation.lookup"
+              shortcut="Ctrl-Shift-O"/>
     </menu>
     <menu id="reference"
           insertBefore="administration">

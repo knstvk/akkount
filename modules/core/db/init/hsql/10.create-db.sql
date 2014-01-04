@@ -94,3 +94,16 @@ create table AKK_OPERATION (
     primary key (ID)
 )^
 -- end AKK_OPERATION
+-- begin AKK_USER_DATA
+create table AKK_USER_DATA (
+    ID varchar(36) not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    --
+    USER_ID varchar(36) not null,
+    KEY_ varchar(50) not null,
+    VALUE_ varchar(500),
+    --
+    primary key (ID)
+)^
+-- end AKK_USER_DATA

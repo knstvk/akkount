@@ -2,11 +2,13 @@
  * Copyright (c) 2013 knstvk.akkount
  */
 
-package akkount.core.entitylisteners;
+package akkount.entitylisteners;
 
 import akkount.entity.Account;
 import akkount.entity.Balance;
 import akkount.entity.Operation;
+import akkount.service.UserDataKeys;
+import akkount.service.UserDataWorker;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
@@ -34,18 +36,42 @@ public class OperationEntityListener implements
 
     private Persistence persistence = AppBeans.get(Persistence.class);
 
+    private UserDataWorker userDataWorker = AppBeans.get(UserDataWorker.class);
+
     private static final String BALANCE_QUERY = "select b from akk$Balance b " +
             "where b.account.id = ?1 and b.balanceDate >= ?2 order by b.balanceDate";
 
     @Override
     public void onBeforeInsert(Operation entity) {
         addOperation(entity);
+        saveUserData(entity);
     }
 
     @Override
     public void onBeforeUpdate(Operation entity) {
         removeOperation(getOldOperation(entity.getId()));
         addOperation(entity);
+        saveUserData(entity);
+    }
+
+    @Override
+    public void onBeforeDelete(Operation entity) {
+        removeOperation(entity);
+    }
+
+    private void saveUserData(Operation operation) {
+        switch (operation.getOpType()) {
+            case EXPENSE:
+                userDataWorker.saveEntity(UserDataKeys.LAST_EXPENSE_ACCOUNT, operation.getAcc1());
+                break;
+            case INCOME:
+                userDataWorker.saveEntity(UserDataKeys.LAST_INCOME_ACCOUNT, operation.getAcc2());
+                break;
+            case TRANSFER:
+                userDataWorker.saveEntity(UserDataKeys.LAST_TRANSFER_EXPENSE_ACCOUNT, operation.getAcc1());
+                userDataWorker.saveEntity(UserDataKeys.LAST_TRANSFER_INCOME_ACCOUNT, operation.getAcc2());
+                break;
+        }
     }
 
     private Operation getOldOperation(UUID operationId) {
@@ -61,11 +87,6 @@ public class OperationEntityListener implements
             tx.end();
         }
         return operation;
-    }
-
-    @Override
-    public void onBeforeDelete(Operation entity) {
-        removeOperation(entity);
     }
 
     private void removeOperation(Operation operation) {

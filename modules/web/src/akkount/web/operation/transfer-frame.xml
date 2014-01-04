@@ -14,10 +14,10 @@
             <rows>
                 <row>
                     <label value="msg://account1"/>
-                    <lookupPickerField id="account1Field"
-                                       datasource="operationDs"
+                    <lookupPickerField datasource="operationDs"
                                        optionsDatasource="accountsDs"
                                        property="acc1"
+                                       required="true"
                                        width="100%">
                         <actions>
                             <action id="lookup"/>
@@ -26,12 +26,11 @@
                 </row>
                 <row>
                     <label value="msg://amount1"/>
-                    <hbox expand="amount1Field"
-                          spacing="true"
+                    <hbox spacing="true"
                           width="100%">
-                        <textField id="amount1Field"
-                                   datasource="operationDs"
+                        <textField datasource="operationDs"
                                    property="amount1"
+                                   required="true"
                                    width="100%"/>
                         <label id="currency1Lab"
                                align="MIDDLE_LEFT"
@@ -40,10 +39,10 @@
                 </row>
                 <row>
                     <label value="msg://account2"/>
-                    <lookupPickerField id="account2Field"
-                                       datasource="operationDs"
+                    <lookupPickerField datasource="operationDs"
                                        optionsDatasource="accountsDs"
                                        property="acc2"
+                                       required="true"
                                        width="100%">
                         <actions>
                             <action id="lookup"/>
@@ -52,12 +51,11 @@
                 </row>
                 <row>
                     <label value="msg://amount2"/>
-                    <hbox expand="amount2Field"
-                          spacing="true"
+                    <hbox spacing="true"
                           width="100%">
-                        <textField id="amount2Field"
-                                   datasource="operationDs"
+                        <textField datasource="operationDs"
                                    property="amount2"
+                                   required="true"
                                    width="100%"/>
                         <label id="currency2Lab"
                                align="MIDDLE_LEFT"

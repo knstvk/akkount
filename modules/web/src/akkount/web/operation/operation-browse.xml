@@ -2,6 +2,7 @@
 <window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
         caption="msg://browseCaption"
         class="akkount.web.operation.OperationBrowse"
+        focusComponent="operationTable"
         lookupComponent="operationTable"
         messagesPack="akkount.web.operation">
     <dsContext>
@@ -9,7 +10,7 @@
                               class="akkount.entity.Operation"
                               view="operation-browse">
             <query>
-                <![CDATA[select e from akk$Operation e order by e.opDate desc]]>
+                <![CDATA[select e from akk$Operation e order by e.opDate desc, e.createTs desc]]>
             </query>
         </collectionDatasource>
     </dsContext>
@@ -21,6 +22,7 @@
         </filter>
         <table id="operationTable"
                height="100%"
+               multiselect="true"
                width="100%">
             <rows datasource="operationDs"/>
             <columns>
@@ -35,14 +37,14 @@
             </columns>
             <rowsCount/>
             <actions>
-                <action id="create"/>
                 <action id="edit"/>
                 <action id="remove"/>
             </actions>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn"
-                        action="operationTable.create"/>
+                <button id="createExpenseBtn"/>
+                <button id="createIncomeBtn"/>
+                <button id="createTransferBtn"/>
                 <button id="editBtn"
                         action="operationTable.edit"/>
                 <button id="removeBtn"

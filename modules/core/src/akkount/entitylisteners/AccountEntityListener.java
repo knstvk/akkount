@@ -2,7 +2,7 @@
  * Copyright (c) 2013 knstvk.akkount
  */
 
-package akkount.core.entitylisteners;
+package akkount.entitylisteners;
 
 import akkount.entity.Account;
 import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;

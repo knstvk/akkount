@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 
 @Table(name = "AKK_OPERATION")
 @Entity(name = "akk$Operation")
-@Listeners("akkount.core.entitylisteners.OperationEntityListener")
+@Listeners("akkount.entitylisteners.OperationEntityListener")
 public class Operation extends StandardEntity {
     @Column(name = "OP_TYPE", nullable = false)
     protected String opType;

@@ -14,10 +14,10 @@
             <rows>
                 <row>
                     <label value="msg://account"/>
-                    <lookupPickerField id="account2Field"
-                                       datasource="operationDs"
+                    <lookupPickerField datasource="operationDs"
                                        optionsDatasource="accountsDs"
                                        property="acc2"
+                                       required="true"
                                        width="100%">
                         <actions>
                             <action id="lookup"/>
@@ -26,14 +26,13 @@
                 </row>
                 <row>
                     <label value="msg://amount"/>
-                    <hbox expand="amount2Field"
-                          spacing="true"
+                    <hbox spacing="true"
                           width="100%">
-                        <textField id="amount2Field"
-                                   datasource="operationDs"
+                        <textField datasource="operationDs"
                                    property="amount2"
+                                   required="true"
                                    width="100%"/>
-                        <label id="currency2Lab"
+                        <label id="currencyLab"
                                align="MIDDLE_LEFT"
                                width="30px"/>
                     </hbox>

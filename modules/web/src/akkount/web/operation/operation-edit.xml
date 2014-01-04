@@ -31,32 +31,8 @@
             <dateField datasource="operationDs"
                        property="opDate"/>
         </hbox>
-        <tabSheet id="tabSheet"
-                  width="397px">
-            <tab id="EXPENSE"
-                 caption="msg://expenseTab"
-                 margin="true"
-                 spacing="true">
-                <iframe id="expenseFrame"
-                        screen="expense-frame"/>
-            </tab>
-            <tab id="INCOME"
-                 caption="msg://incomeTab"
-                 margin="true"
-                 spacing="true">
-                <iframe id="incomeFrame"
-                        screen="income-frame"/>
-            </tab>
-            <tab id="TRANSFER"
-                 caption="msg://transferTab"
-                 margin="true"
-                 spacing="true">
-                <iframe id="transferFrame"
-                        screen="transfer-frame"/>
-            </tab>
-            <tab id="DEBT"
-                 caption="msg://debtTab"/>
-        </tabSheet>
+        <groupBox id="frameContainer"
+                  width="400px"/>
         <iframe id="windowActions"
                 height="100%"
                 screen="editWindowActions"/>

@@ -8,5 +8,6 @@
         <class>akkount.entity.Currency</class>
         <class>akkount.entity.Balance</class>
         <class>akkount.entity.Category</class>
+        <class>akkount.entity.UserData</class>
     </persistence-unit>
 </persistence>
