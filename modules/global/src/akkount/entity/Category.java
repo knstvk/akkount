@@ -16,7 +16,19 @@ public class Category extends StandardEntity {
     @Column(name = "DESCRIPTION", length = 100)
     protected String description;
 
+    @Column(name = "CAT_TYPE", nullable = false)
+    protected String catType;
+
     private static final long serialVersionUID = 5768212165913475729L;
+
+    public void setCatType(CategoryType catType) {
+        this.catType = catType == null ? null : catType.getId();
+    }
+
+    public CategoryType getCatType() {
+        return catType == null ? null : CategoryType.fromId(catType);
+    }
+
 
     public void setDescription(String description) {
         this.description = description;

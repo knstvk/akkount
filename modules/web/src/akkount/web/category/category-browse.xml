@@ -21,6 +21,7 @@
             <columns>
                 <column id="name"/>
                 <column id="description"/>
+                <column id="catType"/>
             </columns>
             <rowsCount/>
             <actions>

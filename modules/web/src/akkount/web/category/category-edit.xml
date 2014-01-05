@@ -17,6 +17,8 @@
                    width="250px"/>
             <field id="description"
                    width="250px"/>
+            <field id="catType"
+                   width="250px"/>
         </fieldGroup>
         <iframe id="windowActions"
                 height="100%"

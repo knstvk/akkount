@@ -1,0 +1,6 @@
+@import "../havana/havana";
+
+/* Define your theme modifications inside next mixin */
+@mixin havana-ext {
+  @include havana;
+}

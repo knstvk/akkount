@@ -8,13 +8,6 @@
         <datasource id="operationDs"
                     class="akkount.entity.Operation"
                     view="operation-edit"/>
-        <collectionDatasource id="categoriesDs"
-                              class="akkount.entity.Category"
-                              view="_minimal">
-            <query>
-                <![CDATA[select e from akk$Category e order by e.name]]>
-            </query>
-        </collectionDatasource>
         <collectionDatasource id="accountsDs"
                               class="akkount.entity.Account"
                               view="_local">

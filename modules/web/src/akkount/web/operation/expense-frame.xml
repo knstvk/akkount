@@ -3,7 +3,15 @@
         caption=""
         class="akkount.web.operation.ExpenseFrame"
         messagesPack="akkount.web.operation">
-    <dsContext/>
+    <dsContext>
+        <collectionDatasource id="categoriesDs"
+                              class="akkount.entity.Category"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from akk$Category e where e.catType = 'E' order by e.name]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
     <layout>
         <grid spacing="true"
               width="100%">

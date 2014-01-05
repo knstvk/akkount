@@ -67,10 +67,10 @@ create table AKK_CATEGORY (
     --
     NAME varchar(50) not null,
     DESCRIPTION varchar(100),
+    CAT_TYPE varchar(50) not null,
     --
     primary key (ID)
-)^
--- end AKK_CATEGORY
+)^-- end AKK_CATEGORY
 
 -- begin AKK_OPERATION
 create table AKK_OPERATION (
