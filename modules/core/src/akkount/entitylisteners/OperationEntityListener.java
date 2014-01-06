@@ -39,7 +39,7 @@ public class OperationEntityListener implements
     private UserDataWorker userDataWorker = AppBeans.get(UserDataWorker.class);
 
     private static final String BALANCE_QUERY = "select b from akk$Balance b " +
-            "where b.account.id = ?1 and b.balanceDate >= ?2 order by b.balanceDate";
+            "where b.account.id = ?1 and b.balanceDate > ?2 order by b.balanceDate";
 
     @Override
     public void onBeforeInsert(Operation entity) {

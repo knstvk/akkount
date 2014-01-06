@@ -23,10 +23,8 @@ import java.util.UUID;
  */
 public class AkkountTestCase extends CubaTestCase {
 
-    public static final String TEST_CURRENCY_CODE = "TST";
-    public static final String TEST_ACC_NAME = "TestAcc";
-
-    protected UUID accountId;
+    protected UUID account1Id;
+    protected UUID account2Id;
 
     @Override
     protected void initDataSources() throws Exception {
@@ -59,30 +57,27 @@ public class AkkountTestCase extends CubaTestCase {
     private void initTestData() {
         Transaction tx = persistence.createTransaction();
         try {
-            Currency currency = createCurrency();
-            createAccount(currency);
+            Currency currency1 = new Currency();
+            currency1.setCode("TST");
+            currency1.setName("Test Currency");
+            persistence.getEntityManager().persist(currency1);
+
+            Account account1 = new Account();
+            account1.setCurrency(currency1);
+            account1.setName("TestAccount1");
+            persistence.getEntityManager().persist(account1);
+            account1Id = account1.getId();
+
+            Account account2 = new Account();
+            account2.setCurrency(currency1);
+            account2.setName("TestAccount2");
+            persistence.getEntityManager().persist(account2);
+            account2Id = account2.getId();
 
             tx.commit();
         } finally {
             tx.end();
         }
-    }
-
-    private Currency createCurrency() {
-        Currency currency = new Currency();
-        currency.setCode(TEST_CURRENCY_CODE);
-        currency.setName("Test Currency");
-        persistence.getEntityManager().persist(currency);
-        return currency;
-    }
-
-    private Account createAccount(Currency currency) {
-        Account account = new Account();
-        accountId = account.getId();
-        account.setCurrency(currency);
-        account.setName(TEST_ACC_NAME);
-        persistence.getEntityManager().persist(account);
-        return account;
     }
 
     protected void cleanupTable(String table) throws SQLException {

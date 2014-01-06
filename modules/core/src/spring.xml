@@ -12,4 +12,14 @@
     <!-- Annotation-based beans -->
     <context:component-scan base-package="akkount"/>
 
+    <bean id="akk_MBeanExporter" lazy-init="false"
+          class="com.haulmont.cuba.core.sys.jmx.MBeanExporter">
+        <property name="beans">
+            <map>
+                <entry key="${cuba.webContextName}.akkount:type=SampleDataGenerator"
+                       value-ref="akk_SampleDataGenerator"/>
+            </map>
+        </property>
+    </bean>
+
 </beans>
