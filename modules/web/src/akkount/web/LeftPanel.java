@@ -84,11 +84,13 @@ public class LeftPanel extends FoldersPane {
             balanceGrid.setMargin(true);
             balanceGrid.setSpacing(true);
 
+            DecimalFormatter formatter = new DecimalFormatter();
+
             int row = 0;
             if (!totals.isEmpty()) {
                 balanceGrid.addComponent(new Label(messages.getMessage(getClass(), "LeftPanel.total")), 0, row++);
                 for (Map.Entry<String, BigDecimal> entry : totals.entrySet()) {
-                    Label sumLabel = new Label(entry.getValue().toString());
+                    Label sumLabel = new Label(formatter.format(entry.getValue()));
                     sumLabel.setStyleName("h2");
                     balanceGrid.addComponent(sumLabel, 1, row);
                     balanceGrid.setComponentAlignment(sumLabel, Alignment.MIDDLE_RIGHT);
@@ -105,7 +107,7 @@ public class LeftPanel extends FoldersPane {
             for (Map.Entry<Account, BigDecimal> entry : balances.entrySet()) {
                 balanceGrid.addComponent(new Label(entry.getKey().getName()), 0, row);
 
-                Label sumLabel = new Label(entry.getValue().toString());
+                Label sumLabel = new Label(formatter.format(entry.getValue()));
                 balanceGrid.addComponent(sumLabel, 1, row);
                 balanceGrid.setComponentAlignment(sumLabel, Alignment.MIDDLE_RIGHT);
 

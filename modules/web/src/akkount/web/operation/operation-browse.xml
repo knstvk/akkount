@@ -6,13 +6,13 @@
         lookupComponent="operationTable"
         messagesPack="akkount.web.operation">
     <dsContext>
-        <collectionDatasource id="operationDs"
-                              class="akkount.entity.Operation"
-                              view="operation-browse">
+        <groupDatasource id="operationDs"
+                         class="akkount.entity.Operation"
+                         view="operation-browse">
             <query>
                 <![CDATA[select e from akk$Operation e order by e.opDate desc, e.createTs desc]]>
             </query>
-        </collectionDatasource>
+        </groupDatasource>
     </dsContext>
     <layout expand="operationTable"
             spacing="true">
@@ -20,18 +20,22 @@
                 datasource="operationDs">
             <properties include=".*"/>
         </filter>
-        <table id="operationTable"
-               height="100%"
-               multiselect="true"
-               width="100%">
+        <groupTable id="operationTable"
+                    height="100%"
+                    multiselect="true"
+                    width="100%">
             <rows datasource="operationDs"/>
             <columns>
                 <column id="opType"/>
                 <column id="opDate"/>
                 <column id="acc1"/>
-                <column id="amount1"/>
+                <column id="amount1">
+                    <formatter class="akkount.web.DecimalFormatter"/>
+                </column>
                 <column id="acc2"/>
-                <column id="amount2"/>
+                <column id="amount2">
+                    <formatter class="akkount.web.DecimalFormatter"/>
+                </column>
                 <column id="category"/>
                 <column id="comments"/>
             </columns>
@@ -50,6 +54,6 @@
                 <button id="removeBtn"
                         action="operationTable.remove"/>
             </buttonsPanel>
-        </table>
+        </groupTable>
     </layout>
 </window>
