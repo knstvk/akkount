@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
+        caption="msg://caption"
+        class="akkount.web.report.categories.CategoriesReport"
+        messagesPack="akkount.web.report.categories">
+    <dsContext>
+        <collectionDatasource id="ds1"
+                              class="akkount.entity.CategoryAmount"
+                              datasourceClass="akkount.web.report.categories.CategoryAmountDatasource">
+            <query>
+                <![CDATA[select e from akk$Category e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="ds2"
+                              class="akkount.entity.CategoryAmount"
+                              datasourceClass="akkount.web.report.categories.CategoryAmountDatasource">
+            <query>
+                <![CDATA[select e from akk$Category e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <layout>
+        <hbox height="100%"
+              spacing="true"
+              width="100%">
+            <groupBox caption="currentPeriod"
+                      expand="table1"
+                      height="100%"
+                      spacing="true">
+                <hbox spacing="true">
+                    <label value="from"/>
+                    <dateField id="from1"/>
+                    <label value="to"/>
+                    <dateField id="to1"/>
+                    <button caption="apply"
+                            invoke="apply1"/>
+                </hbox>
+                <table id="table1"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="category.name"/>
+                        <column id="amount"/>
+                    </columns>
+                    <rows datasource="ds1"/>
+                </table>
+            </groupBox>
+            <groupBox caption="previousPeriod"
+                      expand="table2"
+                      height="100%"
+                      spacing="true">
+                <hbox spacing="true">
+                    <label value="from"/>
+                    <dateField id="from2"/>
+                    <label value="to"/>
+                    <dateField id="to2"/>
+                    <button caption="apply"
+                            invoke="apply2"/>
+                </hbox>
+                <table id="table2"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="category.name"/>
+                        <column id="amount"/>
+                    </columns>
+                    <rows datasource="ds2"/>
+                </table>
+            </groupBox>
+        </hbox>
+    </layout>
+</window>

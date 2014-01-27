@@ -23,4 +23,6 @@
             template="/akkount/web/operation/expense-frame.xml"/>
     <screen id="income-frame"
             template="/akkount/web/operation/income-frame.xml"/>
+    <screen id="categories-report"
+            template="akkount/web/report/categories/categories-report.xml"/>
 </screen-config>

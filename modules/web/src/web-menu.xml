@@ -5,6 +5,8 @@
         <item id="akk$Operation.lookup"
               shortcut="Ctrl-Shift-O"/>
         <separator/>
+        <item id="categories-report"/>
+        <separator/>
         <item id="akk$Currency.lookup"/>
         <item id="akk$Category.lookup"/>
         <item id="akk$Account.lookup"/>
