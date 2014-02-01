@@ -18,22 +18,46 @@
                 <![CDATA[select e from akk$Category e]]>
             </query>
         </collectionDatasource>
+        <collectionDatasource id="currenciesDs"
+                              class="akkount.entity.Currency"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from akk$Currency e]]>
+            </query>
+        </collectionDatasource>
     </dsContext>
-    <layout>
-        <hbox height="100%"
+    <layout expand="mainBox"
+            spacing="true">
+        <hbox spacing="true"
+              width="100%">
+            <optionsGroup id="categoryTypeGroup"
+                          orientation="horizontal"/>
+            <hbox align="MIDDLE_RIGHT"
+                  spacing="true">
+                <label align="MIDDLE_RIGHT"
+                       value="msg://currency"/>
+                <lookupField id="currencyField"
+                             optionsDatasource="currenciesDs"
+                             required="true"/>
+            </hbox>
+        </hbox>
+        <hbox id="mainBox"
+              height="100%"
               spacing="true"
               width="100%">
-            <groupBox caption="currentPeriod"
+            <groupBox caption="msg://period1"
                       expand="table1"
                       height="100%"
                       spacing="true">
                 <hbox spacing="true">
-                    <label value="from"/>
-                    <dateField id="from1"/>
-                    <label value="to"/>
-                    <dateField id="to1"/>
-                    <button caption="apply"
-                            invoke="apply1"/>
+                    <label align="MIDDLE_LEFT"
+                           value="msg://from"/>
+                    <dateField id="from1"
+                               resolution="DAY"/>
+                    <label align="MIDDLE_LEFT"
+                           value="msg://to"/>
+                    <dateField id="to1"
+                               resolution="DAY"/>
                 </hbox>
                 <table id="table1"
                        height="100%"
@@ -45,17 +69,19 @@
                     <rows datasource="ds1"/>
                 </table>
             </groupBox>
-            <groupBox caption="previousPeriod"
+            <groupBox caption="msg://period2"
                       expand="table2"
                       height="100%"
                       spacing="true">
                 <hbox spacing="true">
-                    <label value="from"/>
-                    <dateField id="from2"/>
-                    <label value="to"/>
-                    <dateField id="to2"/>
-                    <button caption="apply"
-                            invoke="apply2"/>
+                    <label align="MIDDLE_LEFT"
+                           value="msg://from"/>
+                    <dateField id="from2"
+                               resolution="DAY"/>
+                    <label align="MIDDLE_LEFT"
+                           value="msg://to"/>
+                    <dateField id="to2"
+                               resolution="DAY"/>
                 </hbox>
                 <table id="table2"
                        height="100%"

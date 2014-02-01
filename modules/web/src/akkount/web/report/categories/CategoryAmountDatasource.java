@@ -5,6 +5,8 @@
 package akkount.web.report.categories;
 
 import akkount.entity.CategoryAmount;
+import akkount.entity.CategoryType;
+import akkount.entity.Currency;
 import akkount.service.ReportService;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.data.impl.CollectionDatasourceImpl;
@@ -31,9 +33,17 @@ public class CategoryAmountDatasource extends CollectionDatasourceImpl<CategoryA
             Date fromDate = (Date) params.get("from");
             Date toDate = (Date) params.get("to");
             if (fromDate == null || toDate == null || toDate.compareTo(fromDate) < 0)
-                throw new IllegalArgumentException("Invalid dates");
+                return;
 
-            List<CategoryAmount> list = service.getTurnoverByCategories(fromDate, toDate);
+            Currency currency = (Currency) params.get("currency");
+            if (currency == null)
+                return;
+
+            CategoryType categoryType = (CategoryType) params.get("categoryType");
+            if (categoryType == null)
+                categoryType = CategoryType.EXPENSE;
+
+            List<CategoryAmount> list = service.getTurnoverByCategories(fromDate, toDate, categoryType, currency.getCode());
             for (CategoryAmount categoryAmount : list) {
                 data.put(categoryAmount.getId(), categoryAmount);
             }
