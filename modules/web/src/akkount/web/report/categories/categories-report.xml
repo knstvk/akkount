@@ -28,18 +28,23 @@
     </dsContext>
     <layout expand="mainBox"
             spacing="true">
-        <hbox spacing="true"
+        <hbox expand="spacer"
+              spacing="true"
               width="100%">
+            <label align="MIDDLE_RIGHT"
+                   value="msg://period"/>
+            <lookupField id="periodTypeField"
+                         filterMode="NO"/>
+            <label align="MIDDLE_RIGHT"
+                   value="msg://currency"/>
+            <lookupField id="currencyField"
+                         optionsDatasource="currenciesDs"
+                         required="true"
+                         width="80px"/>
             <optionsGroup id="categoryTypeGroup"
                           orientation="horizontal"/>
-            <hbox align="MIDDLE_RIGHT"
-                  spacing="true">
-                <label align="MIDDLE_RIGHT"
-                       value="msg://currency"/>
-                <lookupField id="currencyField"
-                             optionsDatasource="currenciesDs"
-                             required="true"/>
-            </hbox>
+            <label id="spacer"
+                   width="100%"/>
         </hbox>
         <hbox id="mainBox"
               height="100%"
@@ -50,12 +55,10 @@
                       height="100%"
                       spacing="true">
                 <hbox spacing="true">
-                    <label align="MIDDLE_LEFT"
-                           value="msg://from"/>
                     <dateField id="from1"
                                resolution="DAY"/>
                     <label align="MIDDLE_LEFT"
-                           value="msg://to"/>
+                           value="-"/>
                     <dateField id="to1"
                                resolution="DAY"/>
                 </hbox>
@@ -74,12 +77,10 @@
                       height="100%"
                       spacing="true">
                 <hbox spacing="true">
-                    <label align="MIDDLE_LEFT"
-                           value="msg://from"/>
                     <dateField id="from2"
                                resolution="DAY"/>
                     <label align="MIDDLE_LEFT"
-                           value="msg://to"/>
+                           value="-"/>
                     <dateField id="to2"
                                resolution="DAY"/>
                 </hbox>
