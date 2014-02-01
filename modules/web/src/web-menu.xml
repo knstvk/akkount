@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/5.0/menu.xsd">
     <menu id="application"
-          insertBefore="reports">
+          insertBefore="administration">
         <item id="akk$Operation.lookup"
               shortcut="Ctrl-Shift-O"/>
         <separator/>
