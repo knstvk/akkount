@@ -11,6 +11,7 @@ import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.web.AppWindow;
 import com.haulmont.cuba.web.app.folders.FoldersPane;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import org.apache.commons.lang.BooleanUtils;
 
@@ -88,7 +89,6 @@ public class LeftPanel extends FoldersPane {
 
             int row = 0;
             if (!totals.isEmpty()) {
-                balanceGrid.addComponent(new Label(messages.getMessage(getClass(), "LeftPanel.total")), 0, row++);
                 for (Map.Entry<String, BigDecimal> entry : totals.entrySet()) {
                     Label sumLabel = new Label(formatter.format(entry.getValue()));
                     sumLabel.setStyleName("h2");
@@ -103,7 +103,9 @@ public class LeftPanel extends FoldersPane {
                 }
             }
 
-            balanceGrid.addComponent(new Label(messages.getMessage(getClass(), "LeftPanel.accounts")), 0, row++);
+            Label label = new Label("<br/>");
+            label.setContentMode(ContentMode.HTML);
+            balanceGrid.addComponent(label, 0, row++);
             for (Map.Entry<Account, BigDecimal> entry : balances.entrySet()) {
                 balanceGrid.addComponent(new Label(entry.getKey().getName()), 0, row);
 
