@@ -22,13 +22,21 @@ public class ReportServiceBean implements ReportService {
     @Override
     @Transactional
     public List<CategoryAmount> getTurnoverByCategories(Date fromDate, Date toDate,
-                                                        CategoryType categoryType, String currencyCode) {
+                                                        CategoryType categoryType, String currencyCode,
+                                                        List<UUID> excludedCategories) {
         List<CategoryAmount> list = new ArrayList<>();
 
         EntityManager em = persistence.getEntityManager();
 
-        TypedQuery<Category> catQuery = em.createQuery("select c from akk$Category c where c.catType = ?1", Category.class);
+        String catQueryString = "select c from akk$Category c where c.catType = ?1";
+        if (!excludedCategories.isEmpty())
+            catQueryString += " and c.id not in ?2";
+
+        TypedQuery<Category> catQuery = em.createQuery(catQueryString, Category.class);
+
         catQuery.setParameter(1, categoryType.getId());
+        if (!excludedCategories.isEmpty())
+            catQuery.setParameter(2, excludedCategories);
 
         for (Category category : catQuery.getResultList()) {
 

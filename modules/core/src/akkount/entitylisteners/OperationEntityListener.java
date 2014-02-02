@@ -62,14 +62,14 @@ public class OperationEntityListener implements
     private void saveUserData(Operation operation) {
         switch (operation.getOpType()) {
             case EXPENSE:
-                userDataWorker.saveEntity(UserDataKeys.LAST_EXPENSE_ACCOUNT, operation.getAcc1());
+                userDataWorker.saveEntity(UserDataKeys.OP_EXPENSE_ACCOUNT, operation.getAcc1(), false);
                 break;
             case INCOME:
-                userDataWorker.saveEntity(UserDataKeys.LAST_INCOME_ACCOUNT, operation.getAcc2());
+                userDataWorker.saveEntity(UserDataKeys.OP_INCOME_ACCOUNT, operation.getAcc2(), false);
                 break;
             case TRANSFER:
-                userDataWorker.saveEntity(UserDataKeys.LAST_TRANSFER_EXPENSE_ACCOUNT, operation.getAcc1());
-                userDataWorker.saveEntity(UserDataKeys.LAST_TRANSFER_INCOME_ACCOUNT, operation.getAcc2());
+                userDataWorker.saveEntity(UserDataKeys.OP_TRANSFER_EXPENSE_ACCOUNT, operation.getAcc1(), false);
+                userDataWorker.saveEntity(UserDataKeys.OP_TRANSFER_INCOME_ACCOUNT, operation.getAcc2(), false);
                 break;
         }
     }

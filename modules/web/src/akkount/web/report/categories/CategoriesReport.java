@@ -5,13 +5,16 @@ import akkount.entity.Currency;
 import akkount.service.UserDataKeys;
 import akkount.service.UserDataService;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.actions.ItemTrackingAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.*;
 
 import com.haulmont.cuba.gui.data.ValueListener;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang.time.DateUtils;
 
 public class CategoriesReport extends AbstractWindow {
@@ -31,15 +34,29 @@ public class CategoriesReport extends AbstractWindow {
     @Inject
     protected DateField to2;
     @Inject
+    protected Table table1;
+    @Inject
+    protected Table table2;
+    @Inject
+    protected TextField totalField1;
+    @Inject
+    protected TextField totalField2;
+    @Inject
+    protected BoxLayout excludedBox;
+    @Inject
     protected CollectionDatasource<CategoryAmount, UUID> ds1;
     @Inject
     protected CollectionDatasource<CategoryAmount, UUID> ds2;
     @Inject
     protected CollectionDatasource<Currency, UUID> currenciesDs;
     @Inject
+    protected ComponentsFactory componentsFactory;
+    @Inject
     protected UserDataService userDataService;
 
     private boolean doNotRefresh;
+
+    private Map<Category, Component> excludedCategories = new HashMap<>();
 
     @Override
     public void init(Map<String, Object> params) {
@@ -47,11 +64,15 @@ public class CategoriesReport extends AbstractWindow {
         initCategoryTypes();
         initPeriodTypes();
         initDates();
+        initExcludedCategories();
+
+        refreshDs1();
+        refreshDs2();
     }
 
     private void initCurrencies() {
         currenciesDs.refresh();
-        Currency currency = userDataService.loadEntity(UserDataKeys.LAST_CAT_REP_CURRENCY, Currency.class);
+        Currency currency = userDataService.loadEntity(UserDataKeys.CAT_REP_CURRENCY, Currency.class);
         if (currency == null) {
             Collection<Currency> currencies = currenciesDs.getItems();
             if (!currencies.isEmpty())
@@ -64,7 +85,7 @@ public class CategoriesReport extends AbstractWindow {
             public void valueChanged(Object source, String property, @Nullable Object prevValue, @Nullable Object value) {
                 refreshDs1();
                 refreshDs2();
-                userDataService.saveEntity(UserDataKeys.LAST_CAT_REP_CURRENCY, (Currency) value);
+                userDataService.saveEntity(UserDataKeys.CAT_REP_CURRENCY, (Currency) value);
             }
         });
     }
@@ -122,11 +143,9 @@ public class CategoriesReport extends AbstractWindow {
 
         from1.setValue(DateUtils.addMonths(now, -2));
         to1.setValue(DateUtils.addMonths(now, -1));
-        refreshDs1();
 
         from2.setValue(DateUtils.addMonths(now, -1));
         to2.setValue(now);
-        refreshDs2();
 
         ValueListener period1Listener = new ValueListener() {
             @Override
@@ -147,27 +166,117 @@ public class CategoriesReport extends AbstractWindow {
         to2.addListener(period2Listener);
     }
 
+    private void initExcludedCategories() {
+        doNotRefresh = true;
+        try {
+            List<Category> categoryList = userDataService.loadEntityList(UserDataKeys.CAT_REP_EXCLUDED_CATEGORIES, Category.class);
+            for (Category category : categoryList) {
+                excludeCategory(category);
+            }
+        } finally {
+            doNotRefresh = false;
+        }
+
+        table1.addAction(new ExcludeCategoryAction(table1));
+        table2.addAction(new ExcludeCategoryAction(table2));
+    }
+
     private void refreshDs1() {
         if (doNotRefresh)
             return;
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("from", from1.getValue());
-        params.put("to", to1.getValue());
-        params.put("categoryType", categoryTypeGroup.getValue());
-        params.put("currency", currencyField.getValue());
-        ds1.refresh(params);
+        ds1.refresh(createDatasourceParams(from1.getValue(), to1.getValue()));
+
+        totalField1.setEditable(true);
+        totalField1.setValue(getTotalAmount(ds1));
+        totalField1.setEditable(false);
     }
 
     private void refreshDs2() {
         if (doNotRefresh)
             return;
 
+        ds2.refresh(createDatasourceParams(from2.getValue(), to2.getValue()));
+
+        totalField2.setEditable(true);
+        totalField2.setValue(getTotalAmount(ds2));
+        totalField2.setEditable(false);
+    }
+
+    private Map<String, Object> createDatasourceParams(Object from, Object to) {
         Map<String, Object> params = new HashMap<>();
-        params.put("from", from2.getValue());
-        params.put("to", to2.getValue());
+        params.put("from", from);
+        params.put("to", to);
         params.put("categoryType", categoryTypeGroup.getValue());
         params.put("currency", currencyField.getValue());
-        ds2.refresh(params);
+        params.put("excludedCategories", excludedCategories.keySet());
+        return params;
     }
+
+    private BigDecimal getTotalAmount(CollectionDatasource<CategoryAmount, UUID> datasource) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (CategoryAmount ca : datasource.getItems()) {
+            total = total.add(ca.getAmount());
+        }
+        return total;
+    }
+
+    private void excludeCategory(Category category) {
+        if (excludedCategories.containsKey(category))
+            return;
+
+        final BoxLayout box = componentsFactory.createComponent(BoxLayout.HBOX);
+        box.setMargin(false, true, false, false);
+
+        Label label = componentsFactory.createComponent(Label.NAME);
+        label.setValue(category.getName());
+        label.setAlignment(Alignment.MIDDLE_LEFT);
+        box.add(label);
+
+        LinkButton button = componentsFactory.createComponent(LinkButton.NAME);
+        button.setIcon("icons/remove.png");
+        button.setAction(new AbstractAction("") {
+            @Override
+            public void actionPerform(Component component) {
+                for (Iterator<Map.Entry<Category, Component>> it = excludedCategories.entrySet().iterator(); it.hasNext(); ) {
+                    Map.Entry<Category, Component> entry = it.next();
+                    if (entry.getValue() == box) {
+                        excludedBox.remove(box);
+                        it.remove();
+                        userDataService.removeEntity(UserDataKeys.CAT_REP_EXCLUDED_CATEGORIES, entry.getKey());
+                        break;
+                    }
+                }
+                refreshDs1();
+                refreshDs2();
+            }
+        });
+        box.add(button);
+
+        excludedBox.add(box);
+        excludedCategories.put(category, box);
+        refreshDs1();
+        refreshDs2();
+    }
+
+    private class ExcludeCategoryAction extends ItemTrackingAction {
+
+        private Table table;
+
+        public ExcludeCategoryAction(Table table) {
+            super("excludeCategory");
+            this.table = table;
+            table.getDatasource().addListener(this);
+        }
+
+        @Override
+        public void actionPerform(Component component) {
+            CategoryAmount categoryAmount = (CategoryAmount) table.getDatasource().getItem();
+            if (categoryAmount != null) {
+                excludeCategory(categoryAmount.getCategory());
+                userDataService.addEntity(UserDataKeys.CAT_REP_EXCLUDED_CATEGORIES, categoryAmount.getCategory());
+            }
+        }
+    }
+
 }

@@ -71,14 +71,14 @@ public class OperationEdit extends AbstractEditor<Operation> {
             item.setOpDate(DateUtils.truncate(timeSource.currentTimestamp(), Calendar.DAY_OF_MONTH));
             switch (item.getOpType()) {
                 case EXPENSE:
-                    item.setAcc1(loadAccount(UserDataKeys.LAST_EXPENSE_ACCOUNT));
+                    item.setAcc1(loadAccount(UserDataKeys.OP_EXPENSE_ACCOUNT));
                     break;
                 case INCOME:
-                    item.setAcc2(loadAccount(UserDataKeys.LAST_INCOME_ACCOUNT));
+                    item.setAcc2(loadAccount(UserDataKeys.OP_INCOME_ACCOUNT));
                     break;
                 case TRANSFER:
-                    item.setAcc1(loadAccount(UserDataKeys.LAST_TRANSFER_EXPENSE_ACCOUNT));
-                    item.setAcc2(loadAccount(UserDataKeys.LAST_TRANSFER_INCOME_ACCOUNT));
+                    item.setAcc1(loadAccount(UserDataKeys.OP_TRANSFER_EXPENSE_ACCOUNT));
+                    item.setAcc2(loadAccount(UserDataKeys.OP_TRANSFER_INCOME_ACCOUNT));
                     break;
             }
             operationFrame.initItem(item);

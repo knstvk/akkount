@@ -4,6 +4,7 @@
 
 package akkount.web.report.categories;
 
+import akkount.entity.Category;
 import akkount.entity.CategoryAmount;
 import akkount.entity.CategoryType;
 import akkount.entity.Currency;
@@ -11,10 +12,7 @@ import akkount.service.ReportService;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.gui.data.impl.CollectionDatasourceImpl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author krivopustov
@@ -43,7 +41,18 @@ public class CategoryAmountDatasource extends CollectionDatasourceImpl<CategoryA
             if (categoryType == null)
                 categoryType = CategoryType.EXPENSE;
 
-            List<CategoryAmount> list = service.getTurnoverByCategories(fromDate, toDate, categoryType, currency.getCode());
+            //noinspection unchecked
+            Set<Category> excludedCategories = (Set) params.get("excludedCategories");
+            if (excludedCategories == null)
+                excludedCategories = new HashSet<>();
+            List<UUID> ids = new ArrayList<>(excludedCategories.size());
+            for (Category category : excludedCategories) {
+                ids.add(category.getId());
+            }
+
+
+            List<CategoryAmount> list = service.getTurnoverByCategories(fromDate, toDate, categoryType,
+                    currency.getCode(), ids);
             for (CategoryAmount categoryAmount : list) {
                 data.put(categoryAmount.getId(), categoryAmount);
             }

@@ -28,9 +28,7 @@
     </dsContext>
     <layout expand="mainBox"
             spacing="true">
-        <hbox expand="spacer"
-              spacing="true"
-              width="100%">
+        <hbox spacing="true">
             <label align="MIDDLE_RIGHT"
                    value="msg://period"/>
             <lookupField id="periodTypeField"
@@ -43,8 +41,6 @@
                          width="80px"/>
             <optionsGroup id="categoryTypeGroup"
                           orientation="horizontal"/>
-            <label id="spacer"
-                   width="100%"/>
         </hbox>
         <hbox id="mainBox"
               height="100%"
@@ -54,13 +50,18 @@
                       expand="table1"
                       height="100%"
                       spacing="true">
-                <hbox spacing="true">
+                <hbox expand="spacer1"
+                      spacing="true"
+                      width="100%">
                     <dateField id="from1"
                                resolution="DAY"/>
                     <label align="MIDDLE_LEFT"
                            value="-"/>
                     <dateField id="to1"
                                resolution="DAY"/>
+                    <label id="spacer1"
+                           width="100%"/>
+                    <button action="table1.excludeCategory"/>
                 </hbox>
                 <table id="table1"
                        height="100%"
@@ -71,18 +72,31 @@
                     </columns>
                     <rows datasource="ds1"/>
                 </table>
+                <hbox align="MIDDLE_RIGHT"
+                      spacing="true">
+                    <label align="MIDDLE_RIGHT"
+                           value="msg://total"/>
+                    <textField id="totalField1"
+                               datatype="decimal"
+                               editable="false"/>
+                </hbox>
             </groupBox>
             <groupBox caption="msg://period2"
                       expand="table2"
                       height="100%"
                       spacing="true">
-                <hbox spacing="true">
+                <hbox expand="spacer2"
+                      spacing="true"
+                      width="100%">
                     <dateField id="from2"
                                resolution="DAY"/>
                     <label align="MIDDLE_LEFT"
                            value="-"/>
                     <dateField id="to2"
                                resolution="DAY"/>
+                    <label id="spacer2"
+                           width="100%"/>
+                    <button action="table2.excludeCategory"/>
                 </hbox>
                 <table id="table2"
                        height="100%"
@@ -93,7 +107,19 @@
                     </columns>
                     <rows datasource="ds2"/>
                 </table>
+                <hbox align="MIDDLE_RIGHT"
+                      spacing="true">
+                    <label align="MIDDLE_RIGHT"
+                           value="msg://total"/>
+                    <textField id="totalField2"
+                               datatype="decimal"
+                               editable="false"/>
+                </hbox>
             </groupBox>
         </hbox>
+        <groupBox caption="msg://excluded">
+            <hbox id="excludedBox"
+                  spacing="true"/>
+        </groupBox>
     </layout>
 </window>
