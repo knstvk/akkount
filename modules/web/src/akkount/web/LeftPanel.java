@@ -16,10 +16,7 @@ import com.vaadin.ui.*;
 import org.apache.commons.lang.BooleanUtils;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * @author krivopustov
@@ -81,7 +78,7 @@ public class LeftPanel extends FoldersPane {
                 }
             }
 
-            balanceGrid = new GridLayout(3, totals.size() + accounts.size() + (totals.isEmpty() ? 1 : 2));
+            balanceGrid = new GridLayout(3, totals.size() + accounts.size() + 3);
             balanceGrid.setMargin(true);
             balanceGrid.setSpacing(true);
 
@@ -103,21 +100,43 @@ public class LeftPanel extends FoldersPane {
                 }
             }
 
+            List<Account> includedAccounts = new ArrayList<>();
+            List<Account> excludedAccounts = new ArrayList<>();
+            for (Account account : balances.keySet()) {
+                if (BooleanUtils.isTrue(account.getIncludeInTotal()))
+                    includedAccounts.add(account);
+                else
+                    excludedAccounts.add(account);
+            }
+
             Label label = new Label("<br/>");
             label.setContentMode(ContentMode.HTML);
             balanceGrid.addComponent(label, 0, row++);
-            for (Map.Entry<Account, BigDecimal> entry : balances.entrySet()) {
-                balanceGrid.addComponent(new Label(entry.getKey().getName()), 0, row);
-
-                Label sumLabel = new Label(formatter.format(entry.getValue()));
-                balanceGrid.addComponent(sumLabel, 1, row);
-                balanceGrid.setComponentAlignment(sumLabel, Alignment.MIDDLE_RIGHT);
-
-                balanceGrid.addComponent(new Label(entry.getKey().getCurrencyCode()), 2, row);
-
+            for (Account account : includedAccounts) {
+                addAccountBalance(account, balances.get(account), formatter, row);
                 row++;
             }
+            if (!excludedAccounts.isEmpty()) {
+                label = new Label("<br/>");
+                label.setContentMode(ContentMode.HTML);
+                balanceGrid.addComponent(label, 0, row++);
+                for (Account account : excludedAccounts) {
+                    addAccountBalance(account, balances.get(account), formatter, row);
+                    row++;
+                }
+            }
+
             balanceLayout.addComponent(balanceGrid);
         }
+    }
+
+    private void addAccountBalance(Account account, BigDecimal balance, DecimalFormatter formatter, int row) {
+        balanceGrid.addComponent(new Label(account.getName()), 0, row);
+
+        Label sumLabel = new Label(formatter.format(balance));
+        balanceGrid.addComponent(sumLabel, 1, row);
+        balanceGrid.setComponentAlignment(sumLabel, Alignment.MIDDLE_RIGHT);
+
+        balanceGrid.addComponent(new Label(account.getCurrencyCode()), 2, row);
     }
 }
