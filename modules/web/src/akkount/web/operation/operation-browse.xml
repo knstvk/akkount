@@ -22,7 +22,6 @@
         </filter>
         <groupTable id="operationTable"
                     height="100%"
-                    multiselect="true"
                     width="100%">
             <rows datasource="operationDs"/>
             <columns>
