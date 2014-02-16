@@ -23,7 +23,10 @@
         <groupTable id="operationTable"
                     height="100%"
                     width="100%">
-            <rows datasource="operationDs"/>
+            <actions>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
             <columns>
                 <column id="opType"/>
                 <column id="opDate"/>
@@ -38,11 +41,8 @@
                 <column id="category"/>
                 <column id="comments"/>
             </columns>
+            <rows datasource="operationDs"/>
             <rowsCount/>
-            <actions>
-                <action id="edit"/>
-                <action id="remove"/>
-            </actions>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createExpenseBtn"/>

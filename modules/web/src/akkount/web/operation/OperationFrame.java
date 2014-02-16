@@ -13,5 +13,5 @@ import com.haulmont.cuba.gui.components.IFrame;
  */
 public interface OperationFrame extends IFrame {
 
-    void initItem(Operation item);
+    void postInit(Operation item);
 }

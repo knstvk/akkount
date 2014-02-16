@@ -57,7 +57,7 @@ public class OperationBrowse extends AbstractLookup {
             super(OperationBrowse.this.operationTable, WindowManager.OpenType.THIS_TAB, opType.name());
             setInitialValues(Collections.<String, Object>singletonMap("opType", opType));
             setCaption(messages.getMessage(opType));
-            setShortcut("Ctrl-Shift-Num" + String.valueOf(opType.ordinal() + 1));
+            setShortcut("Ctrl-Shift-Key" + String.valueOf(opType.ordinal() + 1));
         }
 
         @Override

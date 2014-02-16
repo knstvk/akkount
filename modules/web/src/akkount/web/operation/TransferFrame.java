@@ -1,7 +1,5 @@
 package akkount.web.operation;
 
-import java.util.Map;
-
 import akkount.entity.Operation;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Label;
@@ -10,6 +8,7 @@ import com.haulmont.cuba.gui.data.impl.DsListenerAdapter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 
 public class TransferFrame extends AbstractFrame implements OperationFrame {
 
@@ -23,23 +22,29 @@ public class TransferFrame extends AbstractFrame implements OperationFrame {
     protected Label currency2Lab;
 
     @Override
-    public void init(Map<String, Object> params) {
+    public void postInit(Operation item) {
+        setCurrency1Label(item);
+        setCurrency2Label(item);
+
         operationDs.addListener(new DsListenerAdapter<Operation>() {
             @Override
             public void valueChanged(Operation source, String property, @Nullable Object prevValue, @Nullable Object value) {
-                if ("acc1".equals(property)) {
-                    setCurrency1Label(source);
-                } else if ("acc2".equals(property)) {
-                    setCurrency2Label(source);
+                switch (property) {
+                    case "acc1":
+                        setCurrency1Label(source);
+                        break;
+                    case "acc2":
+                        setCurrency2Label(source);
+                        break;
+                    case "amount1":
+                        if (value != null
+                                && (source.getAmount2() == null || source.getAmount2().equals(BigDecimal.ZERO))) {
+                            source.setAmount2((BigDecimal) value);
+                        }
+                        break;
                 }
             }
         });
-    }
-
-    @Override
-    public void initItem(Operation item) {
-        setCurrency1Label(item);
-        setCurrency2Label(item);
     }
 
     private void setCurrency2Label(Operation operation) {

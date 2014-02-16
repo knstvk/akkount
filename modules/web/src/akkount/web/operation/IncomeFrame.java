@@ -1,7 +1,5 @@
 package akkount.web.operation;
 
-import java.util.Map;
-
 import akkount.entity.Operation;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Label;
@@ -20,7 +18,9 @@ public class IncomeFrame extends AbstractFrame implements OperationFrame {
     protected Label currencyLab;
 
     @Override
-    public void init(Map<String, Object> params) {
+    public void postInit(Operation item) {
+        setCurrencyLabel(item);
+
         operationDs.addListener(new DsListenerAdapter<Operation>() {
             @Override
             public void valueChanged(Operation source, String property, @Nullable Object prevValue, @Nullable Object value) {
@@ -29,11 +29,6 @@ public class IncomeFrame extends AbstractFrame implements OperationFrame {
                 }
             }
         });
-    }
-
-    @Override
-    public void initItem(Operation item) {
-        setCurrencyLabel(item);
     }
 
     private void setCurrencyLabel(Operation operation) {

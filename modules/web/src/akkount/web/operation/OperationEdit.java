@@ -13,7 +13,6 @@ import akkount.web.App;
 import akkount.web.LeftPanel;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.CommitContext;
-import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.WindowParams;
 import com.haulmont.cuba.gui.components.AbstractEditor;
@@ -66,23 +65,25 @@ public class OperationEdit extends AbstractEditor<Operation> {
     }
 
     @Override
-    protected void initItem(Operation item) {
-        if (PersistenceHelper.isNew(item)) {
-            item.setOpDate(DateUtils.truncate(timeSource.currentTimestamp(), Calendar.DAY_OF_MONTH));
-            switch (item.getOpType()) {
-                case EXPENSE:
-                    item.setAcc1(loadAccount(UserDataKeys.OP_EXPENSE_ACCOUNT));
-                    break;
-                case INCOME:
-                    item.setAcc2(loadAccount(UserDataKeys.OP_INCOME_ACCOUNT));
-                    break;
-                case TRANSFER:
-                    item.setAcc1(loadAccount(UserDataKeys.OP_TRANSFER_EXPENSE_ACCOUNT));
-                    item.setAcc2(loadAccount(UserDataKeys.OP_TRANSFER_INCOME_ACCOUNT));
-                    break;
-            }
-            operationFrame.initItem(item);
+    protected void initNewItem(Operation item) {
+        item.setOpDate(DateUtils.truncate(timeSource.currentTimestamp(), Calendar.DAY_OF_MONTH));
+        switch (item.getOpType()) {
+            case EXPENSE:
+                item.setAcc1(loadAccount(UserDataKeys.OP_EXPENSE_ACCOUNT));
+                break;
+            case INCOME:
+                item.setAcc2(loadAccount(UserDataKeys.OP_INCOME_ACCOUNT));
+                break;
+            case TRANSFER:
+                item.setAcc1(loadAccount(UserDataKeys.OP_TRANSFER_EXPENSE_ACCOUNT));
+                item.setAcc2(loadAccount(UserDataKeys.OP_TRANSFER_INCOME_ACCOUNT));
+                break;
         }
+    }
+
+    @Override
+    protected void postInit() {
+        operationFrame.postInit(getItem());
     }
 
     private Account loadAccount(String key) {
