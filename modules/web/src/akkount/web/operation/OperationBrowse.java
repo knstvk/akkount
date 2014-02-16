@@ -54,7 +54,7 @@ public class OperationBrowse extends AbstractLookup {
     protected class OperationCreateAction extends CreateAction {
 
         public OperationCreateAction(OperationType opType) {
-            super(OperationBrowse.this.operationTable, WindowManager.OpenType.THIS_TAB, opType.name());
+            super(OperationBrowse.this.operationTable, WindowManager.OpenType.NEW_TAB, opType.name());
             setInitialValues(Collections.<String, Object>singletonMap("opType", opType));
             setCaption(messages.getMessage(opType));
             setShortcut("Ctrl-Shift-Key" + String.valueOf(opType.ordinal() + 1));
@@ -69,7 +69,7 @@ public class OperationBrowse extends AbstractLookup {
     protected class OperationEditAction extends EditAction {
 
         public OperationEditAction() {
-            super(OperationBrowse.this.operationTable);
+            super(OperationBrowse.this.operationTable, WindowManager.OpenType.NEW_TAB);
         }
 
         @Override

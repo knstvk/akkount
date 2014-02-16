@@ -8,7 +8,8 @@
     </view>
     <view class="akkount.entity.Operation"
           extends="_local"
-          name="operation-browse">
+          name="operation-browse"
+          systemProperties="true">
         <property name="acc1"
                   view="_minimal"/>
         <property name="acc2"

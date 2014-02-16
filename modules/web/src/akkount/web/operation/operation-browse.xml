@@ -29,7 +29,9 @@
             </actions>
             <columns>
                 <column id="opType"/>
-                <column id="opDate"/>
+                <column id="opDate">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="msg://opDateFormat"/>
+                </column>
                 <column id="acc1"/>
                 <column id="amount1">
                     <formatter class="akkount.web.DecimalFormatter"/>
@@ -40,6 +42,7 @@
                 </column>
                 <column id="category"/>
                 <column id="comments"/>
+                <column id="createdBy"/>
             </columns>
             <rows datasource="operationDs"/>
             <rowsCount/>
