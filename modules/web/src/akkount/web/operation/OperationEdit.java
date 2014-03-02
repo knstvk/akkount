@@ -18,10 +18,12 @@ import com.haulmont.cuba.gui.WindowParams;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.GroupBoxLayout;
 import com.haulmont.cuba.gui.data.DsContext;
+import com.haulmont.cuba.security.global.UserSession;
 import org.apache.commons.lang.time.DateUtils;
 
 import javax.inject.Inject;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,14 +33,19 @@ import java.util.Set;
  */
 public class OperationEdit extends AbstractEditor<Operation> {
 
-    @Inject
-    protected GroupBoxLayout frameContainer;
+    public static final String LAST_OPERATION_DATE_ATTR = "lastOperationDate";
 
     @Inject
-    protected TimeSource timeSource;
+    private GroupBoxLayout frameContainer;
 
     @Inject
-    protected UserDataService userDataService;
+    private TimeSource timeSource;
+
+    @Inject
+    private UserDataService userDataService;
+
+    @Inject
+    private UserSession userSession;
 
     private OperationFrame operationFrame;
 
@@ -66,7 +73,7 @@ public class OperationEdit extends AbstractEditor<Operation> {
 
     @Override
     protected void initNewItem(Operation item) {
-        item.setOpDate(DateUtils.truncate(timeSource.currentTimestamp(), Calendar.DAY_OF_MONTH));
+        item.setOpDate(loadDate());
         switch (item.getOpType()) {
             case EXPENSE:
                 item.setAcc1(loadAccount(UserDataKeys.OP_EXPENSE_ACCOUNT));
@@ -86,8 +93,19 @@ public class OperationEdit extends AbstractEditor<Operation> {
         operationFrame.postInit(getItem());
     }
 
+    @Override
+    protected boolean postCommit(boolean committed, boolean close) {
+        userSession.setAttribute(LAST_OPERATION_DATE_ATTR, getItem().getOpDate());
+        return true;
+    }
+
     private Account loadAccount(String key) {
         return userDataService.loadEntity(key, Account.class);
+    }
+
+    private Date loadDate() {
+        Date date = userSession.getAttribute(LAST_OPERATION_DATE_ATTR);
+        return date != null ? date : DateUtils.truncate(timeSource.currentTimestamp(), Calendar.DAY_OF_MONTH);
     }
 
 }
