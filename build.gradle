@@ -28,8 +28,7 @@ def globalModule = project(':app-global')
 def coreModule = project(':app-core')
 def guiModule = project(':app-gui')
 def webModule = project(':app-web')
-
-
+def portalModule = project(':app-portal')
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
 def servletApi = 'org.apache.tomcat:servlet-api:6.0.20'
@@ -38,7 +37,7 @@ def servletApi = 'org.apache.tomcat:servlet-api:6.0.20'
 apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
-configure([globalModule, coreModule, guiModule, webModule]) {
+configure([globalModule, coreModule, guiModule, webModule, portalModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
     apply(plugin: 'idea')
@@ -90,7 +89,7 @@ configure(coreModule) {
 
     task deploy(dependsOn: assemble, type: CubaDeployment) {
         appName = 'app-core'
-        appJars('cuba-global', 'cuba-core', 
+        appJars('cuba-global', 'cuba-core',
                 'app-global', 'app-core')
     }
 
@@ -182,7 +181,7 @@ configure(webModule) {
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
         appName = 'app'
-        appJars('cuba-web', 'cuba-global', 'cuba-gui', 'cuba-client', 
+        appJars('cuba-web', 'cuba-global', 'cuba-gui', 'cuba-client',
                 'app-global', 'app-gui', 'app-web')
     }
     task buildScssThemes(type: CubaWebScssThemeCreation)
@@ -190,14 +189,61 @@ configure(webModule) {
 }
 
 
+configure(portalModule) {
+    dependencies {
+        provided(servletApi)
+        compile(globalModule)
+        compile("com.haulmont.cuba:cuba-portal:$cubaVersion")
+
+    }
+
+    def webappName = 'app-portal'
+    def webRootDir = "$tomcatDir/webapps/$webappName"
+    def resourcesDir = "$webRootDir/akkount"
+
+    task deploy(dependsOn: assemble, type: CubaDeployment) {
+        appName = webappName
+        appJars('cuba-client', 'cuba-portal', 'cuba-global', 
+                'app-global', 'app-portal')
+    }
+
+    task deployStatic() << {
+        copy {
+            from file('web/akkount')
+            include '**/*'
+            into resourcesDir
+        }
+        copy {
+            from file('web/index.html')
+            into webRootDir
+        }
+    }
+
+    task cleanStatic() << {
+        delete resourcesDir
+    }
+
+    task webArchive(type: Zip) {
+        from file('web')
+        from file("$buildDir/web")
+        exclude '**/web.xml', '**/app.properties'
+        classifier = 'web'
+    }
+
+    artifacts {
+        archives webArchive
+    }
+}
+
 
 task undeploy(type: Delete, dependsOn: ':app-web:cleanConf') {
     delete("$tomcatDir/shared")
     delete("$tomcatDir/webapps/app-core")
     delete("$tomcatDir/webapps/app")
+    delete("$tomcatDir/webapps/app-portal")
 }
 
-task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
+task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy', ':app-portal:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
     ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
         not {
             socket(server: 'localhost', port: '8787')

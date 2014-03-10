@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Akkount</title>
+
+    <link href="css/bootstrap.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="css/akkount.css" media="all" rel="stylesheet" type="text/css" />
+
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/underscore.js"></script>
+    <script src="js/lib/backbone.js"></script>
+
+    <script src="js/main.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/login/login_view.js"></script>
+    <script src="js/operation/op_model.js"></script>
+    <script src="js/operation/op_row_view.js"></script>
+    <script src="js/operation/op_table_view.js"></script>
+</head>
+<body>
+<div id="main" class="container">
+</div>
+
+<script type="text/template" id="login-template">
+    <div id="login-container">
+        <form class="form-signin" role="form">
+            <h2 class="form-signin-heading">Please sign in</h2>
+            <input id="login-name" type="text" class="form-control" placeholder="Login" required autofocus>
+            <input id="password" type="password" class="form-control" placeholder="Password" required>
+            <label class="checkbox">
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+            <button class="btn btn-lg btn-primary btn-block" id="login-button">Sign in</button>
+        </form>
+    </div>
+</script>
+
+<script type="text/template" id="operation-table-template">
+    <div class="row">
+        <div class="span6" id="primary-content">
+            <!-- the container that gets populated with the index -->
+            <div class="well">
+                <a class="btn btn-block btn-large btn-info" href="#operation/new">Create New Operation</a>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th width="20%">Date</th>
+                    <th>Comments</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="operation-row-template">
+    <td>
+        <a href="#op/<%= id %>/view"><%= date %></a>
+    </td>
+    <td><%= comments %></td>
+    <td>
+        <a href="#" class="delete btn btn-danger btn-small">delete</a>
+    </td>
+</script>
+
+</body>
+</html>
