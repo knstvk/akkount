@@ -17,6 +17,7 @@
         },
 
         loginClick: function(e) {
+            var self = this;
             e.preventDefault();
 
             $.ajax({
@@ -30,18 +31,27 @@
                 success: function(text) {
                     App.session.id = text;
                     App.session.login = $("#login-name").val();
-
                     console.log(App.session);
 
-                    $("#login-container").fadeOut();
                     window.location.hash = "operations";
                 },
                 error: function(xhr, status) {
                     console.log(xhr, status);
-                    alert("Error!");
+                    if (xhr.status == 401) {
+                        self.showAlert("Invalid user name or password");
+                    } else {
+                        self.showAlert("Error " + xhr.status + " " + xhr.statusCode);
+                    }
                 }
 
             });
+        },
+
+        showAlert: function(msg) {
+            var loginAlertsDiv = $("#login-alerts");
+            loginAlertsDiv.empty();
+            loginAlertsDiv.append("<div class='alert alert-warning'>" + msg + "</div>");
         }
+
     });
 }());
