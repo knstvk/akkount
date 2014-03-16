@@ -2,9 +2,9 @@
  * Created by krivopustov on 26.02.14.
  */
 (function() {
-    window.App = window.App || {};
+    "use strict";
 
-    App.Router = Backbone.Router.extend({
+    app.Router = Backbone.Router.extend({
         routes: {
             "login": "showLogin",
             "operations": "showOperations"
@@ -12,18 +12,19 @@
 
         initialize: function(options) {
             this.operations = options.operations;
-            this.showLogin();
+            this.showOperations();
         },
 
         showLogin: function() {
-            this.currentView = new App.LoginView();
+            app.session = {};
+            this.currentView = new app.LoginView();
             $('#main').html(this.currentView.render().el);
 
         },
 
         showOperations: function() {
-            if (App.session.id) {
-                this.currentView = new App.OperationTableView({operations: this.operations});
+            if (app.session.id) {
+                this.currentView = new app.OperationTableView({operations: this.operations});
                 $('#main').html(this.currentView.render().el);
             } else {
                 window.location.hash = "login";

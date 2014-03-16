@@ -4,15 +4,26 @@
 (function() {
     "use strict";
 
-    App.OperationTableView = Backbone.View.extend({
+    app.OperationTableView = Backbone.View.extend({
         initialize: function(options){
             this.operations = options.operations;
             this.operations.bind("reset", this.addAll, this);
         },
 
-        render: function(){
-            this.$el.html($('#operation-table-template').html());
-            this.addAll();
+        render: function() {
+            var self = this;
+            this.operations.fetch({
+                success: function() {
+                    self.$el.html(_.template($('#operation-table-template').html(), app.session));
+                    self.addAll();
+                },
+                error: function(collection, response, options) {
+                    app.log("Error loading operations: " + response.status);
+                    if (response.status == 500) { // TODO change to 403 after fixing PL-3671
+                        window.location.hash = "#login";
+                    }
+                }
+            });
             return this;
         },
 
@@ -22,7 +33,7 @@
         },
 
         addOne: function(operation){
-            var view = new App.OperationRowView({operations: this.operations, operation: operation});
+            var view = new app.OperationRowView({operations: this.operations, operation: operation});
             this.$el.find("tbody").append(view.render().el);
         }
     });

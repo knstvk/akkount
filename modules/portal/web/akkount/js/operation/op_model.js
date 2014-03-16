@@ -4,7 +4,7 @@
 (function() {
     "use strict";
 
-    App.OperationModel = Backbone.Model.extend({
+    app.OperationModel = Backbone.Model.extend({
        defaults: {
            id: "",
            date: "",
@@ -12,7 +12,14 @@
        }
     });
 
-    App.OperationsCollection = Backbone.Collection.extend({
-       model: App.OperationModel
+    app.OperationsCollection = Backbone.Collection.extend({
+        model: app.OperationModel,
+
+        url: function() {
+            return "api/query.json?s=" + app.session.id
+                + "&e=akk$Operation&q=" + encodeURIComponent("select o from akk$Operation o order by o.opDate desc")
+                + "&max=100"
+                + "&view=operation-browse";
+        }
     });
 }());

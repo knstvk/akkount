@@ -1,7 +1,7 @@
 (function() {
     "use strict";
 
-    App.LoginView = Backbone.View.extend({
+    app.LoginView = Backbone.View.extend({
 
         initialize: function() {
             _.bindAll(this, "render", "loginClick");
@@ -29,10 +29,7 @@
                     l: "en"
                 },
                 success: function(text) {
-                    App.session.id = text;
-                    App.session.login = $("#login-name").val();
-                    console.log(App.session);
-
+                    app.setSession(text, $("#login-name").val());
                     window.location.hash = "operations";
                 },
                 error: function(xhr, status) {

@@ -17,11 +17,11 @@
     <script src="js/router.js"></script>
     <script src="js/login/login_view.js"></script>
     <script src="js/operation/op_model.js"></script>
-    <script src="js/operation/op_row_view.js"></script>
     <script src="js/operation/op_table_view.js"></script>
+    <script src="js/operation/op_row_view.js"></script>
 </head>
 <body>
-<div id="main" class="container">
+<div id="main">
 </div>
 
 <script type="text/template" id="login-template">
@@ -40,33 +40,77 @@
 </script>
 
 <script type="text/template" id="operation-table-template">
-    <div class="row">
-        <div class="span6" id="primary-content">
-            <!-- the container that gets populated with the index -->
-            <div class="well">
-                <a class="btn btn-block btn-large btn-info" href="#operation/new">Create New Operation</a>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Akkount</a>
             </div>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th width="20%">Date</th>
-                    <th>Comments</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#operation/new">New Operation</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><p class="navbar-text"><%= login %></p></li>
+                    <li><a href="#login">Logout</a></li>
+                </ul>
+            </div>
         </div>
+    </div>
+    <div class="container" id="primary-content">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Expense</th>
+                <th>Income</th>
+                <th>Category</th>
+                <th>Comments</th>
+                <!--<th></th>-->
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 </script>
 
 <script type="text/template" id="operation-row-template">
     <td>
-        <a href="#op/<%= id %>/view"><%= date %></a>
+        <a href="#op/<%= id %>/view" class="edit"><%= opDate %></a>
     </td>
+    <td><strong><% print(amount1 != 0 ? amount1 : '') %></strong><br><% print(acc1 ? acc1.name : '') %></td>
+    <td><strong><% print(amount2 != 0 ? amount2 : '') %></strong><br><% print(acc2 ? acc2.name : '') %></td>
+    <td><% print(category ? category.name : '') %></td>
     <td><%= comments %></td>
-    <td>
-        <a href="#" class="delete btn btn-danger btn-small">delete</a>
+    <!--<td>-->
+        <!--<a href="#" class="btn btn-primary">edit</a>-->
+        <!--<a href="#" class="btn btn-danger delete">delete</a>-->
+    <!--</td>-->
+</script>
+
+<script type="text/template" id="operation-edit-template">
+    <td colspan="5">
+        <table>
+            <tbody>
+            <tr>
+                <td>Expense</td>
+                <td>
+                    <a href="#" class="btn btn-success ok">OK</a>
+                    <a href="#" class="btn btn-link cancel">Cancel</a>
+                </td>
+            </tr>
+            <tr><td>Date</td><td><%= opDate %></td></tr>
+            <tr><td>Account</td><td><%= acc1.name %></td></tr>
+            </tbody>
+        </table>
+        <!--<div><%= opDate %></div>-->
+        <!--<a href="#" class="btn btn-success ok">OK</a>-->
+        <!--<a href="#" class="btn btn-link cancel">Cancel</a>-->
     </td>
 </script>
 
