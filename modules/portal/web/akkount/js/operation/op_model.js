@@ -5,21 +5,19 @@
     "use strict";
 
     app.OperationModel = Backbone.Model.extend({
-       defaults: {
-           id: "",
-           date: "",
-           comments: ""
-       }
+        defaults: {
+            id: "",
+            opType: "E",
+            opDate: app.toServerDate(new Date())
+        }
     });
 
     app.OperationsCollection = Backbone.Collection.extend({
         model: app.OperationModel,
 
-        url: function() {
-            return "api/query.json?s=" + app.session.id
-                + "&e=akk$Operation&q=" + encodeURIComponent("select o from akk$Operation o order by o.opDate desc")
-                + "&max=100"
-                + "&view=operation-browse";
-        }
+        entityName: "akk$Operation",
+        jpqlQuery: "select o from akk$Operation o order by o.opDate desc",
+        maxResults: 100,
+        view: "operation-browse"
     });
 }());

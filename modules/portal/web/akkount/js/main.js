@@ -8,12 +8,6 @@ var SESSION_USER_NAME_KEY = "akkount.session.userName";
 window.app = {
     debug: true,
 
-    log: function(obj) {
-        if (this.debug) {
-            console.log(obj);
-        }
-    },
-
     session: {
         id: localStorage.getItem(SESSION_ID_KEY),
         login: localStorage.getItem(SESSION_USER_NAME_KEY)
@@ -26,40 +20,71 @@ window.app = {
         localStorage.setItem(SESSION_USER_NAME_KEY, this.session.login);
 
         this.log(this.session);
+    },
+
+    log: function(obj) {
+        if (this.debug) {
+            console.log(obj);
+        }
+    },
+
+    toDisplayDate: function (date) {
+        if (_.isDate(date)) {
+            return date.toISOString().slice(0, 10).split("-").reverse().join("/");
+        } else {
+            var parts = date.split("-");
+            if (parts.length == 3) {
+                return parts.reverse().join("/");
+            } else if (date.indexOf("/") == 2) {
+                return date;
+            } else {
+                this.log("Invalid date: " + date);
+                return date;
+            }
+        }
+    },
+
+    toServerDate: function (date) {
+        if (_.isDate(date)) {
+            return date.toISOString().slice(0, 10);
+        } else {
+            var parts = date.split("/");
+            if (parts.length == 3) {
+                return parts.reverse().join("-");
+            } else if (date.indexOf("-") == 4) {
+                return date;
+            } else {
+                this.log("Invalid date: " + date);
+                return date;
+            }
+        }
     }
 };
 
-//Backbone.sync = function(method, model, options) {
-//    options || (options = {});
-//
-//    switch (method) {
-//        case 'create':
-//            break;
-//
-//        case 'update':
-//            break;
-//
-//        case 'delete':
-//            break;
-//
-//        case 'read':
-//            //app.log(method)
-//            $.ajax({
-//                url: model.url(),
-//                type: "GET",
-//                success: function(json) {
-//                    app.log("Success: " + json);
-//                    options.success(json);
-//                },
-//                error: function(xhr, status) {
-//                    app.log("Error: " + status);
-//                    options.error(xhr, status);
-//                }
-//            });
-//            break;
-//    }
-//};
+Backbone.sync = function(method, model, options) {
+    options || (options = {});
 
+    switch (method) {
+        case 'create':
+            app.cubaAPI.create(model, options); 
+            break;
+
+        case 'update':
+            app.cubaAPI.update(model, options); 
+            break;
+
+        case 'delete':
+            app.cubaAPI.remove(model, options); 
+            break;
+
+        case 'read':
+            if (model.id)
+                app.cubaAPI.load(model, options); 
+            else
+                app.cubaAPI.loadList(model, options);
+            break;
+    }
+};
 
 $(document).ready(function() {
     var operations = new app.OperationsCollection();

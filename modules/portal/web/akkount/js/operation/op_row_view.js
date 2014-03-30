@@ -10,8 +10,8 @@
         events: {
             "click a.edit": "editRow",
             "click a.delete": "deleteRow",
-            "click a.ok": "commitChanges",
-            "click a.cancel": "cancelChanges"
+            "click a.save": "save",
+            "click a.cancel": "cancel"
         },
 
         initialize: function(options) {
@@ -27,19 +27,24 @@
         editRow: function() {
             this.$el.empty();
             this.$el.html(_.template($("#operation-edit-template").html(), this.operation.toJSON()));
-
+            this.$el.find("#opDate").datepicker({ dateFormat: "dd/mm/yy" });
         },
 
         deleteRow: function() {
             this.$el.remove();
         },
 
-        commitChanges: function() {
+        save: function() {
+            this.operation.set({
+                opDate: app.toServerDate(this.$el.find("#opDate").val()),
+                comments: this.$el.find("#comments").val()
+            });
+            this.operation.save();
             this.$el.empty();
             this.render();
         },
 
-        cancelChanges: function() {
+        cancel: function() {
             this.$el.empty();
             this.render();
         }

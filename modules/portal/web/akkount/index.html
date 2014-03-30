@@ -7,14 +7,17 @@
     <title>Akkount</title>
 
     <link href="css/bootstrap.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="css/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
     <link href="css/akkount.css" media="all" rel="stylesheet" type="text/css" />
 
     <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/jquery-ui.js"></script>
     <script src="js/lib/underscore.js"></script>
     <script src="js/lib/backbone.js"></script>
 
     <script src="js/main.js"></script>
     <script src="js/router.js"></script>
+    <script src="js/cuba-api.js"></script>
     <script src="js/login/login_view.js"></script>
     <script src="js/operation/op_model.js"></script>
     <script src="js/operation/op_table_view.js"></script>
@@ -81,7 +84,7 @@
 
 <script type="text/template" id="operation-row-template">
     <td>
-        <a href="#op/<%= id %>/view" class="edit"><%= opDate %></a>
+        <a href="#op/<%= id %>/view" class="edit"><% print(app.toDisplayDate(opDate)) %></a>
     </td>
     <td><strong><% print(amount1 != 0 ? amount1 : '') %></strong><br><% print(acc1 ? acc1.name : '') %></td>
     <td><strong><% print(amount2 != 0 ? amount2 : '') %></strong><br><% print(acc2 ? acc2.name : '') %></td>
@@ -95,22 +98,28 @@
 
 <script type="text/template" id="operation-edit-template">
     <td colspan="5">
-        <table>
-            <tbody>
-            <tr>
-                <td>Expense</td>
-                <td>
-                    <a href="#" class="btn btn-success ok">OK</a>
-                    <a href="#" class="btn btn-link cancel">Cancel</a>
-                </td>
-            </tr>
-            <tr><td>Date</td><td><%= opDate %></td></tr>
-            <tr><td>Account</td><td><%= acc1.name %></td></tr>
-            </tbody>
-        </table>
-        <!--<div><%= opDate %></div>-->
-        <!--<a href="#" class="btn btn-success ok">OK</a>-->
-        <!--<a href="#" class="btn btn-link cancel">Cancel</a>-->
+        <form>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-error" style="display:none;"></div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="opDate" placeholder="Date"
+                               value="<% print(app.toDisplayDate(opDate)) %>" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="account" placeholder="Account"
+                               value="<%= acc1.name %>" />
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="5" id="comments" placeholder="Comments"><%= comments %></textarea>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <a class="btn btn-success save" type="submit">Save</a>
+                    <a href="#" class="btn cancel">Cancel</a>
+                </div>
+            </div>
+        </form>
     </td>
 </script>
 
