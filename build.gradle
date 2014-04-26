@@ -5,11 +5,12 @@ allprojects {
     ext.isSnapshot = true
     ext.tomcatDir = "$rootDir/build/tomcat"
     ext.copyright = "Copyright (c) 2014 akkount" // Copyright Notice for IDEA project
+    ext.vcs = 'Git'
     // ext.vcs = 'svn' // VCS for IDEA project
 }
 
 buildscript {
-    ext.cubaVersion = '5.0.12'
+    ext.cubaVersion = '5.1.4'
     repositories {
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
@@ -135,6 +136,11 @@ configure(guiModule) {
         include "akkount/**"
         into "$tomcatDir/conf/app"
     }
+
+    task clearMessagesCache(type: CubaClearMessagesCache) {
+        appName = 'app'
+    }
+    deployConf.dependsOn clearMessagesCache
 }
 
 configure(webModule) {
@@ -169,6 +175,11 @@ configure(webModule) {
         include "akkount/**"
         into "$tomcatDir/conf/app"
     }
+
+    task clearMessagesCache(type: CubaClearMessagesCache) {
+        appName = 'app'
+    }
+    deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') << {
         def dir = new File(tomcatDir, '/conf/app')

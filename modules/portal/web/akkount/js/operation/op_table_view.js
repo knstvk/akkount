@@ -19,7 +19,7 @@
                 },
                 error: function(collection, response, options) {
                     app.log("Error loading operations: " + response.status);
-                    if (response.status == 500) { // TODO change to 403 after fixing PL-3671
+                    if (response.status == 401) {
                         window.location.hash = "#login";
                     }
                 }
