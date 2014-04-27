@@ -8,7 +8,13 @@
         defaults: {
             id: "",
             opType: "E",
-            opDate: app.toServerDate(new Date())
+            opDate: app.toServerDate(new Date()),
+            acc1: null,
+            acc2: null,
+            amount1: 0,
+            amount2: 0,
+            category: null,
+            comments: ""
         }
     });
 

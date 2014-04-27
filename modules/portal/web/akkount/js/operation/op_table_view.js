@@ -7,6 +7,7 @@
     app.OperationTableView = Backbone.View.extend({
         initialize: function(options){
             this.operations = options.operations;
+            this.accounts = new app.AccountsCollection();
             this.operations.bind("reset", this.addAll, this);
         },
 
@@ -16,6 +17,7 @@
                 success: function() {
                     self.$el.html(_.template($('#operation-table-template').html(), app.session));
                     self.addAll();
+                    self.accounts.fetch();
                 },
                 error: function(collection, response, options) {
                     app.log("Error loading operations: " + response.status);
@@ -33,8 +35,22 @@
         },
 
         addOne: function(operation){
-            var view = new app.OperationRowView({operations: this.operations, operation: operation});
+            var view = new app.OperationRowView({
+                operations: this.operations,
+                operation: operation,
+                accounts: this.accounts
+            });
             this.$el.find("tbody").append(view.render().el);
+        },
+
+        addNew: function() {
+            var view = new app.OperationRowView({
+                operations: this.operations,
+                operation: new app.OperationModel(),
+                accounts: this.accounts
+            });
+            this.$el.find("tbody").prepend(view.render().el);
+            view.editRow();
         }
     });
 }());

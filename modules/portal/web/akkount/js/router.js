@@ -7,11 +7,12 @@
     app.Router = Backbone.Router.extend({
         routes: {
             "login": "showLogin",
-            "operations": "showOperations"
+            "operations": "showOperations",
+            "op/new": "newOperation"
         },
 
-        initialize: function(options) {
-            this.operations = options.operations;
+        initialize: function() {
+            this.operations = new app.OperationsCollection();
             this.showOperations();
         },
 
@@ -28,6 +29,13 @@
                 $('#main').html(this.currentView.render().el);
             } else {
                 window.location.hash = "login";
+            }
+        },
+
+        newOperation: function() {
+            app.log("New operation");
+            if (this.currentView instanceof app.OperationTableView) {
+                this.currentView.addNew();
             }
         }
     });

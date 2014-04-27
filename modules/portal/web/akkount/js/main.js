@@ -87,8 +87,7 @@ Backbone.sync = function(method, model, options) {
 };
 
 $(document).ready(function() {
-    var operations = new app.OperationsCollection();
-    var router = new app.Router({operations: operations});
+    var router = new app.Router();
 
     Backbone.history.start();
 
