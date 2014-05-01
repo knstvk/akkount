@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<metadata xmlns="http://schemas.haulmont.com/cuba/5.0/metadata.xsd">
+<metadata xmlns="http://schemas.haulmont.com/cuba/5.1/metadata.xsd">
 
-    <metadata-model root-package="akkount"/>
+    <metadata-model root-package="akkount">
+        <class>akkount.entity.CategoryAmount</class>
+    </metadata-model>
 
 </metadata>
