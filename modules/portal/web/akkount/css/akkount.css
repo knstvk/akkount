@@ -1,7 +1,7 @@
 body {
     padding-top: 70px;
     padding-bottom: 40px;
-    background-color: #eee;
+    background-color: #fff;
 }
 
 .form-signin {
@@ -43,4 +43,8 @@ body {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+.currency1, .currency2 {
+    padding-left: 0;
 }

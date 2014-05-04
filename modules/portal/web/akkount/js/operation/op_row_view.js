@@ -26,10 +26,12 @@
         },
 
         editRow: function() {
+            var self = this;
+            var opType, template, acc1, acc2, acc1Select, acc2Select;
+
             this.$el.empty();
 
-            var template;
-            var opType = this.operation.get("opType");
+            opType = this.operation.get("opType");
 
             if (opType == "E")
                 template = $("#expense-edit-template").html();
@@ -41,19 +43,31 @@
             this.$el.html(_.template(template, this.operation.toJSON()));
 
             if (opType == "E" || opType == "T") {
-                var acc1Select = new app.AccountSelectView(this.accounts).render().el;
-                acc1Select.setAttribute("id", "acc1");
-                acc1Select.value = this.operation.get("acc1").id;
-                this.$el.find("div.account1-select").append(acc1Select);
+                acc1Select = new app.AccountSelectView(this.accounts).render().el;
+                $(acc1Select).addClass("acc1");
+                acc1 = this.operation.get("acc1");
+                acc1Select.value = acc1.id;
+                this.$el.find("div.account1-container").append(acc1Select);
+
+                this.$el.find("div.currency1").html(this.accounts.currencyCodeByAccId(acc1.id));
+                acc1Select.onchange = function() {
+                    self.$el.find("div.currency1").html(self.accounts.currencyCodeByAccId(this.value));
+                };
             }
             if (opType == "I" ||  opType == "T") {
-                var acc2Select = new app.AccountSelectView(this.accounts).render().el;
-                acc2Select.setAttribute("id", "acc2");
-                acc2Select.value = this.operation.get("acc2").id;
-                this.$el.find("div.account2-select").append(acc2Select);
+                acc2Select = new app.AccountSelectView(this.accounts).render().el;
+                $(acc2Select).addClass("acc2");
+                acc2 = this.operation.get("acc2");
+                acc2Select.value = acc2.id;
+                this.$el.find("div.account2-container").append(acc2Select);
+
+                this.$el.find("div.currency2").html(this.accounts.currencyCodeByAccId(acc2.id));
+                acc2Select.onchange = function() {
+                    self.$el.find("div.currency2").html(self.accounts.currencyCodeByAccId(this.value));
+                };
             }
 
-            this.$el.find("#opDate").datepicker({ dateFormat: "dd/mm/yy" });
+            this.$el.find("input.opDate").datepicker({ dateFormat: "dd/mm/yy" });
 
         },
 
@@ -62,25 +76,31 @@
         },
 
         save: function() {
+            var acc1Select, acc2Select, amount1Field, amount2Field;
+
             this.operation.set({
-                opDate: app.toServerDate(this.$el.find("#opDate").val()),
-                comments: this.$el.find("#comments").val()
+                opDate: app.toServerDate(this.$el.find("input.opDate").val()),
+                comments: this.$el.find("textarea.comments").val()
             });
 
-            var acc1Select = this.$el.find("#acc1");
+            acc1Select = this.$el.find(".acc1");
             if (acc1Select.length) {
-                var acc1 = this.accounts.find(function(acc) {
-                    return acc.id == acc1Select.val();
-                });
-                this.operation.set("acc1", acc1.toJSON());
+                this.operation.set("acc1", this.accounts.byId(acc1Select.val()).toJSON());
             }
 
-            var acc2Select = this.$el.find("#acc2");
+            acc2Select = this.$el.find(".acc2");
             if (acc2Select.length) {
-                var acc2 = this.accounts.find(function(acc) {
-                    return acc.id == acc2Select.val();
-                });
-                this.operation.set("acc2", acc2.toJSON());
+                this.operation.set("acc2", this.accounts.byId(acc2Select.val()).toJSON());
+            }
+
+            amount1Field = this.$el.find("input.amount1");
+            if (amount1Field.length) {
+                this.operation.set("amount1", amount1Field.val());
+            }
+
+            amount2Field = this.$el.find("input.amount2");
+            if (amount2Field.length) {
+                this.operation.set("amount2", amount2Field.val());
             }
 
             this.operation.save();

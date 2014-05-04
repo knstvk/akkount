@@ -12,6 +12,16 @@
         entityName: "akk$Account",
         jpqlQuery: "select a from akk$Account a order by a.name",
         maxResults: 100,
-        view: "account-with-currency"
+        view: "account-with-currency",
+
+        byId: function(id) {
+            return this.find(function(acc) {
+                return acc.id == id;
+            });
+        },
+
+        currencyCodeByAccId: function(id) {
+            return this.byId(id).get("currency").code;
+        }
     });
 }());
