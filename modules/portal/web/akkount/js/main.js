@@ -86,6 +86,14 @@ Backbone.sync = function(method, model, options) {
     }
 };
 
+Backbone.Model.prototype.parse = function(resp) {
+    return app.cubaAPI.parse(resp);
+};
+
+Backbone.Collection.prototype.parse = function(resp) {
+    return app.cubaAPI.parse(resp);
+};
+
 $(document).ready(function() {
     var router = new app.Router();
 

@@ -54,6 +54,60 @@
 
 		remove: function(model, options) {
 
-		}
+		},
+
+        /**
+         * Parse server responce replacing refs to objects.
+         *
+         * @param resp  data from server, containing "ref" attributes to refer objects inserted previously in JSON
+         * @returns {*} full valid object graph
+         */
+        parse: function (resp) {
+            var visited = {}, result = [];
+
+            function process(obj) {
+                var ref, processedObj;
+
+                ref = obj["ref"];
+                if (ref) {
+                    processedObj = visited[ref];
+                    if (processedObj)
+                        return processedObj;
+                    else {
+                        app.log("Error parsing collection: ref=" + ref + " not found in visited objects");
+                        return obj;
+                    }
+                } else {
+                    if (obj.id) {
+                        if (visited[obj.id])
+                            return obj;
+
+                        visited[obj.id] = obj;
+                    }
+                    _.each(obj, function(val, prop) {
+                        if (_.isArray(val)) {
+                            _.each(val, function(item, index) {
+                                if (_.isObject(item)) {
+                                    val[index] = process(item);
+                                }
+                            });
+                        } else if (_.isObject(val)) {
+                            obj[prop] = process(val);
+                        }
+                    });
+                    return obj;
+                }
+            }
+
+            if (_.isArray(resp)) {
+                _.each(resp, function(item) {
+                    result.push(process(item));
+                });
+                return result;
+            } else {
+                return process(resp);
+            }
+        }
+
 	};
 }());
