@@ -8,6 +8,7 @@
         initialize: function(options){
             this.operations = options.operations;
             this.accounts = new app.AccountsCollection();
+            this.categories = new app.CategoryCollection();
             this.operations.bind("reset", this.addAll, this);
         },
 
@@ -18,6 +19,7 @@
                     self.$el.html(_.template($('#operation-table-template').html(), app.session));
                     self.addAll();
                     self.accounts.fetch();
+                    self.categories.fetch();
                 },
                 error: function(collection, response, options) {
                     app.log("Error loading operations: " + response.status);
@@ -38,16 +40,18 @@
             var view = new app.OperationRowView({
                 operations: this.operations,
                 operation: operation,
-                accounts: this.accounts
+                accounts: this.accounts,
+                categories: this.categories
             });
             this.$el.find("tbody").append(view.render().el);
         },
 
-        addNew: function() {
+        addNew: function(operation) {
             var view = new app.OperationRowView({
                 operations: this.operations,
-                operation: new app.OperationModel(),
-                accounts: this.accounts
+                operation: operation,
+                accounts: this.accounts,
+                categories: this.categories
             });
             this.$el.find("tbody").prepend(view.render().el);
             view.editRow();

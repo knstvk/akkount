@@ -24,6 +24,8 @@
     <script src="js/operation/op_row_view.js"></script>
     <script src="js/account/acc_model.js"></script>
     <script src="js/account/acc_select_view.js"></script>
+    <script src="js/category/cat_model.js"></script>
+    <script src="js/category/cat_select_view.js"></script>
 </head>
 <body>
 <div id="main">
@@ -58,7 +60,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="#op/new">New Operation</a></li>
+                    <li><a href="#op/expense">Expense</a></li>
+                    <li><a href="#op/income">Income</a></li>
+                    <li><a href="#op/transfer">Transfer</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><p class="navbar-text"><%= login %></p></li>
@@ -123,6 +127,7 @@
                         </div>
                         <div class="col-md-1 currency1"></div>
                     </div>
+                    <div class="form-group category-container"></div>
                     <div class="form-group">
                         <textarea class="form-control comments" rows="3" placeholder="Comments"><%= comments %></textarea>
                     </div>
@@ -161,6 +166,7 @@
                         </div>
                         <div class="col-md-1 currency2"></div>
                     </div>
+                    <div class="form-group category-container"></div>
                     <div class="form-group">
                         <textarea class="form-control comments" rows="3" placeholder="Comments"><%= comments %></textarea>
                     </div>
@@ -227,6 +233,13 @@
 <script type="text/template" id="account-select-template">
     <% _(accounts).each(function(acc) { %>
         <option value="<%= acc.id %>"><%= acc.name %></option>
+    <% }); %>
+</script>
+
+<script type="text/template" id="category-select-template">
+    <option value=""></option>
+    <% _(categories).each(function(cat) { %>
+        <option value="<%= cat.id %>"><%= cat.name %></option>
     <% }); %>
 </script>
 

@@ -8,7 +8,9 @@
         routes: {
             "login": "showLogin",
             "operations": "showOperations",
-            "op/new": "newOperation"
+            "op/expense": "newExpense",
+            "op/income": "newIncome",
+            "op/transfer": "newTransfer"
         },
 
         initialize: function() {
@@ -32,10 +34,34 @@
             }
         },
 
-        newOperation: function() {
-            app.log("New operation");
+        newExpense: function() {
+            app.log("New expense");
             if (this.currentView instanceof app.OperationTableView) {
-                this.currentView.addNew();
+                var op = new app.OperationModel();
+                op.set("opType", "E");
+                op.set("acc1", this.currentView.accounts.first().toJSON());
+                this.currentView.addNew(op);
+            }
+        },
+
+        newIncome: function() {
+            app.log("New income");
+            if (this.currentView instanceof app.OperationTableView) {
+                var op = new app.OperationModel();
+                op.set("opType", "I");
+                op.set("acc2", this.currentView.accounts.first().toJSON());
+                this.currentView.addNew(op);
+            }
+        },
+
+        newTransfer: function() {
+            app.log("New transfer");
+            if (this.currentView instanceof app.OperationTableView) {
+                var op = new app.OperationModel();
+                op.set("opType", "T");
+                op.set("acc1", this.currentView.accounts.first().toJSON());
+                op.set("acc2", this.currentView.accounts.first().toJSON());
+                this.currentView.addNew(op);
             }
         }
     });

@@ -4,12 +4,13 @@
 (function() {
     "use strict";
 
-    app.AccountModel = Backbone.Model.extend();
+    app.AccountModel = Backbone.Model.extend({}, {
+        entityName: "akk$Account"
+    });
 
     app.AccountsCollection = Backbone.Collection.extend({
         model: app.AccountModel,
 
-        entityName: "akk$Account",
         jpqlQuery: "select a from akk$Account a order by a.name",
         maxResults: 100,
         view: "account-with-currency",

@@ -4,13 +4,13 @@
 
 		},
 
-		loadList: function(model, options) {
+		loadList: function(collection, options) {
             var url = "api/query.json?s=" + app.session.id
-                + "&e=" + model.entityName + "&q=" + encodeURIComponent(model.jpqlQuery);
-            if (model.maxResults)
-                url = url + "&max=" + model.maxResults;
-            if (model.view)
-                url = url + "&view=" + model.view;
+                + "&e=" + collection.model.entityName + "&q=" + encodeURIComponent(collection.jpqlQuery);
+            if (collection.maxResults)
+                url = url + "&max=" + collection.maxResults;
+            if (collection.view)
+                url = url + "&view=" + collection.view;
 
             $.ajax({
                 url: url,
@@ -27,7 +27,7 @@
         },
             
 		create: function(model, options) {
-
+            this.update(mode, options);
 		},
 
 		update: function(model, options) {
@@ -49,7 +49,6 @@
                     options.error(xhr, status);
                 }
             });
-
 		},
 
 		remove: function(model, options) {
@@ -108,6 +107,5 @@
                 return process(resp);
             }
         }
-
 	};
 }());

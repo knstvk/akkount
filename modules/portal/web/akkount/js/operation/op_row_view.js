@@ -18,6 +18,7 @@
             this.operation = options.operation;
             this.operations = options.operations;
             this.accounts = options.accounts;
+            this.categories = options.categories;
         },
 
         render: function() {
@@ -27,7 +28,7 @@
 
         editRow: function() {
             var self = this;
-            var opType, template, acc1, acc2, acc1Select, acc2Select;
+            var opType, template, acc1, acc2, acc1Select, acc2Select, cat, catSelect;
 
             this.$el.empty();
 
@@ -67,6 +68,16 @@
                 };
             }
 
+            if (opType == "E" || opType == "I") {
+                catSelect = new app.CategorySelectView(this.categories, opType).render().el;
+                $(catSelect).addClass("category");
+                cat = this.operation.get("category");
+                if (cat) {
+                    catSelect.value = cat.id;
+                }
+                this.$el.find("div.category-container").append(catSelect);
+            }
+
             this.$el.find("input.opDate").datepicker({ dateFormat: "dd/mm/yy" });
 
         },
@@ -76,7 +87,7 @@
         },
 
         save: function() {
-            var acc1Select, acc2Select, amount1Field, amount2Field;
+            var acc1Select, acc2Select, amount1Field, amount2Field, catSelect;
 
             this.operation.set({
                 opDate: app.toServerDate(this.$el.find("input.opDate").val()),
@@ -103,14 +114,23 @@
                 this.operation.set("amount2", amount2Field.val());
             }
 
+            catSelect = this.$el.find(".category");
+            if (catSelect.length) {
+                this.operation.set("category", this.categories.byId(catSelect.val()));
+            }
+
             this.operation.save();
             this.$el.empty();
             this.render();
         },
 
         cancel: function() {
-            this.$el.empty();
-            this.render();
+            if (this.operation.get("version")) { // not new
+                this.$el.empty();
+                this.render();
+            } else {
+                this.$el.remove();
+            }
         }
     });
 }());
