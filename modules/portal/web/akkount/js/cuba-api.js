@@ -52,7 +52,24 @@
 		},
 
 		remove: function(model, options) {
-
+            var json = {
+                "removeInstances": [_.clone(model.attributes)]
+            };
+            var url = "api/commit?s=" + app.session.id;
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(json),
+                success: function(json, status, xhr) {
+                    app.log("Success: " + status);
+                    options.success(json);
+                },
+                error: function(xhr, status) {
+                    app.log("Error: " + status);
+                    options.error(xhr, status);
+                }
+            });
 		},
 
         /**

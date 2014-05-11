@@ -80,7 +80,7 @@
                 <th>Income</th>
                 <th>Category</th>
                 <th>Comments</th>
-                <!--<th></th>-->
+                <th></th>
             </tr>
             </thead>
             <tbody></tbody>
@@ -96,10 +96,9 @@
     <td><strong><% print(amount2 != 0 ? amount2 : '') %></strong><br><% print(acc2 ? acc2.name : '') %></td>
     <td><% print(category ? category.name : '') %></td>
     <td><%= comments %></td>
-    <!--<td>-->
-        <!--<a href="#" class="btn btn-primary">edit</a>-->
-        <!--<a href="#" class="btn btn-danger delete">delete</a>-->
-    <!--</td>-->
+    <td class="delete-cell">
+        <a href="#" class="glyphicon glyphicon-remove-circle confirm-delete"></a>
+    </td>
 </script>
 
 <script type="text/template" id="expense-edit-template">
@@ -241,6 +240,14 @@
     <% _(categories).each(function(cat) { %>
         <option value="<%= cat.id %>"><%= cat.name %></option>
     <% }); %>
+</script>
+
+<script type="text/template" id="operation-delete-template">
+    <td colspan="5"></td>
+    <td>
+        <a href="#" class="delete btn btn-danger btn-small">Delete</a>
+        <a href="#" class="btn cancel">Cancel</a>
+    </td>
 </script>
 
 </body>

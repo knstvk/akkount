@@ -9,6 +9,7 @@
 
         events: {
             "click a.edit": "editRow",
+            "click a.confirm-delete": "confirmDelete",
             "click a.delete": "deleteRow",
             "click a.save": "save",
             "click a.cancel": "cancel"
@@ -79,10 +80,15 @@
             }
 
             this.$el.find("input.opDate").datepicker({ dateFormat: "dd/mm/yy" });
+        },
 
+        confirmDelete: function() {
+            this.$el.find(".delete-cell").html($("#operation-delete-template").html());
         },
 
         deleteRow: function() {
+            this.operations.remove(this.operation);
+            this.operation.destroy();
             this.$el.remove();
         },
 
