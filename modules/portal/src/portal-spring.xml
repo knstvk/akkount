@@ -12,4 +12,18 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd"
         >
 
+    <bean class="com.haulmont.cuba.portal.sys.remoting.PortalRemoteProxyBeanCreator">
+        <property name="clusterInvocationSupport"
+                  ref="cuba_clusterInvocationSupport"/>
+        <property name="remoteServices">
+            <map>
+                <entry key="akk_BalanceService"
+                       value="akkount.service.BalanceService"/>
+                <entry key="akk_UserDataService"
+                       value="akkount.service.UserDataService"/>
+                <entry key="akk_ReportService"
+                       value="akkount.service.ReportService"/>
+            </map>
+        </property>
+    </bean>
 </beans>

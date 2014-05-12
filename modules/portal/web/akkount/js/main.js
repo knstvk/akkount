@@ -107,7 +107,7 @@ Backbone.Collection.prototype.parse = function(resp) {
 };
 
 $(document).ready(function() {
-    var router = new app.Router();
-
+    new app.Router();
+    app.initBalanceDialog();
     Backbone.history.start();
 });

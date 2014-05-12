@@ -12,6 +12,7 @@
 
     <script src="js/lib/jquery.min.js"></script>
     <script src="js/lib/jquery-ui.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
     <script src="js/lib/underscore.js"></script>
     <script src="js/lib/backbone.js"></script>
 
@@ -26,9 +27,24 @@
     <script src="js/account/acc_select_view.js"></script>
     <script src="js/category/cat_model.js"></script>
     <script src="js/category/cat_select_view.js"></script>
+    <script src="js/balance/balance_view.js"></script>
 </head>
 <body>
 <div id="main">
+</div>
+
+<div id="balance-dialog" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Balance</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/template" id="login-template">
@@ -63,6 +79,7 @@
                     <li><a href="#op/expense">Expense</a></li>
                     <li><a href="#op/income">Income</a></li>
                     <li><a href="#op/transfer">Transfer</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#balance-dialog">Balance</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><p class="navbar-text"><%= login %></p></li>
@@ -97,7 +114,7 @@
     <td><% print(category ? category.name : '') %></td>
     <td><%= comments %></td>
     <td class="delete-cell">
-        <a href="#" class="glyphicon glyphicon-remove-circle confirm-delete"></a>
+        <a href="#" class="btn btn-default confirm-delete">&times;</a>
     </td>
 </script>
 
@@ -248,6 +265,22 @@
         <a href="#" class="delete btn btn-danger btn-small">Delete</a>
         <a href="#" class="btn cancel">Cancel</a>
     </td>
+</script>
+
+<script type="text/template" id="balance-template">
+    <table class="balance-table">
+        <% _(balance.totals).each(function(total) { %>
+        <tr><td></td><td class="amount total"><%= total.amount %></td><td class="total"><%= total.currency %></td></tr>
+        <% }); %>
+        <tr><td colspan="3"><hr/></td></tr>
+        <% _(balance.includedAccounts).each(function(acc) { %>
+        <tr><td><%= acc.name%></td><td class="amount"><%= acc.amount %></td><td><%= acc.currency %></td></tr>
+        <% }); %>
+        <tr><td colspan="3"><hr/></td></tr>
+        <% _(balance.excludedAccounts).each(function(acc) { %>
+        <tr><td><%= acc.name%></td><td class="amount"><%= acc.amount %></td><td><%= acc.currency %></td></tr>
+        <% }); %>
+    </table>
 </script>
 
 </body>
