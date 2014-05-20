@@ -20,6 +20,10 @@
                     self.addAll();
                     self.accounts.fetch();
                     self.categories.fetch();
+
+                    self.$el.find(".nav a").on("click", function(){
+                        self.$el.find(".navbar-toggle").click();
+                    });
                 },
                 error: function(collection, response, options) {
                     app.log("Error loading operations: " + response.status);
