@@ -22,7 +22,9 @@
                     self.categories.fetch();
 
                     self.$el.find(".nav a").on("click", function(){
-                        self.$el.find(".navbar-toggle").click();
+                        var toggle = self.$el.find(".navbar-toggle");
+                        if (toggle.is(":visible"))
+                            toggle.click();
                     });
                 },
                 error: function(collection, response, options) {

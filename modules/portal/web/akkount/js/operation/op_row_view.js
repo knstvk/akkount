@@ -95,8 +95,11 @@
         save: function() {
             var acc1Select, acc2Select, amount1Field, amount2Field, catSelect;
 
+            var date = this.$el.find("input.opDate").val();
+            app.lastUsedDate = date;
+
             this.operation.set({
-                opDate: app.toServerDate(this.$el.find("input.opDate").val()),
+                opDate: app.toServerDate(date),
                 comments: this.$el.find("textarea.comments").val()
             });
 

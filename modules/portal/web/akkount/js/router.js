@@ -36,33 +36,67 @@
 
         newExpense: function() {
             app.log("New expense");
-            if (this.currentView instanceof app.OperationTableView) {
-                var op = new app.OperationModel();
-                op.set("opType", "E");
-                op.set("acc1", this.currentView.accounts.first().toJSON());
-                this.currentView.addNew(op);
-            }
+            var self = this;
+            $.ajax({
+                url: "api/last-account?s=" + app.session.id + "&t=opExpenseAccount",
+                success: function(json) {
+                    var op = new app.OperationModel({opDate: app.newOpDate()});
+                    op.set("opType", "E");
+                    self.setAcc(json, op, "acc1");
+                    self.currentView.addNew(op);
+                },
+                error: function(xhr, status) {
+                    app.log("Error getting last account: " + status);
+                }
+            });
         },
 
         newIncome: function() {
             app.log("New income");
             if (this.currentView instanceof app.OperationTableView) {
-                var op = new app.OperationModel();
-                op.set("opType", "I");
-                op.set("acc2", this.currentView.accounts.first().toJSON());
-                this.currentView.addNew(op);
+                var self = this;
+                $.ajax({
+                    url: "api/last-account?s=" + app.session.id + "&t=opIncomeAccount",
+                    success: function(json) {
+                        var op = new app.OperationModel({opDate: app.newOpDate()});
+                        op.set("opType", "I");
+                        self.setAcc(json, op, "acc2");
+                        self.currentView.addNew(op);
+                    },
+                    error: function(xhr, status) {
+                        app.log("Error getting last account: " + status);
+                    }
+                });
             }
         },
 
         newTransfer: function() {
             app.log("New transfer");
             if (this.currentView instanceof app.OperationTableView) {
-                var op = new app.OperationModel();
-                op.set("opType", "T");
-                op.set("acc1", this.currentView.accounts.first().toJSON());
-                op.set("acc2", this.currentView.accounts.first().toJSON());
-                this.currentView.addNew(op);
+                var self = this;
+                $.when(
+                    $.get("api/last-account?s=" + app.session.id + "&t=opTransferExpenseAccount"),
+                    $.get("api/last-account?s=" + app.session.id + "&t=opTransferIncomeAccount"))
+                    .done(function(res1, res2) {
+                        var op = new app.OperationModel({opDate: app.newOpDate()});
+                        op.set("opType", "T");
+                        self.setAcc(res1[0], op, "acc1");
+                        self.setAcc(res2[0], op, "acc2");
+                        self.currentView.addNew(op);
+                    })
+                    .fail(function(xhr, status) {
+                        app.log("Error getting last account: " + status);
+                    });
             }
+        },
+
+        setAcc: function (acc, op, attr) {
+            var accModel = this.currentView.accounts.byId(app.AccountModel.entityName + "-" + acc.id);
+            if (accModel)
+                op.set(attr, accModel.toJSON());
+            else
+                op.set(attr, this.currentView.accounts.first().toJSON());
         }
+
     });
 }());

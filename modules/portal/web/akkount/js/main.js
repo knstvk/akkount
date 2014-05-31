@@ -8,6 +8,8 @@ var SESSION_USER_NAME_KEY = "akkount.session.userName";
 window.app = {
     debug: true,
 
+    lastUsedDate: undefined,
+
     session: {
         id: localStorage.getItem(SESSION_ID_KEY),
         login: localStorage.getItem(SESSION_USER_NAME_KEY)
@@ -58,6 +60,10 @@ window.app = {
                 return date;
             }
         }
+    },
+
+    newOpDate: function() {
+        return this.toServerDate(this.lastUsedDate ? this.lastUsedDate : new Date());
     },
 
     guid: function() {

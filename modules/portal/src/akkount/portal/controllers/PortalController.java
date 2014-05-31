@@ -2,6 +2,7 @@ package akkount.portal.controllers;
 
 import akkount.entity.Account;
 import akkount.service.BalanceService;
+import akkount.service.UserDataService;
 import com.haulmont.cuba.core.app.DataService;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.TimeSource;
@@ -36,6 +37,9 @@ public class PortalController {
 
     @Inject
     private BalanceService balanceService;
+
+    @Inject
+    private UserDataService userDataService;
 
     @Inject
     private TimeSource timeSource;
@@ -106,6 +110,33 @@ public class PortalController {
                 result.put("includedAccounts", includedAccounts);
                 result.put("excludedAccounts", excludedAccounts);
             }
+            response.setContentType("application/json;charset=UTF-8");
+            PrintWriter writer = response.getWriter();
+            writer.write(result.toString());
+            writer.flush();
+        } catch (Throwable e) {
+            log.error("Error processing request: " + request.getRequestURI() + "?" + request.getQueryString(), e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } finally {
+            authentication.end();
+        }
+    }
+
+    @RequestMapping(value = "/api/last-account", method = RequestMethod.GET)
+    public void getLastAccount(@RequestParam(value = "s") String sessionId,
+                               @RequestParam(value = "t") String opType,
+                               HttpServletRequest request,
+                               HttpServletResponse response) throws IOException {
+        if (!authentication.begin(sessionId)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+        try {
+            Account account = userDataService.loadEntity(opType, Account.class);
+            JSONObject result = new JSONObject();
+            result.put("id", account.getId());
+            result.put("name", account.getName());
+
             response.setContentType("application/json;charset=UTF-8");
             PrintWriter writer = response.getWriter();
             writer.write(result.toString());
