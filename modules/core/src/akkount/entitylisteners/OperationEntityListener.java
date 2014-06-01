@@ -156,12 +156,12 @@ public class OperationEntityListener implements
     }
 
     private BigDecimal previousBalanceAmount(Account account, Date opDate) {
-        Date prevBalanceDate = DateUtils.addMonths(DateUtils.ceiling(opDate, Calendar.MONTH), -1);
         EntityManager em = persistence.getEntityManager();
         TypedQuery<Balance> query = em.createQuery("select b from akk$Balance b " +
-                "where b.account.id = ?1 and b.balanceDate = ?2", Balance.class);
+                "where b.account.id = ?1 and b.balanceDate <= ?2 order by b.balanceDate desc", Balance.class);
         query.setParameter(1, account.getId());
-        query.setParameter(2, prevBalanceDate);
+        query.setParameter(2, opDate);
+        query.setMaxResults(1);
         Balance prevBalance = query.getFirstResult();
         return prevBalance == null ? BigDecimal.ZERO : prevBalance.getAmount();
     }

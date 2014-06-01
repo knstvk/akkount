@@ -369,4 +369,24 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         balance = balanceService.getBalance(account2Id, date("2014-02-02"));
         checkEquality(BigDecimal.ONE, balance);
     }
+
+    public void testMissedMonths() throws Exception {
+        BalanceService balanceService = AppBeans.get(BalanceService.class);
+
+        BigDecimal balance;
+
+        ///////////////////////////////////////////////////
+
+        income(date("2014-01-31"), BigDecimal.TEN);
+
+        balance = balanceService.getBalance(account1Id, date("2014-02-01"));
+        checkEquality(BigDecimal.TEN, balance);
+
+        ///////////////////////////////////////////////////
+
+        transfer(date("2014-05-07"), BigDecimal.TEN);
+
+        balance = balanceService.getBalance(account1Id, date("2014-06-02"));
+        checkEquality(BigDecimal.ZERO, balance);
+    }
 }
