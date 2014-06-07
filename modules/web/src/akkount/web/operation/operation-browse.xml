@@ -26,6 +26,7 @@
             <actions>
                 <action id="edit"/>
                 <action id="remove"/>
+                <action id="excel"/>
             </actions>
             <columns>
                 <column id="opType"/>
@@ -56,6 +57,7 @@
                         action="operationTable.edit"/>
                 <button id="removeBtn"
                         action="operationTable.remove"/>
+                <button action="operationTable.excel"/>
             </buttonsPanel>
         </groupTable>
     </layout>
