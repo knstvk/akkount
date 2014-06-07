@@ -80,6 +80,13 @@
             }
 
             this.$el.find("input.opDate").datepicker({ dateFormat: "dd/mm/yy" });
+
+            this.$el.find("input.calc").on("blur", function(event) {
+                var x = event.target.value;
+                if (x.match(/([-+]?[0-9]*\.?[0-9]+[\-\+\*\/])+([-+]?[0-9]*\.?[0-9]+)/)) {
+                    event.target.value = eval(x);
+                }
+            });
         },
 
         confirmDelete: function() {
