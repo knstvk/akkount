@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/5.1/window.xsd"
         caption="msg://browseCaption"
-        class="akkount.web.operation.OperationBrowse"
-        focusComponent="operationTable"
-        lookupComponent="operationTable"
+        class="akkount.web.operation.ShowOperations"
         messagesPack="akkount.web.operation">
     <dsContext>
         <groupDatasource id="operationDs"
                          class="akkount.entity.Operation"
                          view="operation-browse">
             <query>
-                <![CDATA[select e from akk$Operation e order by e.opDate desc, e.createTs desc]]>
+                <![CDATA[select o from akk$Operation o order by o.opDate desc, o.createTs desc]]>
+                <filter>
+                    <and>
+                        <c>o.category.id = :param$category</c>
+                        <c>@dateAfter(o.opDate, :param$fromDate)</c>
+                        <c>@dateBefore(o.opDate, :param$toDate)</c>
+                        <c>o.acc1.currencyCode = :param$currency1</c>
+                        <c>o.acc2.currencyCode = :param$currency2</c>
+                    </and>
+                </filter>
             </query>
         </groupDatasource>
     </dsContext>
     <layout expand="operationTable"
             spacing="true">
-        <filter id="filter"
-                datasource="operationDs">
-            <properties include=".*"/>
-        </filter>
+        <label id="descriptionLab"/>
         <groupTable id="operationTable"
                     height="100%"
                     width="100%">
             <actions>
-                <action id="edit"/>
-                <action id="remove"/>
                 <action id="excel"/>
             </actions>
             <columns>
@@ -48,15 +50,7 @@
             </columns>
             <rows datasource="operationDs"/>
             <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
-                <button id="createExpenseBtn"/>
-                <button id="createIncomeBtn"/>
-                <button id="createTransferBtn"/>
-                <button id="editBtn"
-                        action="operationTable.edit"/>
-                <button id="removeBtn"
-                        action="operationTable.remove"/>
+            <buttonsPanel>
                 <button action="operationTable.excel"/>
             </buttonsPanel>
         </groupTable>

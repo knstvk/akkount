@@ -11,15 +11,15 @@ window.app = {
     lastUsedDate: undefined,
 
     session: {
-        id: localStorage.getItem(SESSION_ID_KEY),
-        login: localStorage.getItem(SESSION_USER_NAME_KEY)
+        id: sessionStorage.getItem(SESSION_ID_KEY),
+        login: sessionStorage.getItem(SESSION_USER_NAME_KEY)
     },
 
     setSession: function(id, login) {
         this.session.id = id;
         this.session.login = login;
-        localStorage.setItem(SESSION_ID_KEY, this.session.id);
-        localStorage.setItem(SESSION_USER_NAME_KEY, this.session.login);
+        sessionStorage.setItem(SESSION_ID_KEY, this.session.id);
+        sessionStorage.setItem(SESSION_USER_NAME_KEY, this.session.login);
 
         this.log(this.session);
     },

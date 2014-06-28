@@ -4,6 +4,7 @@ import akkount.entity.*;
 import akkount.entity.Currency;
 import akkount.service.UserDataKeys;
 import akkount.service.UserDataService;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.ItemTrackingAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
@@ -65,6 +66,7 @@ public class CategoriesReport extends AbstractWindow {
         initPeriodTypes();
         initDates();
         initExcludedCategories();
+        initShowOperationsActions();
 
         refreshDs1();
         refreshDs2();
@@ -181,6 +183,16 @@ public class CategoriesReport extends AbstractWindow {
         table2.addAction(new ExcludeCategoryAction(table2));
     }
 
+    private void initShowOperationsActions() {
+        ShowOperationsAction action1 = new ShowOperationsAction(table1, from1, to1);
+        table1.addAction(action1);
+        table1.setItemClickAction(action1);
+
+        ShowOperationsAction action2 = new ShowOperationsAction(table2, from2, to2);
+        table2.addAction(action2);
+        table2.setItemClickAction(action2);
+    }
+
     private void refreshDs1() {
         if (doNotRefresh)
             return;
@@ -275,6 +287,38 @@ public class CategoriesReport extends AbstractWindow {
             if (categoryAmount != null) {
                 excludeCategory(categoryAmount.getCategory());
                 userDataService.addEntity(UserDataKeys.CAT_REP_EXCLUDED_CATEGORIES, categoryAmount.getCategory());
+            }
+        }
+    }
+
+    private class ShowOperationsAction extends ItemTrackingAction {
+
+        private Table table;
+        private DateField from;
+        private DateField to;
+
+        public ShowOperationsAction(Table table, DateField from, DateField to) {
+            super("showOperations");
+            this.table = table;
+            this.from = from;
+            this.to = to;
+            table.getDatasource().addListener(this);
+        }
+
+        @Override
+        public void actionPerform(Component component) {
+            CategoryAmount categoryAmount = (CategoryAmount) table.getDatasource().getItem();
+            if (categoryAmount != null) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("category", categoryAmount.getCategory());
+                params.put("fromDate", from.getValue());
+                params.put("toDate", to.getValue());
+                if (categoryAmount.getCategory().getCatType() == CategoryType.EXPENSE) {
+                    params.put("currency1", ((Currency) currencyField.getValue()).getCode());
+                } else {
+                    params.put("currency2", ((Currency) currencyField.getValue()).getCode());
+                }
+                openWindow("show-operations", WindowManager.OpenType.NEW_TAB, params);
             }
         }
     }

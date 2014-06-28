@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/5.0/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/5.1/window.xsd"
         caption="msg://caption"
         class="akkount.web.report.categories.CategoriesReport"
         messagesPack="akkount.web.report.categories">
@@ -61,7 +61,10 @@
                                resolution="DAY"/>
                     <label id="spacer1"
                            width="100%"/>
-                    <button action="table1.excludeCategory"/>
+                    <button action="table1.showOperations"
+                            caption="msg://operations"/>
+                    <button action="table1.excludeCategory"
+                            caption="msg://exclude"/>
                 </hbox>
                 <table id="table1"
                        height="100%"
@@ -96,7 +99,10 @@
                                resolution="DAY"/>
                     <label id="spacer2"
                            width="100%"/>
-                    <button action="table2.excludeCategory"/>
+                    <button action="table2.showOperations"
+                            caption="msg://operations"/>
+                    <button action="table2.excludeCategory"
+                            caption="msg://exclude"/>
                 </hbox>
                 <table id="table2"
                        height="100%"

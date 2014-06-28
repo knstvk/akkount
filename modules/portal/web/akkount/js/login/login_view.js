@@ -13,6 +13,14 @@
 
         render: function() {
             this.$el.html($("#login-template").html());
+            var userName = window.localStorage.getItem(SESSION_USER_NAME_KEY);
+            if (userName) {
+                this.$el.find("#remember-me").attr("checked", true);
+                this.$el.find("#login-name").val(userName);
+                this.$el.find("#password").attr("autofocus", true);
+            } else {
+                this.$el.find("#login-name").attr("autofocus", true);
+            }
             return this;
         },
 
@@ -30,6 +38,11 @@
                 },
                 success: function(text) {
                     app.setSession(text, $("#login-name").val());
+                    if ($("#remember-me").is(":checked")) {
+                        window.localStorage.setItem(SESSION_USER_NAME_KEY, $("#login-name").val());
+                    } else {
+                        window.localStorage.removeItem(SESSION_USER_NAME_KEY);
+                    }
                     window.location.hash = "operations";
                 },
                 error: function(xhr, status) {

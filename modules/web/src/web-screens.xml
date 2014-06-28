@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<screen-config xmlns="http://schemas.haulmont.com/cuba/5.0/screens.xsd">
+<screen-config xmlns="http://schemas.haulmont.com/cuba/5.1/screens.xsd">
     <include file="/screens.xml"/>
     <screen id="akk$Currency.lookup"
             template="/akkount/web/currency/currency-browse.xml"/>
@@ -25,4 +25,6 @@
             template="/akkount/web/operation/income-frame.xml"/>
     <screen id="categories-report"
             template="akkount/web/report/categories/categories-report.xml"/>
+    <screen id="show-operations"
+            template="akkount/web/operation/show-operations.xml"/>
 </screen-config>
