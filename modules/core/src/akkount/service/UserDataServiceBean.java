@@ -3,6 +3,7 @@ package akkount.service;
 import com.haulmont.cuba.core.entity.Entity;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class UserDataServiceBean implements UserDataService {
     protected UserDataWorker worker;
 
     @Override
+    @Nullable
     public <T extends Entity> T loadEntity(String key, Class<T> entityClass) {
         return worker.loadEntity(key, entityClass);
     }

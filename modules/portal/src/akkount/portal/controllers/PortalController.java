@@ -134,9 +134,10 @@ public class PortalController {
         try {
             Account account = userDataService.loadEntity(opType, Account.class);
             JSONObject result = new JSONObject();
-            result.put("id", account.getId());
-            result.put("name", account.getName());
-
+            if (account != null) {
+                result.put("id", account.getId());
+                result.put("name", account.getName());
+            }
             response.setContentType("application/json;charset=UTF-8");
             PrintWriter writer = response.getWriter();
             writer.write(result.toString());

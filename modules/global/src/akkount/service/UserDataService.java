@@ -2,11 +2,13 @@ package akkount.service;
 
 import com.haulmont.cuba.core.entity.Entity;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public interface UserDataService {
     String NAME = "akk_UserDataService";
 
+    @Nullable
     <T extends Entity> T loadEntity(String key, Class<T> entityClass);
 
     <T extends Entity> List<T> loadEntityList(String key, Class<T> entityClass);

@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.annotation.ManagedBean;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class UserDataWorker {
     @Inject
     protected UserSessionSource userSessionSource;
 
+    @Nullable
     public <T extends Entity> T loadEntity(String key, Class<T> entityClass) {
         List<String> values = getValues(key);
         if (values.isEmpty())
