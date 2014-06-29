@@ -91,7 +91,9 @@
         },
 
         setAcc: function (acc, op, attr) {
-            var accModel = this.currentView.accounts.byId(app.AccountModel.entityName + "-" + acc.id);
+            var accModel;
+            if (acc.id)
+                accModel = this.currentView.accounts.byId(app.AccountModel.entityName + "-" + acc.id);
             if (accModel)
                 op.set(attr, accModel.toJSON());
             else
