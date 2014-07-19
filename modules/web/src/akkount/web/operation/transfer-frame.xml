@@ -28,9 +28,9 @@
                     <label value="msg://amount1"/>
                     <hbox spacing="true"
                           width="100%">
-                        <textField datasource="operationDs"
-                                   property="amount1"
+                        <textField id="amount1Field"
                                    required="true"
+                                   requiredMessage="msg://amountIsRequired"
                                    width="100%"/>
                         <label id="currency1Lab"
                                align="MIDDLE_LEFT"
@@ -53,9 +53,9 @@
                     <label value="msg://amount2"/>
                     <hbox spacing="true"
                           width="100%">
-                        <textField datasource="operationDs"
-                                   property="amount2"
+                        <textField id="amount2Field"
                                    required="true"
+                                   requiredMessage="msg://amountIsRequired"
                                    width="100%"/>
                         <label id="currency2Lab"
                                align="MIDDLE_LEFT"

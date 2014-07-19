@@ -3,8 +3,12 @@ package akkount.web.operation;
 import akkount.entity.Operation;
 import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Label;
+import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.data.ValueListener;
 import com.haulmont.cuba.gui.data.impl.DsListenerAdapter;
+import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -13,16 +17,36 @@ import java.math.BigDecimal;
 public class TransferFrame extends AbstractFrame implements OperationFrame {
 
     @Inject
-    protected Datasource<Operation> operationDs;
+    private Datasource<Operation> operationDs;
 
     @Inject
-    protected Label currency1Lab;
+    private TextField amount1Field;
+    @Inject
+    private TextField amount2Field;
 
     @Inject
-    protected Label currency2Lab;
+    private Label currency1Lab;
+
+    @Inject
+    private Label currency2Lab;
+
+    @Inject
+    private AmountCalculator amountCalculator;
 
     @Override
     public void postInit(Operation item) {
+        amountCalculator.initAmount(amount1Field, item.getAmount1());
+        amountCalculator.initAmount(amount2Field, item.getAmount2());
+
+        amount1Field.addListener(new ValueListener() {
+            @Override
+            public void valueChanged(Object source, String property, @Nullable Object prevValue, @Nullable Object value) {
+                if (value != null && StringUtils.isBlank((String) amount2Field.getValue())) {
+                    amount2Field.setValue(value);
+                }
+            }
+        });
+
         setCurrency1Label(item);
         setCurrency2Label(item);
 
@@ -36,15 +60,20 @@ public class TransferFrame extends AbstractFrame implements OperationFrame {
                     case "acc2":
                         setCurrency2Label(source);
                         break;
-                    case "amount1":
-                        if (value != null
-                                && (source.getAmount2() == null || source.getAmount2().equals(BigDecimal.ZERO))) {
-                            source.setAmount2((BigDecimal) value);
-                        }
-                        break;
                 }
             }
         });
+    }
+
+    @Override
+    public void postValidate(ValidationErrors errors) {
+        BigDecimal value1 = amountCalculator.calculateAmount(amount1Field, errors);
+        if (value1 != null)
+            operationDs.getItem().setAmount1(value1);
+
+        BigDecimal value2 = amountCalculator.calculateAmount(amount2Field, errors);
+        if (value2 != null)
+            operationDs.getItem().setAmount2(value2);
     }
 
     private void setCurrency2Label(Operation operation) {

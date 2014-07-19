@@ -36,9 +36,9 @@
                     <label value="msg://amount"/>
                     <hbox spacing="true"
                           width="100%">
-                        <textField datasource="operationDs"
-                                   property="amount2"
+                        <textField id="amountField"
                                    required="true"
+                                   requiredMessage="msg://amountIsRequired"
                                    width="100%"/>
                         <label id="currencyLab"
                                align="MIDDLE_LEFT"
