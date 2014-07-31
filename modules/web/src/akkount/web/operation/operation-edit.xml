@@ -25,6 +25,7 @@
                        property="opDate"/>
         </hbox>
         <groupBox id="frameContainer"
+                  stylename="light"
                   width="400px"/>
         <iframe id="windowActions"
                 height="100%"

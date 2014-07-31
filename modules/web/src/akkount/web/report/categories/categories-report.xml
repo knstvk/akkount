@@ -49,7 +49,8 @@
             <groupBox caption="msg://period1"
                       expand="table1"
                       height="100%"
-                      spacing="true">
+                      spacing="true"
+                      stylename="light">
                 <hbox expand="spacer1"
                       spacing="true"
                       width="100%">
@@ -87,7 +88,8 @@
             <groupBox caption="msg://period2"
                       expand="table2"
                       height="100%"
-                      spacing="true">
+                      spacing="true"
+                      stylename="light">
                 <hbox expand="spacer2"
                       spacing="true"
                       width="100%">
@@ -123,7 +125,8 @@
                 </hbox>
             </groupBox>
         </hbox>
-        <groupBox caption="msg://excluded">
+        <groupBox caption="msg://excluded"
+                  stylename="light">
             <hbox id="excludedBox"
                   spacing="true"/>
         </groupBox>

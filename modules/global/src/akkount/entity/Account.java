@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 @Entity(name = "akk$Account")
 @Listeners("akkount.entitylisteners.AccountEntityListener")
 public class Account extends StandardEntity {
-    @Column(name = "NAME", nullable = false, length = 20)
+    @Column(name = "NAME", nullable = false, length = 20, unique = true)
     protected String name;
 
     @Column(name = "DESCRIPTION", length = 100)
