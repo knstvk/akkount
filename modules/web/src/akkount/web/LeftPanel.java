@@ -33,17 +33,26 @@ public class LeftPanel extends FoldersPane {
 
     @Override
     public void init(Component parent) {
+        super.init(parent);
+        createBalancePanel();
+    }
+
+    @Override
+    public void refreshFolders() {
+        super.refreshFolders();
+        createBalancePanel();
+    }
+
+    private void createBalancePanel() {
         Label label = new Label(messages.getMessage(getClass(), "LeftPanel.caption"));
         label.setStyleName("cuba-folders-pane-caption");
         balanceLayout = new VerticalLayout();
         balanceLayout.setMargin(true);
         balanceLayout.setSpacing(true);
         balanceLayout.addComponent(label);
-        addComponent(balanceLayout);
+        addComponent(balanceLayout, 0);
 
         refreshBalance();
-
-        super.init(parent);
     }
 
     public void refreshBalance() {

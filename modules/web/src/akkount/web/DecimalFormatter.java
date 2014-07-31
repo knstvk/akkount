@@ -23,6 +23,8 @@ public class DecimalFormatter implements Formatter<BigDecimal> {
 
     @Override
     public String format(BigDecimal value) {
+        if (value == null)
+            return null;
         if (BigDecimal.ZERO.compareTo(value) == 0)
             return "";
         FormatStrings formatStrings = Datatypes.getFormatStrings(userSessionSource.getLocale());
