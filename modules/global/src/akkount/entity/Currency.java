@@ -10,7 +10,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 @Table(name = "AKK_CURRENCY")
 @Entity(name = "akk$Currency")
 public class Currency extends StandardEntity {
-    @Column(name = "CODE", nullable = false, length = 3, unique = true)
+    @Column(name = "CODE", nullable = false, length = 3)
     protected String code;
 
     @Column(name = "NAME", length = 50)
