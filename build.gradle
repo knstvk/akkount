@@ -111,12 +111,13 @@ configure(coreModule) {
     }
 
     task startTestDb(description: 'Starts HSQLDB for tests', type: CubaHsqlStart) {
+        dbPort = 9002
         dbName = 'akk_test'
 }
 
     task createTestDb(dependsOn: assemble, description: 'Creates local test database', type: CubaDbCreation) {
         dbms = 'hsql'
-        host = 'localhost'
+        host = 'localhost:9002'
         dbName = 'akk_test'
         dbUser = 'sa'
         dbPassword = ''

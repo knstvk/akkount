@@ -29,7 +29,7 @@ public class AkkountTestCase extends CubaTestCase {
     @Override
     protected void initDataSources() throws Exception {
         Class.forName("org.hsqldb.jdbc.JDBCDriver");
-        TestDataSource ds = new TestDataSource("jdbc:hsqldb:hsql://localhost/akk_test", "sa", "");
+        TestDataSource ds = new TestDataSource("jdbc:hsqldb:hsql://localhost:9002/akk_test", "sa", "");
         TestContext.getInstance().bind("java:comp/env/jdbc/CubaDS", ds);
     }
 

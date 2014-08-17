@@ -5,13 +5,14 @@
 package akkount.service;
 
 import akkount.entity.Balance;
+import akkount.entity.Operation;
 import com.haulmont.cuba.core.*;
+import org.apache.commons.lang.time.DateUtils;
 
 import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author krivopustov
@@ -65,5 +66,74 @@ public class BalanceWorker {
                 return startAmount.add(income).subtract(expense);
             }
         });
+    }
+
+    public void recalculateBalance(UUID accountId) {
+        Transaction tx = persistence.createTransaction();
+        try {
+            removeBalanceRecords(accountId);
+
+            TreeMap<Date, Balance> balances = new TreeMap<>();
+
+            EntityManager em = persistence.getEntityManager();
+            TypedQuery<Operation> query = em.createQuery("select op from akk$Operation op " +
+                    "where (op.acc1.id = ?1 or op.acc2.id = ?1) order by op.opDate", Operation.class);
+            query.setParameter(1, accountId);
+            query.setViewName("operation-recalc-balance");
+            List<Operation> operations = query.getResultList();
+            for (Operation operation : operations) {
+                addOperation(balances, operation, accountId);
+            }
+            for (Balance balance : balances.values()) {
+                em.persist(balance);
+            }
+
+            tx.commit();
+        } finally {
+            tx.end();
+        }
+    }
+
+    private void removeBalanceRecords(UUID accountId) {
+        EntityManager em = persistence.getEntityManager();
+        Query query = em.createQuery("delete from akk$Balance b where b.account.id = ?1");
+        query.setParameter(1, accountId);
+        query.executeUpdate();
+    }
+
+    private void addOperation(TreeMap<Date, Balance> balances, Operation operation, UUID accountId) {
+        if (operation.getAcc1() != null && operation.getAcc1().getId().equals(accountId)) {
+            Map.Entry<Date, Balance> entry = balances.higherEntry(operation.getOpDate());
+            if (entry == null) {
+                Balance balance = new Balance();
+                balance.setAccount(operation.getAcc1());
+                balance.setAmount(operation.getAmount1().negate()
+                        .add(previousBalanceAmount(balances, operation.getOpDate())));
+                balance.setBalanceDate(DateUtils.ceiling(operation.getOpDate(), Calendar.MONTH));
+                balances.put(balance.getBalanceDate(), balance);
+            } else {
+                Balance balance = entry.getValue();
+                balance.setAmount(balance.getAmount().subtract(operation.getAmount1()));
+            }
+        }
+        if (operation.getAcc2() != null && operation.getAcc2().getId().equals(accountId)) {
+            Map.Entry<Date, Balance> entry = balances.higherEntry(operation.getOpDate());
+            if (entry == null) {
+                Balance balance = new Balance();
+                balance.setAccount(operation.getAcc2());
+                balance.setAmount(operation.getAmount2()
+                        .add(previousBalanceAmount(balances, operation.getOpDate())));
+                balance.setBalanceDate(DateUtils.ceiling(operation.getOpDate(), Calendar.MONTH));
+                balances.put(balance.getBalanceDate(), balance);
+            } else {
+                Balance balance = entry.getValue();
+                balance.setAmount(balance.getAmount().add(operation.getAmount2()));
+            }
+        }
+    }
+
+    private BigDecimal previousBalanceAmount(TreeMap<Date, Balance> balances, Date opDate) {
+        Map.Entry<Date, Balance> entry = balances.floorEntry(opDate);
+        return entry == null ? BigDecimal.ZERO : entry.getValue().getAmount();
     }
 }

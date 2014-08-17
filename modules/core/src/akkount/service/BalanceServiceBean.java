@@ -17,4 +17,9 @@ public class BalanceServiceBean implements BalanceService {
     public BigDecimal getBalance(UUID accountId, Date date) {
         return balanceWorker.getBalance(accountId, date);
     }
+
+    @Override
+    public void recalculateBalance(UUID accountId) {
+        balanceWorker.recalculateBalance(accountId);
+    }
 }

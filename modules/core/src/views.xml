@@ -39,4 +39,14 @@
         <property name="acc2"
                   view="_minimal"/>
     </view>
+    <view class="akkount.entity.Operation"
+          name="operation-recalc-balance">
+        <property name="opDate"/>
+        <property name="acc1"
+                  view="_minimal"/>
+        <property name="acc2"
+                  view="_minimal"/>
+        <property name="amount1"/>
+        <property name="amount2"/>
+    </view>
 </views>

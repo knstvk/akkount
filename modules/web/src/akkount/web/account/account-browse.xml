@@ -16,8 +16,17 @@
     <layout spacing="true">
         <table id="accountTable"
                height="100%"
+               multiselect="true"
                width="100%">
-            <rows datasource="accountDs"/>
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="refresh"/>
+                <action id="recalcBalance"
+                        caption="msg://recalcBalance"
+                        invoke="onRecalcBalance"/>
+            </actions>
             <columns>
                 <column id="name"/>
                 <column id="description"/>
@@ -25,13 +34,8 @@
                 <column id="active"/>
                 <column id="includeInTotal"/>
             </columns>
+            <rows datasource="accountDs"/>
             <rowsCount/>
-            <actions>
-                <action id="create"/>
-                <action id="edit"/>
-                <action id="remove"/>
-                <action id="refresh"/>
-            </actions>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"
@@ -42,6 +46,7 @@
                         action="accountTable.remove"/>
                 <button id="refreshBtn"
                         action="accountTable.refresh"/>
+                <button action="accountTable.recalcBalance"/>
             </buttonsPanel>
         </table>
     </layout>

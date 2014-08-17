@@ -1,4 +1,5 @@
--- begin AKK_ACCOUNTcreate table AKK_ACCOUNT (
+-- begin AKK_ACCOUNT
+create table AKK_ACCOUNT (
     ID varchar(36) not null,
     CREATE_TS timestamp,
     CREATED_BY varchar(50),
@@ -18,7 +19,8 @@
     primary key (ID)
 );-- end AKK_ACCOUNT
 
--- begin AKK_CURRENCYcreate table AKK_CURRENCY (
+-- begin AKK_CURRENCY
+create table AKK_CURRENCY (
     ID varchar(36) not null,
     CREATE_TS timestamp,
     CREATED_BY varchar(50),
@@ -33,7 +35,8 @@
     --
     primary key (ID)
 );-- end AKK_CURRENCY
--- begin AKK_BALANCEcreate table AKK_BALANCE (
+-- begin AKK_BALANCE
+create table AKK_BALANCE (
     ID varchar(36) not null,
     CREATE_TS timestamp,
     CREATED_BY varchar(50),
@@ -67,7 +70,8 @@ create table AKK_CATEGORY (
     primary key (ID)
 );-- end AKK_CATEGORY
 
--- begin AKK_OPERATIONcreate table AKK_OPERATION (
+-- begin AKK_OPERATION
+create table AKK_OPERATION (
     ID varchar(36) not null,
     CREATE_TS timestamp,
     CREATED_BY varchar(50),
