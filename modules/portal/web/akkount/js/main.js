@@ -30,7 +30,7 @@ window.app = {
         }
     },
 
-    toDisplayDate: function (date) {
+    toDisplayDate: function(date) {
         if (_.isDate(date)) {
             return date.toISOString().slice(0, 10).split("-").reverse().join("/");
         } else {
@@ -46,7 +46,17 @@ window.app = {
         }
     },
 
-    toServerDate: function (date) {
+    weekDay: function(date) {
+        var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        if (_.isDate(date)) {
+            return dayNames[date.getDay()];
+        } else {
+            var parts = date.split("-");
+            return dayNames[new Date(parts[0], parts[1] - 1, parts[2]).getDay()];
+        }
+    },
+
+    toServerDate: function(date) {
         if (_.isDate(date)) {
             return date.toISOString().slice(0, 10);
         } else {

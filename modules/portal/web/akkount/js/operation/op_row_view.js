@@ -82,9 +82,18 @@
             this.$el.find("input.opDate").datepicker({ dateFormat: "dd/mm/yy" });
 
             this.$el.find("input.calc").on("blur", function(event) {
+                var amount2Field;
                 var x = event.target.value;
                 if (x.match(/([-+]?[0-9]*\.?[0-9]+[\-\+\*\/])+([-+]?[0-9]*\.?[0-9]+)/)) {
                     event.target.value = eval(x);
+                }
+                if (opType == "T") {
+                    if (event.target.className.indexOf("amount1") > -1) {
+                        amount2Field = self.$el.find("input.amount2");
+                        if (amount2Field.val() == "") {
+                            amount2Field.val(event.target.value);
+                        }
+                    }
                 }
             });
         },
