@@ -43,7 +43,6 @@
                           orientation="horizontal"/>
         </hbox>
         <hbox id="mainBox"
-              height="100%"
               spacing="true"
               width="100%">
             <groupBox caption="msg://period1"
@@ -60,15 +59,13 @@
                            value="-"/>
                     <dateField id="to1"
                                resolution="DAY"/>
-                    <label id="spacer1"
-                           width="100%"/>
+                    <label id="spacer1"/>
                     <button action="table1.showOperations"
                             caption="msg://operations"/>
                     <button action="table1.excludeCategory"
                             caption="msg://exclude"/>
                 </hbox>
                 <table id="table1"
-                       height="100%"
                        width="100%">
                     <columns>
                         <column id="category.name"/>
@@ -99,15 +96,13 @@
                            value="-"/>
                     <dateField id="to2"
                                resolution="DAY"/>
-                    <label id="spacer2"
-                           width="100%"/>
+                    <label id="spacer2"/>
                     <button action="table2.showOperations"
                             caption="msg://operations"/>
                     <button action="table2.excludeCategory"
                             caption="msg://exclude"/>
                 </hbox>
                 <table id="table2"
-                       height="100%"
                        width="100%">
                     <columns>
                         <column id="category.name"/>

@@ -33,7 +33,6 @@
                    width="250px"/>
         </fieldGroup>
         <iframe id="windowActions"
-                height="100%"
                 screen="editWindowActions"/>
     </layout>
 </window>

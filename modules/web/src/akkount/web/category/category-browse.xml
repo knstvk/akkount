@@ -17,19 +17,19 @@
         <table id="categoryTable"
                height="100%"
                width="100%">
-            <rows datasource="categoryDs"/>
-            <columns>
-                <column id="name"/>
-                <column id="description"/>
-                <column id="catType"/>
-            </columns>
-            <rowsCount/>
             <actions>
                 <action id="create"/>
                 <action id="edit"/>
                 <action id="remove"/>
                 <action id="refresh"/>
             </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"/>
+                <column id="catType"/>
+            </columns>
+            <rows datasource="categoryDs"/>
+            <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"

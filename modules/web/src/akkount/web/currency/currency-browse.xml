@@ -17,18 +17,18 @@
         <table id="currencyTable"
                height="100%"
                width="100%">
-            <rows datasource="currencyDs"/>
-            <columns>
-                <column id="code"/>
-                <column id="name"/>
-            </columns>
-            <rowsCount/>
             <actions>
                 <action id="create"/>
                 <action id="edit"/>
                 <action id="remove"/>
                 <action id="refresh"/>
             </actions>
+            <columns>
+                <column id="code"/>
+                <column id="name"/>
+            </columns>
+            <rows datasource="currencyDs"/>
+            <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"

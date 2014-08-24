@@ -25,7 +25,6 @@
             spacing="true">
         <label id="descriptionLab"/>
         <groupTable id="operationTable"
-                    height="100%"
                     width="100%">
             <actions>
                 <action id="excel"/>
