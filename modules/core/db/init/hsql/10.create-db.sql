@@ -17,8 +17,8 @@ create table AKK_ACCOUNT (
     INCLUDE_IN_TOTAL boolean,
     --
     primary key (ID)
-);-- end AKK_ACCOUNT
-
+)^
+-- end AKK_ACCOUNT
 -- begin AKK_CURRENCY
 create table AKK_CURRENCY (
     ID varchar(36) not null,
@@ -34,7 +34,8 @@ create table AKK_CURRENCY (
     NAME varchar(50),
     --
     primary key (ID)
-);-- end AKK_CURRENCY
+)^
+-- end AKK_CURRENCY
 -- begin AKK_BALANCE
 create table AKK_BALANCE (
     ID varchar(36) not null,
@@ -51,7 +52,8 @@ create table AKK_BALANCE (
     AMOUNT decimal(19, 2),
     --
     primary key (ID)
-);-- end AKK_BALANCE
+)^
+-- end AKK_BALANCE
 -- begin AKK_CATEGORY
 create table AKK_CATEGORY (
     ID varchar(36) not null,
@@ -68,8 +70,8 @@ create table AKK_CATEGORY (
     CAT_TYPE varchar(50) not null,
     --
     primary key (ID)
-);-- end AKK_CATEGORY
-
+)^
+-- end AKK_CATEGORY
 -- begin AKK_OPERATION
 create table AKK_OPERATION (
     ID varchar(36) not null,
@@ -91,7 +93,8 @@ create table AKK_OPERATION (
     COMMENTS varchar(200),
     --
     primary key (ID)
-);-- end AKK_OPERATION
+)^
+-- end AKK_OPERATION
 -- begin AKK_USER_DATA
 create table AKK_USER_DATA (
     ID varchar(36) not null,
@@ -103,5 +106,5 @@ create table AKK_USER_DATA (
     VALUE_ varchar(500),
     --
     primary key (ID)
-);
+)^
 -- end AKK_USER_DATA
