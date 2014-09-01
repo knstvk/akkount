@@ -94,6 +94,10 @@ configure(coreModule) {
                 'app-global', 'app-core')
     }
 
+    task startDb(description: 'Starts HSQLDB', type: CubaHsqlStart) {
+        dbName = 'akk'
+    }
+
     task createDb(dependsOn: assemble, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'hsql'
         host = 'localhost'
@@ -113,7 +117,7 @@ configure(coreModule) {
     task startTestDb(description: 'Starts HSQLDB for tests', type: CubaHsqlStart) {
         dbPort = 9002
         dbName = 'akk_test'
-}
+    }
 
     task createTestDb(dependsOn: assemble, description: 'Creates local test database', type: CubaDbCreation) {
         dbms = 'hsql'
