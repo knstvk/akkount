@@ -36,6 +36,8 @@
 
         newExpense: function() {
             app.log("New expense");
+            if (!this.checkReferences())
+                return;
             var self = this;
             $.ajax({
                 url: "api/last-account?s=" + app.session.id + "&t=opExpenseAccount",
@@ -53,6 +55,8 @@
 
         newIncome: function() {
             app.log("New income");
+            if (!this.checkReferences())
+                return;
             if (this.currentView instanceof app.OperationTableView) {
                 var self = this;
                 $.ajax({
@@ -72,6 +76,8 @@
 
         newTransfer: function() {
             app.log("New transfer");
+            if (!this.checkReferences())
+                return;
             if (this.currentView instanceof app.OperationTableView) {
                 var self = this;
                 $.when(
@@ -96,8 +102,18 @@
                 accModel = this.currentView.accounts.byId(app.AccountModel.entityName + "-" + acc.id);
             if (accModel)
                 op.set(attr, accModel.toJSON());
-            else
+            else if (!this.currentView.accounts.isEmpty())
                 op.set(attr, this.currentView.accounts.first().toJSON());
+        },
+
+        checkReferences: function() {
+            if (this.currentView.accounts.isEmpty() || this.currentView.categories.isEmpty()) {
+                var opAlertsDiv = $("#op-alerts");
+                opAlertsDiv.empty();
+                opAlertsDiv.append("<div class='alert alert-warning'>Fill in accounts and categories first</div>");
+                return false;
+            } else
+                return true;
         }
 
     });
