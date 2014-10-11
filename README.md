@@ -25,7 +25,7 @@ Usage
 -----
 
 Install JDK 7 or above and set JAVA_HOME environment variable to the JDK root dir.
-Open command line in the project directory and run the following commands to build the application:
+Open command line in the project directory and run the following command to build the application:
 ```
 gradlew setupTomcat deploy
 ```
@@ -38,4 +38,5 @@ gradlew createDb
 ```
 To run Tomcat use ```gradlew start``` Gradle command or ```startup.*``` scripts in ```build/tomcat/bin```.
 
-Main UI is available on ```http://localhost:8080/app```, responsive UI on ```http://localhost:8080/app-portal```. Username ```admin```, password ```admin```.
+Main UI is available on ```http://localhost:8080/app```, responsive UI on ```http://localhost:8080/app-portal```. 
+Username: ```admin```, password: ```admin```.
