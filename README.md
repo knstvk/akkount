@@ -25,16 +25,17 @@ Usage
 -----
 
 Install JDK 7 or above and set JAVA_HOME environment variable to the JDK root dir.
-Open command line in the project directory and run the following commands to build the application and create HSQL database in ```data``` directory:
+Open command line in the project directory and run the following commands to build the application:
 ```
 gradlew setupTomcat deploy
+```
+During the build process you will be prompted to accept CUBA platform license agreement. CUBA is free while you have five or less simultaneous user sessions. This should be more than enough for home usage. 
+
+Now start HSQL server and create database in ```data``` directory:
+```
 gradlew startDb
 gradlew createDb
 ```
-To run Tomcat use this Gradle command:
-```
-gradlew start
-```
-or ```startup.*``` scripts in ```build/tomcat/bin```.
+To run Tomcat use ```gradlew start``` Gradle command or ```startup.*``` scripts in ```build/tomcat/bin```.
 
-Open ```http://localhost:8080/app``` for main UI or ```http://localhost:8080/app-portal``` for responsive UI. Username and password: ```admin``` / ```admin```.
+Main UI is available on ```http://localhost:8080/app```, responsive UI on ```http://localhost:8080/app-portal```. Username ```admin```, password ```admin```.
