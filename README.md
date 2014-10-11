@@ -20,3 +20,21 @@ Some details:
    1. Middleware
    2. Full-functional CUBA UI
    3. Responsive UI built on Backbone.js + Bootstrap to simplify entering operations on mobile devices. 
+
+Usage
+-----
+
+Install JDK 7 or above and set JAVA_HOME environment variable to the JDK root dir.
+Open command line in the project directory and run the following commands to build the application and create HSQL database in ```data``` directory:
+```
+gradlew setupTomcat deploy
+gradlew startDb
+gradlew createDb
+```
+To run Tomcat use this Gradle command:
+```
+gradlew start
+```
+or ```startup.*``` scripts in ```build/tomcat/bin```.
+
+Open ```http://localhost:8080/app``` for main UI or ```http://localhost:8080/app-portal``` for responsive UI. Username and password: ```admin``` / ```admin```.
