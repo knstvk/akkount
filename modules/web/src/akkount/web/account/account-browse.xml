@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/5.2/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/5.3/window.xsd"
         caption="msg://browseCaption"
         class="akkount.web.account.AccountBrowse"
         lookupComponent="accountTable"
