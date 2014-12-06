@@ -1,8 +1,8 @@
-@import "../havana/havana";
+@import "../halo/halo";
 
 /* Define your theme modifications inside next mixin */
-@mixin havana-ext {
-  @include havana;
+@mixin halo-ext {
+  @include halo;
 
   .v-label-totals {
     font-weight: bold;

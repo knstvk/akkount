@@ -1,0 +1,12 @@
+@import "halo-defaults";
+@import "halo-ext-defaults";
+@import "halo-ext";
+
+.halo {
+  @include halo-ext;
+}
+
+// hide Vaadin warning about theme version
+.v-theme-version {
+  display: none;
+}

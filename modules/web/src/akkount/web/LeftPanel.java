@@ -97,12 +97,12 @@ public class LeftPanel extends FoldersPane {
             if (!totals.isEmpty()) {
                 for (Map.Entry<String, BigDecimal> entry : totals.entrySet()) {
                     Label sumLabel = new Label(formatter.format(entry.getValue()));
-                    sumLabel.setStyleName("h2");
+                    sumLabel.setStyleName("totals");
                     balanceGrid.addComponent(sumLabel, 1, row);
                     balanceGrid.setComponentAlignment(sumLabel, Alignment.MIDDLE_RIGHT);
 
                     Label currencyLabel = new Label(entry.getKey());
-                    currencyLabel.setStyleName("h2");
+                    currencyLabel.setStyleName("totals");
                     balanceGrid.addComponent(currencyLabel, 2, row);
 
                     row++;
