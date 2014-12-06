@@ -1,0 +1,1 @@
+drop index IDX_AKK_ACCOUNT_UNIQ_NAME ;

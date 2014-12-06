@@ -1,5 +1,4 @@
--- begin AKK_ACCOUNT
-create table AKK_ACCOUNT (
+-- begin AKK_ACCOUNTcreate table AKK_ACCOUNT (
     ID varchar(36) not null,
     CREATE_TS timestamp,
     CREATED_BY varchar(50),
@@ -17,8 +16,7 @@ create table AKK_ACCOUNT (
     INCLUDE_IN_TOTAL boolean,
     --
     primary key (ID)
-)^
--- end AKK_ACCOUNT
+)^-- end AKK_ACCOUNT
 -- begin AKK_CURRENCY
 create table AKK_CURRENCY (
     ID varchar(36) not null,
