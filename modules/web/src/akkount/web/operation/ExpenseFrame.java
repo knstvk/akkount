@@ -7,8 +7,6 @@ import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.DsListenerAdapter;
-import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
-import com.vaadin.ui.Component;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -30,9 +28,6 @@ public class ExpenseFrame extends AbstractFrame implements OperationFrame {
 
     @Override
     public void postInit(Operation item) {
-        com.vaadin.ui.TextField vTextField = WebComponentsHelper.unwrap(amountField);
-        new CalcExtension(vTextField);
-
         amountCalculator.initAmount(amountField, item.getAmount1());
 
         setCurrencyLabel(item);

@@ -10,7 +10,7 @@ allprojects {
 }
 
 buildscript {
-    ext.cubaVersion = '5.3.1'
+    ext.cubaVersion = '5.3.2'
     repositories {
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'

@@ -10,6 +10,7 @@ import com.haulmont.cuba.core.global.Scripting;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.components.ValidationErrors;
+import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.ManagedBean;
@@ -40,6 +41,9 @@ public class AmountCalculator {
     private Datatype<BigDecimal> decimalDatatype = Datatypes.getNN(BigDecimal.class);
 
     public void initAmount(TextField amountField, BigDecimal value) {
+        com.vaadin.ui.TextField vTextField = WebComponentsHelper.unwrap(amountField);
+        new CalcExtension(vTextField);
+
         amountField.setValue(decimalDatatype.format(value, userSessionSource.getUserSession().getLocale()));
     }
 
