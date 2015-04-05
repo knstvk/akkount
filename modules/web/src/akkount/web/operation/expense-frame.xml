@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/5.3/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/5.4/window.xsd"
         class="akkount.web.operation.ExpenseFrame"
         messagesPack="akkount.web.operation">
     <dsContext>
@@ -20,7 +20,8 @@
             </columns>
             <rows>
                 <row>
-                    <label value="msg://account"/>
+                    <label align="MIDDLE_LEFT"
+                           value="msg://account"/>
                     <lookupPickerField datasource="operationDs"
                                        optionsDatasource="accountsDs"
                                        property="acc1"
@@ -32,7 +33,8 @@
                     </lookupPickerField>
                 </row>
                 <row>
-                    <label value="msg://amount"/>
+                    <label align="MIDDLE_LEFT"
+                           value="msg://amount"/>
                     <hbox spacing="true"
                           width="100%">
                         <textField id="amountField"
@@ -45,7 +47,8 @@
                     </hbox>
                 </row>
                 <row>
-                    <label value="msg://category"/>
+                    <label align="MIDDLE_LEFT"
+                           value="msg://category"/>
                     <lookupPickerField datasource="operationDs"
                                        optionsDatasource="categoriesDs"
                                        property="category"
@@ -56,7 +59,8 @@
                     </lookupPickerField>
                 </row>
                 <row>
-                    <label value="msg://comment"/>
+                    <label align="MIDDLE_LEFT"
+                           value="msg://comment"/>
                     <textArea datasource="operationDs"
                               property="comments"
                               rows="3"

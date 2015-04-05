@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/5.3/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/5.4/window.xsd"
         caption="msg://editCaption"
         class="akkount.web.operation.OperationEdit"
         datasource="operationDs"
@@ -20,14 +20,22 @@
             margin="true"
             spacing="true">
         <hbox spacing="true">
-            <label value="msg://dateLab"/>
+            <label align="MIDDLE_LEFT"
+                   value="msg://dateLab"/>
             <dateField datasource="operationDs"
                        property="opDate"/>
+            <label id="weekDayLab"
+                   align="MIDDLE_LEFT"
+                   datasource="operationDs"
+                   property="opDate">
+                <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="EEEE"/>
+            </label>
         </hbox>
         <groupBox id="frameContainer"
                   stylename="light"
                   width="400px"/>
         <iframe id="windowActions"
-                screen="editWindowActions"/>
+                screen="editWindowActions"
+                stylename="window-actions"/>
     </layout>
 </window>
