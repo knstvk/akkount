@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 knstvk.akkount
- */
-
 package akkount.testsupport;
 
 import akkount.entity.Account;
@@ -17,10 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 public class AkkountTestCase extends CubaTestCase {
 
     protected UUID account1Id;

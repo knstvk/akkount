@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2014 akkount
- */
-
 package akkount.web.operation;
 
 import com.haulmont.chile.core.datatypes.Datatype;
@@ -22,10 +18,6 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 @ManagedBean
 public class AmountCalculator {
 

@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 knstvk.akkount
- */
-
 package akkount.jmx;
 
 import akkount.entity.*;
@@ -25,10 +21,6 @@ import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.*;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 @ManagedBean("akk_SampleDataGenerator")
 public class SampleDataGenerator implements SampleDataGeneratorMBean {
 

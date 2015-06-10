@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 knstvk.akkount
- */
-
 package akkount.web;
 
 import com.haulmont.chile.core.datatypes.Datatypes;
@@ -13,10 +9,6 @@ import com.haulmont.cuba.gui.components.Formatter;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 public class DecimalFormatter implements Formatter<BigDecimal> {
 
     protected UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.class);

@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2014 akkount
- */
-
 package akkount.entity;
 
 import com.haulmont.chile.core.annotations.MetaClass;
@@ -10,10 +6,6 @@ import com.haulmont.cuba.core.entity.AbstractNotPersistentEntity;
 
 import java.math.BigDecimal;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 @MetaClass(name = "akk$CategoryBalance")
 public class CategoryAmount extends AbstractNotPersistentEntity {
 

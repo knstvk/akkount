@@ -1,13 +1,5 @@
-/*
- * Copyright (c) 2013 knstvk.akkount
- */
-
 package akkount.service;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 public class UserDataKeys {
 
     public static final String OP_EXPENSE_ACCOUNT = "opExpenseAccount";

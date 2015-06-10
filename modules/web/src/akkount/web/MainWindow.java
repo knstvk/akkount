@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2014 akkount
- */
 package akkount.web;
 
 import akkount.entity.Account;

@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 knstvk.akkount
- */
-
 package akkount.entitylisteners;
 
 import akkount.entity.Account;
@@ -25,10 +21,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 public class OperationEntityListener implements
         BeforeInsertEntityListener<Operation>,
         BeforeUpdateEntityListener<Operation>,

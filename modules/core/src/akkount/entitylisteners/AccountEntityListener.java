@@ -1,17 +1,9 @@
-/*
- * Copyright (c) 2013 knstvk.akkount
- */
-
 package akkount.entitylisteners;
 
 import akkount.entity.Account;
 import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 public class AccountEntityListener
         implements BeforeInsertEntityListener<Account>, BeforeUpdateEntityListener<Account> {
 

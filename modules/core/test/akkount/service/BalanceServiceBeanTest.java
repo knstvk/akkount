@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 knstvk.akkount
- */
-
 package akkount.service;
 
 import akkount.entity.Account;
@@ -20,10 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 public class BalanceServiceBeanTest extends AkkountTestCase {
 
     public void setUp() throws Exception {

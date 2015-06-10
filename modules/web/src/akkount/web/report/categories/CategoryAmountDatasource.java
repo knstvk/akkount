@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2014 akkount
- */
-
 package akkount.web.report.categories;
 
 import akkount.entity.Category;
@@ -14,10 +10,6 @@ import com.haulmont.cuba.gui.data.impl.CollectionDatasourceImpl;
 
 import java.util.*;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 public class CategoryAmountDatasource extends CollectionDatasourceImpl<CategoryAmount, UUID> {
 
     private ReportService service = AppBeans.get(ReportService.NAME);

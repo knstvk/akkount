@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 knstvk.akkount
- */
-
 package akkount.web.operation;
 
 import akkount.entity.Account;
@@ -27,10 +23,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
 public class OperationEdit extends AbstractEditor<Operation> {
 
     public static final String LAST_OPERATION_DATE_ATTR = "lastOperationDate";

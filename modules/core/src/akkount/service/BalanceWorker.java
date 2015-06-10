@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2013 knstvk.akkount
- */
-
 package akkount.service;
 
 import akkount.entity.Balance;
@@ -13,11 +9,6 @@ import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
-
-/**
- * @author krivopustov
- * @version $Id$
- */
 @ManagedBean(BalanceWorker.NAME)
 public class BalanceWorker {
 
