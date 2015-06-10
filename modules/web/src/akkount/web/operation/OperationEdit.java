@@ -10,7 +10,6 @@ import akkount.entity.OperationType;
 import akkount.service.UserDataKeys;
 import akkount.service.UserDataService;
 import akkount.web.App;
-import akkount.web.LeftPanel;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.TimeSource;
@@ -65,9 +64,7 @@ public class OperationEdit extends AbstractEditor<Operation> {
         getDsContext().addListener(new DsContext.CommitListenerAdapter() {
             @Override
             public void afterCommit(CommitContext context, Set<Entity> result) {
-                LeftPanel leftPanel = App.getLeftPanel();
-                if (leftPanel != null)
-                    leftPanel.refreshBalance();
+                ((App) App.getInstance()).getMainWindow().refreshBalance();
             }
         });
     }

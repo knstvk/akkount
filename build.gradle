@@ -4,13 +4,12 @@ allprojects {
     ext.artifactVersion = '0.1'
     ext.isSnapshot = true
     ext.tomcatDir = "$rootDir/build/tomcat"
-    ext.copyright = "Copyright (c) 2014 akkount" // Copyright Notice for IDEA project
-    ext.vcs = 'Git'
-    // ext.vcs = 'svn' // VCS for IDEA project
+    ext.copyright = "Copyright (c) 2015 akkount" // Copyright Notice for IDEA project
+    ext.vcs = 'Git' // VCS for IDEA project
 }
 
 buildscript {
-    ext.cubaVersion = '5.4.4'
+    ext.cubaVersion = '5.5.0'
     repositories {
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'

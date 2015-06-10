@@ -2,7 +2,6 @@ package akkount.web.operation;
 
 import akkount.entity.OperationType;
 import akkount.web.App;
-import akkount.web.LeftPanel;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;
@@ -86,9 +85,7 @@ public class OperationBrowse extends AbstractLookup {
 
         @Override
         protected void afterRemove(Set selected) {
-            LeftPanel leftPanel = App.getLeftPanel();
-            if (leftPanel != null)
-                leftPanel.refreshBalance();
+            ((App) App.getInstance()).getMainWindow().refreshBalance();
         }
     }
 }

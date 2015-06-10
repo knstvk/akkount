@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<metadata xmlns="http://schemas.haulmont.com/cuba/5.4/metadata.xsd">
+<metadata xmlns="http://schemas.haulmont.com/cuba/5.5/metadata.xsd">
     <metadata-model namespace="akk"
                     root-package="akkount">
         <class>akkount.entity.CategoryAmount</class>

@@ -1,7 +1,6 @@
 /*
- * Copyright (c) 2013 knstvk.akkount
+ * Copyright (c) 2014 akkount
  */
-
 package akkount.web;
 
 import akkount.entity.Account;
@@ -9,48 +8,36 @@ import akkount.service.BalanceService;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.TimeSource;
-import com.haulmont.cuba.web.AppWindow;
-import com.haulmont.cuba.web.app.folders.FoldersPane;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.*;
+import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.mainwindow.AppMenu;
+import com.haulmont.cuba.gui.data.DataSupplier;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang.BooleanUtils;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
-public class LeftPanel extends FoldersPane {
+public class MainWindow extends AbstractMainWindow {
 
-    private VerticalLayout balanceLayout;
+    @Inject
+    protected AppMenu mainMenu;
+    @Inject
+    protected Embedded logoImage;
+    @Inject
+    private BoxLayout balanceLayout;
+
+    @Inject
+    private DataSupplier dataSupplier;
+    @Inject
+    private ComponentsFactory componentsFactory;
+
     private GridLayout balanceGrid;
 
-    public LeftPanel(MenuBar menuBar, AppWindow appWindow) {
-        super(menuBar, appWindow);
-    }
-
     @Override
-    public void init(Component parent) {
-        super.init(parent);
-        createBalancePanel();
-    }
-
-    @Override
-    public void refreshFolders() {
-        super.refreshFolders();
-        createBalancePanel();
-    }
-
-    private void createBalancePanel() {
-        Label label = new Label(messages.getMessage(getClass(), "LeftPanel.caption"));
-        label.setStyleName("cuba-folders-pane-caption");
-        balanceLayout = new VerticalLayout();
-        balanceLayout.setMargin(true);
-        balanceLayout.setSpacing(true);
-        balanceLayout.addComponent(label);
-        addComponent(balanceLayout, 0);
+    public void init(Map<String, Object> params) {
+        mainMenu.requestFocus();
+        logoImage.setSource("theme://" + messages.getMainMessage("application.logoImage"));
 
         refreshBalance();
     }
@@ -61,10 +48,10 @@ public class LeftPanel extends FoldersPane {
 
         LoadContext loadContext = new LoadContext(Account.class);
         loadContext.setQueryString("select a from akk$Account a where a.active = true order by a.name");
-        List<Account> accounts = dataService.loadList(loadContext);
+        List<Account> accounts = dataSupplier.loadList(loadContext);
 
         if (balanceGrid != null) {
-            balanceLayout.removeComponent(balanceGrid);
+            balanceLayout.remove(balanceGrid);
         }
 
         if (accounts.size() > 0) {
@@ -87,7 +74,9 @@ public class LeftPanel extends FoldersPane {
                 }
             }
 
-            balanceGrid = new GridLayout(3, totals.size() + accounts.size() + 3);
+            balanceGrid = componentsFactory.createComponent(GridLayout.NAME);
+            balanceGrid.setColumns(3);
+            balanceGrid.setRows(totals.size() + accounts.size() + 3);
             balanceGrid.setMargin(true);
             balanceGrid.setSpacing(true);
 
@@ -96,14 +85,16 @@ public class LeftPanel extends FoldersPane {
             int row = 0;
             if (!totals.isEmpty()) {
                 for (Map.Entry<String, BigDecimal> entry : totals.entrySet()) {
-                    Label sumLabel = new Label(formatter.format(entry.getValue()));
+                    Label sumLabel = componentsFactory.createComponent(Label.NAME);
+                    sumLabel.setValue(formatter.format(entry.getValue()));
                     sumLabel.setStyleName("totals");
-                    balanceGrid.addComponent(sumLabel, 1, row);
-                    balanceGrid.setComponentAlignment(sumLabel, Alignment.MIDDLE_RIGHT);
+                    sumLabel.setAlignment(Alignment.MIDDLE_RIGHT);
+                    balanceGrid.add(sumLabel, 1, row);
 
-                    Label currencyLabel = new Label(entry.getKey());
+                    Label currencyLabel = componentsFactory.createComponent(Label.NAME);
+                    currencyLabel.setValue(entry.getKey());
                     currencyLabel.setStyleName("totals");
-                    balanceGrid.addComponent(currencyLabel, 2, row);
+                    balanceGrid.add(currencyLabel, 2, row);
 
                     row++;
                 }
@@ -118,34 +109,41 @@ public class LeftPanel extends FoldersPane {
                     excludedAccounts.add(account);
             }
 
-            Label label = new Label("<br/>");
-            label.setContentMode(ContentMode.HTML);
-            balanceGrid.addComponent(label, 0, row++);
+            Label label = componentsFactory.createComponent(Label.NAME);
+            label.setValue("<br/>");
+            label.setHtmlEnabled(true);
+            balanceGrid.add(label, 0, row++);
             for (Account account : includedAccounts) {
                 addAccountBalance(account, balances.get(account), formatter, row);
                 row++;
             }
             if (!excludedAccounts.isEmpty()) {
-                label = new Label("<br/>");
-                label.setContentMode(ContentMode.HTML);
-                balanceGrid.addComponent(label, 0, row++);
+                label = componentsFactory.createComponent(Label.NAME);
+                label.setValue("<br/>");
+                label.setHtmlEnabled(true);
+                balanceGrid.add(label, 0, row++);
                 for (Account account : excludedAccounts) {
                     addAccountBalance(account, balances.get(account), formatter, row);
                     row++;
                 }
             }
 
-            balanceLayout.addComponent(balanceGrid);
+            balanceLayout.add(balanceGrid);
         }
     }
 
     private void addAccountBalance(Account account, BigDecimal balance, DecimalFormatter formatter, int row) {
-        balanceGrid.addComponent(new Label(account.getName()), 0, row);
+        Label label = componentsFactory.createComponent(Label.NAME);
+        label.setValue(account.getName());
+        balanceGrid.add(label, 0, row);
 
-        Label sumLabel = new Label(formatter.format(balance));
-        balanceGrid.addComponent(sumLabel, 1, row);
-        balanceGrid.setComponentAlignment(sumLabel, Alignment.MIDDLE_RIGHT);
+        Label sumLabel = componentsFactory.createComponent(Label.NAME);
+        sumLabel.setValue(formatter.format(balance));
+        sumLabel.setAlignment(Alignment.MIDDLE_RIGHT);
+        balanceGrid.add(sumLabel, 1, row);
 
-        balanceGrid.addComponent(new Label(account.getCurrencyCode()), 2, row);
+        Label curlabel = componentsFactory.createComponent(Label.NAME);
+        curlabel.setValue(account.getCurrencyCode());
+        balanceGrid.add(curlabel, 2, row);
     }
 }
