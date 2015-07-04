@@ -1,0 +1,1 @@
+alter table SEC_USER drop constraint SEC_USER_DEFAULT_SUBSTITUTED_USER;
