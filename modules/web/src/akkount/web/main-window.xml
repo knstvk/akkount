@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/5.5/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         class="akkount.web.MainWindow"
-        xmlns:main="http://schemas.haulmont.com/cuba/5.5/mainwindow.xsd">
+        xmlns:main="http://schemas.haulmont.com/cuba/mainwindow.xsd">
     <layout expand="foldersSplit">
         <hbox id="titleBar"
               expand="mainMenu"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<views xmlns="http://schemas.haulmont.com/cuba/5.5/view.xsd">
+<views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
     <view class="akkount.entity.Account"
           extends="_local"
           name="account-with-currency">
