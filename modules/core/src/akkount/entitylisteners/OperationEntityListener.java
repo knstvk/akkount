@@ -108,9 +108,9 @@ public class OperationEntityListener implements
 
     private void addOperation(Operation operation) {
         EntityManager em = persistence.getEntityManager();
-        TypedQuery<Balance> query = em.createQuery(BALANCE_QUERY, Balance.class);
 
         if (operation.getAcc1() != null) {
+            TypedQuery<Balance> query = em.createQuery(BALANCE_QUERY, Balance.class);
             query.setParameter(1, operation.getAcc1().getId()).setParameter(2, operation.getOpDate());
             List<Balance> list = query.getResultList();
 
@@ -129,6 +129,7 @@ public class OperationEntityListener implements
         }
 
         if (operation.getAcc2() != null) {
+            TypedQuery<Balance> query = em.createQuery(BALANCE_QUERY, Balance.class);
             query.setParameter(1, operation.getAcc2().getId()).setParameter(2, operation.getOpDate());
             List<Balance> list = query.getResultList();
 

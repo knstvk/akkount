@@ -71,7 +71,7 @@ public class MainWindow extends AbstractMainWindow {
                 }
             }
 
-            balanceGrid = componentsFactory.createComponent(GridLayout.NAME);
+            balanceGrid = componentsFactory.createComponent(GridLayout.class);
             balanceGrid.setColumns(3);
             balanceGrid.setRows(totals.size() + accounts.size() + 3);
             balanceGrid.setMargin(true);
@@ -82,13 +82,13 @@ public class MainWindow extends AbstractMainWindow {
             int row = 0;
             if (!totals.isEmpty()) {
                 for (Map.Entry<String, BigDecimal> entry : totals.entrySet()) {
-                    Label sumLabel = componentsFactory.createComponent(Label.NAME);
+                    Label sumLabel = componentsFactory.createComponent(Label.class);
                     sumLabel.setValue(formatter.format(entry.getValue()));
                     sumLabel.setStyleName("totals");
                     sumLabel.setAlignment(Alignment.MIDDLE_RIGHT);
                     balanceGrid.add(sumLabel, 1, row);
 
-                    Label currencyLabel = componentsFactory.createComponent(Label.NAME);
+                    Label currencyLabel = componentsFactory.createComponent(Label.class);
                     currencyLabel.setValue(entry.getKey());
                     currencyLabel.setStyleName("totals");
                     balanceGrid.add(currencyLabel, 2, row);
@@ -106,7 +106,7 @@ public class MainWindow extends AbstractMainWindow {
                     excludedAccounts.add(account);
             }
 
-            Label label = componentsFactory.createComponent(Label.NAME);
+            Label label = componentsFactory.createComponent(Label.class);
             label.setValue("<br/>");
             label.setHtmlEnabled(true);
             balanceGrid.add(label, 0, row++);
@@ -115,7 +115,7 @@ public class MainWindow extends AbstractMainWindow {
                 row++;
             }
             if (!excludedAccounts.isEmpty()) {
-                label = componentsFactory.createComponent(Label.NAME);
+                label = componentsFactory.createComponent(Label.class);
                 label.setValue("<br/>");
                 label.setHtmlEnabled(true);
                 balanceGrid.add(label, 0, row++);
@@ -130,16 +130,16 @@ public class MainWindow extends AbstractMainWindow {
     }
 
     private void addAccountBalance(Account account, BigDecimal balance, DecimalFormatter formatter, int row) {
-        Label label = componentsFactory.createComponent(Label.NAME);
+        Label label = componentsFactory.createComponent(Label.class);
         label.setValue(account.getName());
         balanceGrid.add(label, 0, row);
 
-        Label sumLabel = componentsFactory.createComponent(Label.NAME);
+        Label sumLabel = componentsFactory.createComponent(Label.class);
         sumLabel.setValue(formatter.format(balance));
         sumLabel.setAlignment(Alignment.MIDDLE_RIGHT);
         balanceGrid.add(sumLabel, 1, row);
 
-        Label curlabel = componentsFactory.createComponent(Label.NAME);
+        Label curlabel = componentsFactory.createComponent(Label.class);
         curlabel.setValue(account.getCurrencyCode());
         balanceGrid.add(curlabel, 2, row);
     }

@@ -33,7 +33,7 @@ public class AmountCalculator {
     private Datatype<BigDecimal> decimalDatatype = Datatypes.getNN(BigDecimal.class);
 
     public void initAmount(TextField amountField, BigDecimal value) {
-        com.vaadin.ui.TextField vTextField = WebComponentsHelper.unwrap(amountField);
+        com.vaadin.ui.TextField vTextField = (com.vaadin.ui.TextField) WebComponentsHelper.unwrap(amountField);
         new CalcExtension(vTextField);
 
         amountField.setValue(decimalDatatype.format(value, userSessionSource.getUserSession().getLocale()));

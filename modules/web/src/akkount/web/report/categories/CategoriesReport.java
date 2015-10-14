@@ -237,15 +237,15 @@ public class CategoriesReport extends AbstractWindow {
         if (excludedCategories.containsKey(category))
             return;
 
-        final BoxLayout box = componentsFactory.createComponent(BoxLayout.HBOX);
+        BoxLayout box = componentsFactory.createComponent(HBoxLayout.class);
         box.setMargin(false, true, false, false);
 
-        Label label = componentsFactory.createComponent(Label.NAME);
+        Label label = componentsFactory.createComponent(Label.class);
         label.setValue(category.getName());
         label.setAlignment(Alignment.MIDDLE_LEFT);
         box.add(label);
 
-        LinkButton button = componentsFactory.createComponent(LinkButton.NAME);
+        LinkButton button = componentsFactory.createComponent(LinkButton.class);
         button.setIcon("icons/remove.png");
         button.setAction(new AbstractAction("") {
             @Override
@@ -276,9 +276,8 @@ public class CategoriesReport extends AbstractWindow {
         private Table table;
 
         public ExcludeCategoryAction(Table table) {
-            super("excludeCategory");
+            super(table, "excludeCategory");
             this.table = table;
-            table.getDatasource().addListener(this);
         }
 
         @Override
@@ -298,11 +297,10 @@ public class CategoriesReport extends AbstractWindow {
         private DateField to;
 
         public ShowOperationsAction(Table table, DateField from, DateField to) {
-            super("showOperations");
+            super(table, "showOperations");
             this.table = table;
             this.from = from;
             this.to = to;
-            table.getDatasource().addListener(this);
         }
 
         @Override

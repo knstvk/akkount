@@ -34,7 +34,7 @@
         <groupBox id="frameContainer"
                   stylename="light"
                   width="400px"/>
-        <iframe id="windowActions"
+        <frame id="windowActions"
                 screen="editWindowActions"
                 stylename="window-actions"/>
     </layout>

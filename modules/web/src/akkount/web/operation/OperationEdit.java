@@ -43,13 +43,13 @@ public class OperationEdit extends AbstractEditor<Operation> {
 
     @Override
     public void init(Map<String, Object> params) {
-        Operation operation = WindowParams.ITEM.getEntity(params);
+        Operation operation = (Operation) WindowParams.ITEM.getEntity(params);
         if (operation.getOpType() == null)
             operation.setOpType(OperationType.EXPENSE);
 
         String frameId = operation.getOpType().name().toLowerCase() + "-frame";
 
-        operationFrame = openFrame(frameContainer, frameId, params);
+        operationFrame = (OperationFrame) openFrame(frameContainer, frameId, params);
 
         frameContainer.setCaption(messages.getMessage(operation.getOpType()));
 

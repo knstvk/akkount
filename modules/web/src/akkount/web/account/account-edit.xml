@@ -32,7 +32,7 @@
             <field id="includeInTotal"
                    width="250px"/>
         </fieldGroup>
-        <iframe id="windowActions"
+        <frame id="windowActions"
                 screen="editWindowActions"/>
     </layout>
 </window>

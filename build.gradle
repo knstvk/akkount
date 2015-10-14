@@ -1,18 +1,9 @@
 
-allprojects {
-    ext.artifactGroup = 'akkount'
-    ext.artifactVersion = '0.1'
-    ext.isSnapshot = true
-    ext.tomcatDir = "$rootDir/build/tomcat"
-    ext.copyright = "Copyright (c) 2015 akkount" // Copyright Notice for IDEA project
-    ext.vcs = 'Git' // VCS for IDEA project
-}
-
 buildscript {
-    ext.cubaVersion = '5.6.7'
+    ext.cubaVersion = '6.0-SNAPSHOT'
     repositories {
         maven {
-            url 'https://repo.cuba-platform.com/content/groups/work'
+            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
             credentials {
                 username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
@@ -31,11 +22,26 @@ def webModule = project(':app-web')
 def portalModule = project(':app-portal')
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
-def servletApi = 'org.apache.tomcat:tomcat-servlet-api:7.0.53'
+def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
 
 
 apply(plugin: 'idea')
 apply(plugin: 'cuba')
+
+cuba {
+    artifact {
+        group = 'akkount'
+        version = '0.1'
+        isSnapshot = true
+    }
+    tomcat {
+        dir = "$project.rootDir/build/tomcat"
+    }
+    ide {
+        vcs = 'Git'
+        copyright = 'Copyright (c) 2015 akkount'
+    }
+}
 
 configure([globalModule, coreModule, guiModule, webModule, portalModule]) {
     apply(plugin: 'java')
@@ -44,7 +50,7 @@ configure([globalModule, coreModule, guiModule, webModule, portalModule]) {
     apply(plugin: 'cuba')
 
     dependencies {
-        testCompile('junit:junit:4.5')
+        testCompile('junit:junit:4.12')
     }
 
     task sourceJar(type: Jar) {
@@ -63,9 +69,7 @@ configure(globalModule) {
 
     }
 
-    task enhance(type: CubaEnhancing) {
-        persistenceXml = "$globalModule.projectDir/src/persistence.xml"
-    }
+    task enhance(type: CubaEnhancing) 
 }
 
 configure(coreModule) {
@@ -81,7 +85,7 @@ configure(coreModule) {
         jdbc(hsql)
         testRuntime(hsql)
         compile("com.haulmont.cuba:cuba-core:$cubaVersion")
-        testCompile("com.haulmont.cuba:cuba-core:$cubaVersion:tests")
+        testCompile("com.haulmont.cuba:cuba-core-tests:$cubaVersion")
         testCompile("com.haulmont.cuba:cuba-shared-lib:$cubaVersion")
         dbscripts("com.haulmont.cuba:cuba-core:$cubaVersion:db@zip")
 
@@ -138,7 +142,7 @@ configure(guiModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "akkount/**"
-        into "$tomcatDir/conf/app"
+        into "$cuba.tomcat.dir/conf/app"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
@@ -177,7 +181,7 @@ configure(webModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "akkount/**"
-        into "$tomcatDir/conf/app"
+        into "$cuba.tomcat.dir/conf/app"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
@@ -186,7 +190,7 @@ configure(webModule) {
     deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') << {
-        def dir = new File(tomcatDir, '/conf/app')
+        def dir = new File(cuba.tomcat.dir, '/conf/app')
         if (dir.isDirectory()) {
             ant.delete(includeemptydirs: true) {
                 fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -213,7 +217,7 @@ configure(portalModule) {
     }
 
     def webappName = 'app-portal'
-    def webRootDir = "$tomcatDir/webapps/$webappName"
+    def webRootDir = "$cuba.tomcat.dir/webapps/$webappName"
     def resourcesDir = "$webRootDir/akkount"
 
     task deploy(dependsOn: assemble, type: CubaDeployment) {
@@ -252,10 +256,10 @@ configure(portalModule) {
 
 
 task undeploy(type: Delete, dependsOn: ':app-web:cleanConf') {
-    delete("$tomcatDir/shared")
-    delete("$tomcatDir/webapps/app-core")
-    delete("$tomcatDir/webapps/app")
-    delete("$tomcatDir/webapps/app-portal")
+    delete("$cuba.tomcat.dir/shared")
+    delete("$cuba.tomcat.dir/webapps/app-core")
+    delete("$cuba.tomcat.dir/webapps/app")
+    delete("$cuba.tomcat.dir/webapps/app-portal")
 }
 
 task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy', ':app-portal:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
@@ -268,5 +272,5 @@ task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy', ':app-po
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.12'
+    gradleVersion = '2.6'
 }
