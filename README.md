@@ -24,7 +24,7 @@ Some details:
 Usage
 -----
 
-Install JDK 7 or above and set JAVA_HOME environment variable to the JDK root dir.
+Install JDK 8 or above and set JAVA_HOME environment variable to the JDK root dir.
 Open command line in the project directory and run the following command to build the application:
 ```
 gradlew setupTomcat deploy
