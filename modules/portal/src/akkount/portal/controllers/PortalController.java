@@ -6,7 +6,7 @@ import akkount.service.UserDataService;
 import com.haulmont.cuba.core.app.DataService;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.TimeSource;
-import com.haulmont.cuba.portal.restapi.Authentication;
+import com.haulmont.cuba.restapi.Authentication;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -11,7 +11,7 @@
     <mvc:annotation-driven />
 
     <context:component-scan base-package="akkount.portal.controllers"/>
-    <context:component-scan base-package="com.haulmont.cuba.portal.restapi"/>
+    <context:component-scan base-package="com.haulmont.cuba.restapi"/>
 
     <!-- Static resources -->
     <mvc:resources mapping="/**" location="/akkount/" cache-period="0"/>

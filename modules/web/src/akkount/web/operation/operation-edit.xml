@@ -28,14 +28,15 @@
                    align="MIDDLE_LEFT"
                    datasource="operationDs"
                    property="opDate">
-                <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="EEEE"/>
+                <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                           format="EEEE"/>
             </label>
         </hbox>
         <groupBox id="frameContainer"
                   stylename="light"
                   width="400px"/>
         <frame id="windowActions"
-                screen="editWindowActions"
-                stylename="window-actions"/>
+               screen="editWindowActions"
+               stylename="window-actions"/>
     </layout>
 </window>
