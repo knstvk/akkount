@@ -6,11 +6,8 @@ import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.cuba.gui.data.ValueListener;
-import com.haulmont.cuba.gui.data.impl.DsListenerAdapter;
 import org.apache.commons.lang.StringUtils;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 
@@ -38,29 +35,23 @@ public class TransferFrame extends AbstractFrame implements OperationFrame {
         amountCalculator.initAmount(amount1Field, item.getAmount1());
         amountCalculator.initAmount(amount2Field, item.getAmount2());
 
-        amount1Field.addListener(new ValueListener() {
-            @Override
-            public void valueChanged(Object source, String property, @Nullable Object prevValue, @Nullable Object value) {
-                if (value != null && StringUtils.isBlank((String) amount2Field.getValue())) {
-                    amount2Field.setValue(value);
-                }
+        amount1Field.addValueChangeListener(e -> {
+            if (e.getValue() != null && StringUtils.isBlank(amount2Field.getValue())) {
+                amount2Field.setValue(e.getValue());
             }
         });
 
         setCurrency1Label(item);
         setCurrency2Label(item);
 
-        operationDs.addListener(new DsListenerAdapter<Operation>() {
-            @Override
-            public void valueChanged(Operation source, String property, @Nullable Object prevValue, @Nullable Object value) {
-                switch (property) {
-                    case "acc1":
-                        setCurrency1Label(source);
-                        break;
-                    case "acc2":
-                        setCurrency2Label(source);
-                        break;
-                }
+        operationDs.addItemPropertyChangeListener(e -> {
+            switch (e.getProperty()) {
+                case "acc1":
+                    setCurrency1Label(e.getItem());
+                    break;
+                case "acc2":
+                    setCurrency2Label(e.getItem());
+                    break;
             }
         });
     }

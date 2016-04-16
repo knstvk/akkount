@@ -8,8 +8,8 @@ import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.ManagedBean;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@ManagedBean
+@Component
 public class AmountCalculator {
 
     private static final Pattern EXPR_PATTERN = Pattern.compile(

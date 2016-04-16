@@ -10,6 +10,7 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.TypedQuery;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.listener.BeforeDeleteEntityListener;
 import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
@@ -27,6 +28,8 @@ public class OperationEntityListener implements
         BeforeDeleteEntityListener<Operation> {
 
     private Persistence persistence = AppBeans.get(Persistence.class);
+
+    private Metadata metadata = AppBeans.get(Metadata.class);
 
     private UserDataWorker userDataWorker = AppBeans.get(UserDataWorker.class);
 
@@ -69,14 +72,11 @@ public class OperationEntityListener implements
     private Operation getOldOperation(UUID operationId) {
         Operation operation;
         // Get old operation state in separate transaction
-        Transaction tx = persistence.createTransaction();
-        try {
+        try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
             operation = em.find(Operation.class, operationId, "operation-with-accounts");
 
             tx.commit();
-        } finally {
-            tx.end();
         }
         return operation;
     }
@@ -115,7 +115,7 @@ public class OperationEntityListener implements
             List<Balance> list = query.getResultList();
 
             if (list.isEmpty()) {
-                Balance balance = new Balance();
+                Balance balance = metadata.create(Balance.class);
                 balance.setAccount(operation.getAcc1());
                 balance.setAmount(operation.getAmount1().negate()
                         .add(previousBalanceAmount(operation.getAcc1(), operation.getOpDate())));
@@ -134,7 +134,7 @@ public class OperationEntityListener implements
             List<Balance> list = query.getResultList();
 
             if (list.isEmpty()) {
-                Balance balance = new Balance();
+                Balance balance = metadata.create(Balance.class);
                 balance.setAccount(operation.getAcc2());
                 balance.setAmount(operation.getAmount2()
                         .add(previousBalanceAmount(operation.getAcc2(), operation.getOpDate())));

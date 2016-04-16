@@ -6,14 +6,11 @@ import akkount.entity.OperationType;
 import akkount.service.UserDataKeys;
 import akkount.service.UserDataService;
 import akkount.web.App;
-import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.WindowParams;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.GroupBoxLayout;
 import com.haulmont.cuba.gui.components.ValidationErrors;
-import com.haulmont.cuba.gui.data.DsContext;
 import com.haulmont.cuba.security.global.UserSession;
 import org.apache.commons.lang.time.DateUtils;
 
@@ -21,7 +18,6 @@ import javax.inject.Inject;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 
 public class OperationEdit extends AbstractEditor<Operation> {
 
@@ -53,11 +49,8 @@ public class OperationEdit extends AbstractEditor<Operation> {
 
         frameContainer.setCaption(messages.getMessage(operation.getOpType()));
 
-        getDsContext().addListener(new DsContext.CommitListenerAdapter() {
-            @Override
-            public void afterCommit(CommitContext context, Set<Entity> result) {
-                ((App) App.getInstance()).getMainWindow().refreshBalance();
-            }
+        getDsContext().addAfterCommitListener((context, result) -> {
+            ((App) App.getInstance()).getMainWindow().refreshBalance();
         });
     }
 

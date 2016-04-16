@@ -22,7 +22,7 @@ public class AccountBrowse extends AbstractLookup {
     private EditAction editAction;
 
     @Inject
-    private Table accountTable;
+    private Table<Account> accountTable;
 
     @Inject
     private BalanceService balanceService;

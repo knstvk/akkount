@@ -4,12 +4,13 @@ import akkount.entity.Balance;
 import akkount.entity.Operation;
 import com.haulmont.cuba.core.*;
 import org.apache.commons.lang.time.DateUtils;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
-@ManagedBean(BalanceWorker.NAME)
+
+@Component(BalanceWorker.NAME)
 public class BalanceWorker {
 
     public static final String NAME = "akk_BalanceWorker";
@@ -18,57 +19,56 @@ public class BalanceWorker {
     protected Persistence persistence;
 
     public BigDecimal getBalance(final UUID accountId, final Date date) {
-        return persistence.createTransaction().execute(new Transaction.Callable<BigDecimal>() {
-            @Override
-            public BigDecimal call(EntityManager em) {
-                TypedQuery<Balance> balQuery = em.createQuery(
-                        "select b from akk$Balance b where b.account.id = ?1 and b.balanceDate < ?2 order by b.balanceDate desc",
-                        Balance.class);
-                balQuery.setParameter(1, accountId);
-                balQuery.setParameter(2, date);
-                balQuery.setMaxResults(1);
-                Balance startBalance = balQuery.getFirstResult();
-                BigDecimal startAmount = startBalance != null ? startBalance.getAmount() : BigDecimal.ZERO;
+        try (Transaction tx = persistence.createTransaction()) {
+            EntityManager em = persistence.getEntityManager();
 
-                String expenseQueryStr = "select sum(o.amount1) from akk$Operation o where o.acc1.id = ?1 and o.opDate <= ?2";
-                if (startBalance != null)
-                    expenseQueryStr += " and o.opDate >= ?3";
-                Query expenseQuery = em.createQuery(expenseQueryStr);
-                expenseQuery.setParameter(1, accountId);
-                expenseQuery.setParameter(2, date);
-                if (startBalance != null)
-                    expenseQuery.setParameter(3, startBalance.getBalanceDate());
-                BigDecimal expense = (BigDecimal) expenseQuery.getSingleResult();
-                if (expense == null)
-                    expense = BigDecimal.ZERO;
+            TypedQuery<Balance> balQuery = em.createQuery(
+                    "select b from akk$Balance b where b.account.id = ?1 and b.balanceDate < ?2 order by b.balanceDate desc",
+                    Balance.class);
+            balQuery.setParameter(1, accountId);
+            balQuery.setParameter(2, date);
+            balQuery.setMaxResults(1);
+            Balance startBalance = balQuery.getFirstResult();
+            BigDecimal startAmount = startBalance != null ? startBalance.getAmount() : BigDecimal.ZERO;
 
-                String incomeQueryStr = "select sum(o.amount2) from akk$Operation o where o.acc2.id = ?1 and o.opDate <= ?2";
-                if (startBalance != null)
-                    incomeQueryStr += " and o.opDate >= ?3";
-                Query incomeQuery = em.createQuery(incomeQueryStr);
-                incomeQuery.setParameter(1, accountId);
-                incomeQuery.setParameter(2, date);
-                if (startBalance != null)
-                    incomeQuery.setParameter(3, startBalance.getBalanceDate());
-                BigDecimal income = (BigDecimal) incomeQuery.getSingleResult();
-                if (income == null)
-                    income = BigDecimal.ZERO;
+            String expenseQueryStr = "select sum(o.amount1) from akk$Operation o where o.acc1.id = ?1 and o.opDate <= ?2";
+            if (startBalance != null)
+                expenseQueryStr += " and o.opDate >= ?3";
+            Query expenseQuery = em.createQuery(expenseQueryStr);
+            expenseQuery.setParameter(1, accountId);
+            expenseQuery.setParameter(2, date);
+            if (startBalance != null)
+                expenseQuery.setParameter(3, startBalance.getBalanceDate());
+            BigDecimal expense = (BigDecimal) expenseQuery.getSingleResult();
+            if (expense == null)
+                expense = BigDecimal.ZERO;
 
-                return startAmount.add(income).subtract(expense);
-            }
-        });
+            String incomeQueryStr = "select sum(o.amount2) from akk$Operation o where o.acc2.id = ?1 and o.opDate <= ?2";
+            if (startBalance != null)
+                incomeQueryStr += " and o.opDate >= ?3";
+            Query incomeQuery = em.createQuery(incomeQueryStr);
+            incomeQuery.setParameter(1, accountId);
+            incomeQuery.setParameter(2, date);
+            if (startBalance != null)
+                incomeQuery.setParameter(3, startBalance.getBalanceDate());
+            BigDecimal income = (BigDecimal) incomeQuery.getSingleResult();
+            if (income == null)
+                income = BigDecimal.ZERO;
+
+            return startAmount.add(income).subtract(expense);
+        }
     }
 
     public void recalculateBalance(UUID accountId) {
-        Transaction tx = persistence.createTransaction();
-        try {
+        try (Transaction tx = persistence.createTransaction()) {
             removeBalanceRecords(accountId);
 
             TreeMap<Date, Balance> balances = new TreeMap<>();
 
             EntityManager em = persistence.getEntityManager();
             TypedQuery<Operation> query = em.createQuery("select op from akk$Operation op " +
-                    "where (op.acc1.id = ?1 or op.acc2.id = ?1) order by op.opDate", Operation.class);
+                    "left join op.acc1 a1 left join op.acc2 a2 " +
+                    "where (a1.id = ?1 or a2.id = ?1) order by op.opDate", Operation.class);
             query.setParameter(1, accountId);
             query.setViewName("operation-recalc-balance");
             List<Operation> operations = query.getResultList();
@@ -80,8 +80,6 @@ public class BalanceWorker {
             }
 
             tx.commit();
-        } finally {
-            tx.end();
         }
     }
 

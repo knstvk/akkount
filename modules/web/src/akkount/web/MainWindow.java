@@ -43,9 +43,9 @@ public class MainWindow extends AbstractMainWindow {
         TimeSource timeSource = AppBeans.get(TimeSource.class);
         BalanceService balanceService = AppBeans.get(BalanceService.class);
 
-        LoadContext loadContext = new LoadContext(Account.class);
-        loadContext.setQueryString("select a from akk$Account a where a.active = true order by a.name");
-        List<Account> accounts = dataSupplier.loadList(loadContext);
+        List<Account> accounts = dataSupplier.loadList(
+                LoadContext.create(Account.class).setQuery(
+                        LoadContext.createQuery("select a from akk$Account a where a.active = true order by a.name")));
 
         if (balanceGrid != null) {
             balanceLayout.remove(balanceGrid);

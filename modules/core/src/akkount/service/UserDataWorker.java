@@ -1,25 +1,25 @@
 package akkount.service;
 
 import akkount.entity.UserData;
-import com.haulmont.cuba.core.*;
+import com.haulmont.cuba.core.EntityManager;
+import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.TypedQuery;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.security.entity.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.ManagedBean;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * @author krivopustov
- * @version $Id$
- */
-@ManagedBean(UserDataWorker.NAME)
+@Component(UserDataWorker.NAME)
 public class UserDataWorker {
 
     public static final String NAME = "akk_UserDataWorker";
@@ -31,6 +31,9 @@ public class UserDataWorker {
 
     @Inject
     protected UserSessionSource userSessionSource;
+
+    @Inject
+    private Metadata metadata;
 
     @Nullable
     public <T extends Entity> T loadEntity(String key, Class<T> entityClass) {
@@ -62,8 +65,7 @@ public class UserDataWorker {
 
     public void saveEntity(String key, Entity entity, boolean multipleValues) {
         String value = entity.getId().toString();
-        Transaction tx = persistence.createTransaction();
-        try {
+        try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
 
             String queryString = "select d from akk$UserData d where d.user.id = ?1 and d.key = ?2";
@@ -81,7 +83,7 @@ public class UserDataWorker {
             UserData userData = query.getFirstResult();
 
             if (userData == null) {
-                userData = new UserData();
+                userData = metadata.create(UserData.class);
                 userData.setUser(em.getReference(User.class, userSessionSource.currentOrSubstitutedUserId()));
                 userData.setKey(key);
                 userData.setValue(value);
@@ -91,15 +93,12 @@ public class UserDataWorker {
             }
 
             tx.commit();
-        } finally {
-            tx.end();
         }
     }
 
     public void removeEntity(String key, Entity entity) {
         String value = entity.getId().toString();
-        Transaction tx = persistence.createTransaction();
-        try {
+        try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
             TypedQuery<UserData> query = em.createQuery(
                     "select d from akk$UserData d where d.user.id = ?1 and d.key = ?2 and d.value = ?3", UserData.class);
@@ -113,8 +112,6 @@ public class UserDataWorker {
             }
 
             tx.commit();
-        } finally {
-            tx.end();
         }
     }
 
@@ -128,22 +125,18 @@ public class UserDataWorker {
         }
 
         T entity;
-        Transaction tx = persistence.createTransaction();
-        try {
+        try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
             //noinspection unchecked
             entity = (T) em.find((Class<Entity<UUID>>) entityClass, entityId);
             tx.commit();
-        } finally {
-            tx.end();
         }
         return entity;
     }
 
     private List<String> getValues(String key) {
         List<String> list;
-        Transaction tx = persistence.createTransaction();
-        try {
+        try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
             TypedQuery<String> query = em.createQuery(
                     "select d.value from akk$UserData d where d.user.id = ?1 and d.key = ?2", String.class);
@@ -151,8 +144,6 @@ public class UserDataWorker {
             query.setParameter(2, key);
             list = query.getResultList();
             tx.commit();
-        } finally {
-            tx.end();
         }
         return list;
     }

@@ -1,5 +1,6 @@
 package akkount.web.operation;
 
+import akkount.entity.Operation;
 import akkount.entity.OperationType;
 import akkount.web.App;
 import com.haulmont.cuba.core.entity.Entity;
@@ -19,7 +20,7 @@ import java.util.Set;
 public class OperationBrowse extends AbstractLookup {
 
     @Inject
-    protected Table operationTable;
+    protected Table<Operation> operationTable;
 
     @Inject
     protected Button createExpenseBtn;

@@ -6,9 +6,7 @@ import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.cuba.gui.data.impl.DsListenerAdapter;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 
@@ -32,12 +30,9 @@ public class ExpenseFrame extends AbstractFrame implements OperationFrame {
 
         setCurrencyLabel(item);
 
-        operationDs.addListener(new DsListenerAdapter<Operation>() {
-            @Override
-            public void valueChanged(Operation source, String property, @Nullable Object prevValue, @Nullable Object value) {
-                if ("acc1".equals(property)) {
-                    setCurrencyLabel(source);
-                }
+        operationDs.addItemPropertyChangeListener(e -> {
+            if ("acc1".equals(e.getProperty())) {
+                setCurrencyLabel(e.getItem());
             }
         });
     }
