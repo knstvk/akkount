@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-         version="2.5">
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
     <context-param>
         <description>Vaadin production mode</description>
         <param-name>productionMode</param-name>
@@ -17,17 +16,14 @@
     <!-- Application properties config files -->
     <context-param>
         <param-name>appPropertiesConfig</param-name>
-        <param-value>
-            classpath:cuba-web-app.properties
+        <param-value>classpath:cuba-web-app.properties
             classpath:web-app.properties
             /WEB-INF/local.app.properties
-            file:${catalina.home}/conf/app/local.app.properties
-        </param-value>
+            file:${catalina.home}/conf/app/local.app.properties</param-value>
     </context-param>
     <listener>
         <listener-class>com.haulmont.cuba.web.sys.WebAppContextLoader</listener-class>
     </listener>
-    
     <servlet>
         <servlet-name>app_servlet</servlet-name>
         <servlet-class>com.haulmont.cuba.web.sys.CubaApplicationServlet</servlet-class>
@@ -56,6 +52,7 @@
             <param-name>heartbeatInterval</param-name>
             <param-value>30</param-value>
         </init-param>
+        <async-supported>true</async-supported>
     </servlet>
     <servlet>
         <servlet-name>dispatcher</servlet-name>
