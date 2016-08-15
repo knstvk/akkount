@@ -23,4 +23,8 @@
         <servlet-name>remoting</servlet-name>
         <url-pattern>/remoting/*</url-pattern>
     </servlet-mapping>
+    <context-param>
+        <param-name>appComponents</param-name>
+        <param-value>com.haulmont.cuba</param-value>
+    </context-param>
 </web-app>

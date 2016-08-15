@@ -37,21 +37,21 @@ public class OperationEntityListener implements
             "where b.account.id = ?1 and b.balanceDate > ?2 order by b.balanceDate";
 
     @Override
-    public void onBeforeInsert(Operation entity) {
-        addOperation(entity);
+    public void onBeforeInsert(Operation entity, EntityManager entityManager) {
+        addOperation(entity, entityManager);
         saveUserData(entity);
     }
 
     @Override
-    public void onBeforeUpdate(Operation entity) {
-        removeOperation(getOldOperation(entity.getId()));
-        addOperation(entity);
+    public void onBeforeUpdate(Operation entity, EntityManager entityManager) {
+        removeOperation(getOldOperation(entity.getId()), entityManager);
+        addOperation(entity, entityManager);
         saveUserData(entity);
     }
 
     @Override
-    public void onBeforeDelete(Operation entity) {
-        removeOperation(entity);
+    public void onBeforeDelete(Operation entity, EntityManager entityManager) {
+        removeOperation(entity, entityManager);
     }
 
     private void saveUserData(Operation operation) {
@@ -81,9 +81,7 @@ public class OperationEntityListener implements
         return operation;
     }
 
-    private void removeOperation(Operation operation) {
-        EntityManager em = persistence.getEntityManager();
-
+    private void removeOperation(Operation operation, EntityManager em) {
         if (operation.getAcc1() != null) {
             TypedQuery<Balance> query = em.createQuery(BALANCE_QUERY, Balance.class);
             query.setParameter(1, operation.getAcc1().getId()).setParameter(2, operation.getOpDate());
@@ -107,9 +105,7 @@ public class OperationEntityListener implements
         }
     }
 
-    private void addOperation(Operation operation) {
-        EntityManager em = persistence.getEntityManager();
-
+    private void addOperation(Operation operation, EntityManager em) {
         if (operation.getAcc1() != null) {
             TypedQuery<Balance> query = em.createQuery(BALANCE_QUERY, Balance.class);
             query.setParameter(1, operation.getAcc1().getId()).setParameter(2, operation.getOpDate());
@@ -119,7 +115,7 @@ public class OperationEntityListener implements
                 Balance balance = metadata.create(Balance.class);
                 balance.setAccount(operation.getAcc1());
                 balance.setAmount(operation.getAmount1().negate()
-                        .add(previousBalanceAmount(operation.getAcc1(), operation.getOpDate())));
+                        .add(previousBalanceAmount(operation.getAcc1(), operation.getOpDate(), em)));
                 balance.setBalanceDate(nextBalanceDate(operation.getOpDate()));
                 em.persist(balance);
             } else {
@@ -138,7 +134,7 @@ public class OperationEntityListener implements
                 Balance balance = metadata.create(Balance.class);
                 balance.setAccount(operation.getAcc2());
                 balance.setAmount(operation.getAmount2()
-                        .add(previousBalanceAmount(operation.getAcc2(), operation.getOpDate())));
+                        .add(previousBalanceAmount(operation.getAcc2(), operation.getOpDate(), em)));
                 balance.setBalanceDate(nextBalanceDate(operation.getOpDate()));
                 em.persist(balance);
             } else {
@@ -149,8 +145,7 @@ public class OperationEntityListener implements
         }
     }
 
-    private BigDecimal previousBalanceAmount(Account account, Date opDate) {
-        EntityManager em = persistence.getEntityManager();
+    private BigDecimal previousBalanceAmount(Account account, Date opDate, EntityManager em) {
         TypedQuery<Balance> query = em.createQuery("select b from akk$Balance b " +
                 "where b.account.id = ?1 and b.balanceDate <= ?2 order by b.balanceDate desc", Balance.class);
         query.setParameter(1, account.getId());

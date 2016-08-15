@@ -2,11 +2,11 @@ package akkount.web.account;
 
 import akkount.entity.Account;
 import akkount.service.BalanceService;
-import akkount.web.App;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.components.actions.EditAction;
+import com.haulmont.cuba.web.AppUI;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,7 +47,7 @@ public class AccountBrowse extends AbstractLookup {
                                     for (Account account : selected) {
                                         balanceService.recalculateBalance(account.getId());
                                     }
-                                    ((App) App.getInstance()).getMainWindow().refreshBalance();
+                                    ((akkount.web.MainWindow) AppUI.getCurrent().getTopLevelWindow()).refreshBalance();
                                 }
                             },
                             new DialogAction(DialogAction.Type.CANCEL)

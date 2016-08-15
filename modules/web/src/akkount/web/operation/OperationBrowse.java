@@ -2,7 +2,6 @@ package akkount.web.operation;
 
 import akkount.entity.Operation;
 import akkount.entity.OperationType;
-import akkount.web.App;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;
@@ -11,6 +10,7 @@ import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.components.actions.EditAction;
 import com.haulmont.cuba.gui.components.actions.RemoveAction;
+import com.haulmont.cuba.web.AppUI;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -86,7 +86,7 @@ public class OperationBrowse extends AbstractLookup {
 
         @Override
         protected void afterRemove(Set selected) {
-            ((App) App.getInstance()).getMainWindow().refreshBalance();
+            ((akkount.web.MainWindow) AppUI.getCurrent().getTopLevelWindow()).refreshBalance();
         }
     }
 }

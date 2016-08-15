@@ -5,13 +5,13 @@ import akkount.entity.Operation;
 import akkount.entity.OperationType;
 import akkount.service.UserDataKeys;
 import akkount.service.UserDataService;
-import akkount.web.App;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.WindowParams;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.GroupBoxLayout;
 import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.security.global.UserSession;
+import com.haulmont.cuba.web.AppUI;
 import org.apache.commons.lang.time.DateUtils;
 
 import javax.inject.Inject;
@@ -50,7 +50,7 @@ public class OperationEdit extends AbstractEditor<Operation> {
         frameContainer.setCaption(messages.getMessage(operation.getOpType()));
 
         getDsContext().addAfterCommitListener((context, result) -> {
-            ((App) App.getInstance()).getMainWindow().refreshBalance();
+            ((akkount.web.MainWindow) AppUI.getCurrent().getTopLevelWindow()).refreshBalance();
         });
     }
 
