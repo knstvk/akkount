@@ -5,16 +5,26 @@
 		},
 
 		loadList: function(collection, options) {
-            var url = "api/query.json?s=" + app.session.id
-                + "&e=" + collection.model.entityName + "&q=" + encodeURIComponent(collection.jpqlQuery);
-            if (collection.maxResults)
-                url = url + "&max=" + collection.maxResults;
-            if (collection.view)
-                url = url + "&view=" + collection.view;
+            var url = "rest/v2/entities/" + collection.model.entityName;
+            var params = "";
+            if (collection.maxResults) {
+                params = params == "" ? params + "?" : params + "&";
+                params = params + "limit=" + collection.maxResults;
+            }
+            if (collection.view) {
+                params = params == "" ? params + "?" : params + "&";
+                params = params + "view=" + collection.view;
+            }
+            if (collection.sortOrder) {
+                params = params == "" ? params + "?" : params + "&";
+                params = params + "sort=" + collection.sortOrder;
+            }
+            url += params;
 
             $.ajax({
                 url: url,
                 type: "GET",
+                headers: {"Authorization": "Bearer " + app.session.id},
                 success: function(json) {
                     app.log("Success: " + json);
                     options.success(json);
@@ -26,18 +36,17 @@
             });
         },
             
-		create: function(model, options) {
-            this.update(mode, options);
-		},
-
 		update: function(model, options) {
-            var json = {
-                "commitInstances": [_.clone(model.attributes)]
-            };
-            var url = "api/commit?s=" + app.session.id;
+		    var update = model.attributes._entityName != undefined
+		    var url = "rest/v2/entities/" + model.constructor.entityName;
+		    if (update) {
+		        url += "/" + model.attributes.id;
+		    }
+            var json = _.clone(model.attributes);
             $.ajax({
                 url: url,
-                type: "POST",
+                type: update ? "PUT" : "POST",
+                headers: {"Authorization": "Bearer " + app.session.id},
                 contentType: "application/json",
                 data: JSON.stringify(json),
                 success: function(json, status, xhr) {
@@ -52,15 +61,12 @@
 		},
 
 		remove: function(model, options) {
-            var json = {
-                "removeInstances": [_.clone(model.attributes)]
-            };
-            var url = "api/commit?s=" + app.session.id;
+		    var url = "rest/v2/entities/" + model.constructor.entityName + "/" + model.attributes.id;
             $.ajax({
                 url: url,
-                type: "POST",
+                type: "DELETE",
+                headers: {"Authorization": "Bearer " + app.session.id},
                 contentType: "application/json",
-                data: JSON.stringify(json),
                 success: function(json, status, xhr) {
                     app.log("Success: " + status);
                     options.success(json);

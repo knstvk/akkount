@@ -2,6 +2,7 @@
 buildscript {
     ext.cubaVersion = '6.3-SNAPSHOT'
     repositories {
+        mavenLocal()
         maven {
             url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
             credentials {

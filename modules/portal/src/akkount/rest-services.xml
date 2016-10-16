@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns="http://schemas.haulmont.com/cuba/rest-services-v2.xsd">
+
+    <service name="akk_PortalService">
+        <method name="getLastAccount">
+            <param name="opType"/>
+        </method>
+
+        <method name="getBalance"/>
+    </service>
+
+</services>

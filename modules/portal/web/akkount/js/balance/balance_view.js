@@ -18,7 +18,8 @@
         render: function() {
             var self = this;
             $.ajax({
-                url: "api/balance?s=" + app.session.id,
+                url: "rest/v2/services/akk_PortalService/getBalance",
+                headers: {"Authorization": "Bearer " + app.session.id},
                 type: "GET",
                 success: function(json) {
                     self.$el.html(_.template($("#balance-template").html(), { balance: json }));

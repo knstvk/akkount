@@ -26,6 +26,8 @@
                        value="akkount.service.UserDataService"/>
                 <entry key="akk_ReportService"
                        value="akkount.service.ReportService"/>
+                <entry key="akk_PortalService"
+                       value="akkount.service.PortalService"/>
             </map>
         </property>
     </bean>

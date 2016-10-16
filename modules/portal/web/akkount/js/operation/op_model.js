@@ -7,7 +7,7 @@
     app.OperationModel = Backbone.Model.extend(
         {
             defaults: {
-                opType: "E",
+                opType: "EXPENSE",
                 opDate: app.toServerDate(new Date()),
                 acc1: null,
                 acc2: null,
@@ -27,6 +27,7 @@
 
         jpqlQuery: "select o from akk$Operation o order by o.opDate desc",
         maxResults: 100,
-        view: "operation-browse"
+        view: "operation-browse",
+        sortOrder: "-opDate"
     });
 }());

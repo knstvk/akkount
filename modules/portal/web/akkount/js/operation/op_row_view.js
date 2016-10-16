@@ -35,16 +35,16 @@
 
             opType = this.operation.get("opType");
 
-            if (opType == "E")
+            if (opType == "EXPENSE")
                 template = $("#expense-edit-template").html();
-            else if (opType == "I")
+            else if (opType == "INCOME")
                 template = $("#income-edit-template").html();
             else
                 template = $("#transfer-edit-template").html();
 
             this.$el.html(_.template(template, this.operation.toJSON()));
 
-            if (opType == "E" || opType == "T") {
+            if (opType == "EXPENSE" || opType == "TRANSFER") {
                 acc1Select = new app.AccountSelectView(this.accounts).render().el;
                 $(acc1Select).addClass("acc1");
                 acc1 = this.operation.get("acc1");
@@ -56,7 +56,7 @@
                     self.$el.find("div.currency1").html(self.accounts.currencyCodeByAccId(this.value));
                 };
             }
-            if (opType == "I" ||  opType == "T") {
+            if (opType == "INCOME" ||  opType == "TRANSFER") {
                 acc2Select = new app.AccountSelectView(this.accounts).render().el;
                 $(acc2Select).addClass("acc2");
                 acc2 = this.operation.get("acc2");
@@ -69,7 +69,7 @@
                 };
             }
 
-            if (opType == "E" || opType == "I") {
+            if (opType == "EXPENSE" || opType == "INCOME") {
                 catSelect = new app.CategorySelectView(this.categories, opType).render().el;
                 $(catSelect).addClass("category");
                 cat = this.operation.get("category");
@@ -87,7 +87,7 @@
                 if (x.match(/([-+]?[0-9]*\.?[0-9]+[\-\+\*\/])+([-+]?[0-9]*\.?[0-9]+)/)) {
                     event.target.value = eval(x);
                 }
-                if (opType == "T") {
+                if (opType == "TRANSFER") {
                     if (event.target.className.indexOf("amount1") > -1) {
                         amount2Field = self.$el.find("input.amount2");
                         if (amount2Field.val() == "") {

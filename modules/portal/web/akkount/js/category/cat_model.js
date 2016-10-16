@@ -11,6 +11,7 @@
         jpqlQuery: "select c from akk$Category c order by c.name",
         maxResults: 100,
         view: "_local",
+        sortOrder: "name",
 
         byId: function(id) {
             return  id == "" ?

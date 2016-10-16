@@ -1,7 +1,5 @@
 package akkount.service;
 
-import akkount.entity.Account;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;

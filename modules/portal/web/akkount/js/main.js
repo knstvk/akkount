@@ -89,7 +89,7 @@ Backbone.sync = function(method, model, options) {
 
     switch (method) {
         case 'create':
-            app.cubaAPI.create(model, options); 
+            app.cubaAPI.update(model, options);
             break;
 
         case 'update':
@@ -111,7 +111,7 @@ Backbone.sync = function(method, model, options) {
 
 Backbone.Model.prototype.initialize = function() {
     if (!this.get("id"))
-        this.set("id", this.constructor.entityName + "-" + app.guid());
+        this.set("id", app.guid());
 };
 
 Backbone.Model.prototype.parse = function(resp) {

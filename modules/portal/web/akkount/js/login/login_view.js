@@ -30,14 +30,16 @@
 
             $.ajax({
                 async: false,
-                url: "api/login",
+                method: "POST",
+                url: "rest/v2/oauth/token",
+                headers: {"Authorization": "Basic " + btoa("client" + ":" + "secret")},
                 data: {
-                    u: $("#login-name").val(),
-                    p: $("#password").val(),
-                    l: "en"
+                    grant_type: "password",
+                    username: $("#login-name").val(),
+                    password: $("#password").val()
                 },
-                success: function(text) {
-                    app.setSession(text, $("#login-name").val());
+                success: function(result) {
+                    app.setSession(result.access_token, $("#login-name").val());
                     if ($("#remember-me").is(":checked")) {
                         window.localStorage.setItem(SESSION_USER_NAME_KEY, $("#login-name").val());
                     } else {

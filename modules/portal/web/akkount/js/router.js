@@ -40,10 +40,11 @@
                 return;
             var self = this;
             $.ajax({
-                url: "api/last-account?s=" + app.session.id + "&t=opExpenseAccount",
+                url: "rest/v2/services/akk_PortalService/getLastAccount?opType=opExpenseAccount",
+                headers: {"Authorization": "Bearer " + app.session.id},
                 success: function(json) {
                     var op = new app.OperationModel({opDate: app.newOpDate()});
-                    op.set("opType", "E");
+                    op.set("opType", "EXPENSE");
                     self.setAcc(json, op, "acc1");
                     self.currentView.addNew(op);
                 },
@@ -60,10 +61,11 @@
             if (this.currentView instanceof app.OperationTableView) {
                 var self = this;
                 $.ajax({
-                    url: "api/last-account?s=" + app.session.id + "&t=opIncomeAccount",
+                    url: "rest/v2/services/akk_PortalService/getLastAccount?opType=opIncomeAccount",
+                    headers: {"Authorization": "Bearer " + app.session.id},
                     success: function(json) {
                         var op = new app.OperationModel({opDate: app.newOpDate()});
-                        op.set("opType", "I");
+                        op.set("opType", "INCOME");
                         self.setAcc(json, op, "acc2");
                         self.currentView.addNew(op);
                     },
@@ -81,11 +83,17 @@
             if (this.currentView instanceof app.OperationTableView) {
                 var self = this;
                 $.when(
-                    $.get("api/last-account?s=" + app.session.id + "&t=opTransferExpenseAccount"),
-                    $.get("api/last-account?s=" + app.session.id + "&t=opTransferIncomeAccount"))
+                    $.ajax({
+                        url: "rest/v2/services/akk_PortalService/getLastAccount?opType=opTransferExpenseAccount",
+                        headers: {"Authorization": "Bearer " + app.session.id}
+                    }),
+                    $.ajax({
+                        url: "rest/v2/services/akk_PortalService/getLastAccount?opType=opTransferIncomeAccount",
+                        headers: {"Authorization": "Bearer " + app.session.id}
+                    }))
                     .done(function(res1, res2) {
                         var op = new app.OperationModel({opDate: app.newOpDate()});
-                        op.set("opType", "T");
+                        op.set("opType", "TRANSFER");
                         self.setAcc(res1[0], op, "acc1");
                         self.setAcc(res2[0], op, "acc2");
                         self.currentView.addNew(op);
