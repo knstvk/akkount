@@ -1,10 +1,10 @@
 
 buildscript {
-    ext.cubaVersion = '6.3-SNAPSHOT'
+    ext.cubaVersion = '6.3.1'
     repositories {
         mavenLocal()
         maven {
-            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
+            url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
                 username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
@@ -22,6 +22,7 @@ def coreModule = project(':app-core')
 def guiModule = project(':app-gui')
 def webModule = project(':app-web')
 def portalModule = project(':app-portal')
+def webThemesModule = project(':app-web-themes')
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
@@ -197,6 +198,26 @@ configure(webModule) {
     assemble.dependsOn buildScssThemes
 }
 
+configure(webThemesModule) {
+    apply(plugin: 'java')
+    apply(plugin: 'maven')
+    apply(plugin: 'cuba')
+
+    appModuleType = 'web-themes'
+
+    buildDir = file('../build/scss-themes')
+
+    sourceSets {
+        main {
+            java {
+                srcDir '.'
+            }
+            resources {
+                srcDir '.'
+            }
+        }
+    }
+}
 
 configure(portalModule) {
     dependencies {
