@@ -283,3 +283,12 @@ task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy', ':app-po
 task wrapper(type: Wrapper) {
     gradleVersion = '2.13'
 }
+
+task buildWar(type: CubaWarBuilding) {
+    singleWar = false
+    appProperties = ['cuba.automaticDatabaseUpdate':'true', 'cuba.web.loginDialogDefaultUser':'<disabled>', 'cuba.web.loginDialogDefaultPassword':'<disabled>', 'akk.shutdownDatabaseOnExit':'true']
+    includeContextXml = true
+    coreContextXmlPath = 'modules/core/web/META-INF/prod-context.xml'
+    includeJdbcDriver = true
+    appHome = '/home/ubuntu/akkount/app_home'
+}
