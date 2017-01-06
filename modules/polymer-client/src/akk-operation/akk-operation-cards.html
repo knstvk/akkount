@@ -27,9 +27,9 @@
     <akk-operation-edit entity="{{editedEntity}}" on-commit="_onEditorCommit" on-cancel="_closeEditor" optype="[[optype]]"></akk-operation-edit>
     <template is="dom-if" if="[[!editedEntity]]">
       <div class="actions">
-        <paper-button on-tap="_createExpense"><iron-icon icon="add"></iron-icon>Expense</paper-button>
-        <paper-button on-tap="_createIncome"><iron-icon icon="add"></iron-icon>Income</paper-button>
-        <paper-button on-tap="_createTransfer"><iron-icon icon="add"></iron-icon>Transfer</paper-button>
+        <paper-button on-tap="_createExpense">Expense</paper-button>
+        <paper-button on-tap="_createIncome">Income</paper-button>
+        <paper-button on-tap="_createTransfer">Transfer</paper-button>
       </div>
       <template is="dom-repeat" items="{{entities}}">
         <paper-card heading="[[_getCardHeading(item)]]" class="page-widget" on-tap="_edit">
@@ -54,7 +54,9 @@
   <script>
     Polymer({
       is: 'akk-operation-cards',
+      
       behaviors: [CubaLocalizeBehavior, AkkBehavior],
+      
       properties: {
         entities: Array,
         editedEntity: {
@@ -62,32 +64,49 @@
           value: null
         }
       },
+
+      listeners: {
+        'delete-entity': '_deleteEntity'
+      },
+
+      _deleteEntity: function(event) {
+        this.$.data.remove(event.detail);
+        this.fire('iron-signal', {name: 'refresh-balance'});
+      },
+
+
       _createExpense: function(event) {
         this.editedEntity = {
             opType: "EXPENSE"
         };
       },
+      
       _createIncome: function(event) {
         this.editedEntity = {
             opType: "INCOME"
         };
       },
+      
       _createTransfer: function(event) {
         this.editedEntity = {
             opType: "TRANSFER"
         };
       },
+      
       _edit: function(event) {
         this.editedEntity = event.model.item;
       },
+      
       _onEditorCommit: function(event) {
         this.$.data.load();
         this._closeEditor();
-        this.fire('iron-signal', {name: 'operation-commit', data: null});
+        this.fire('iron-signal', {name: 'refresh-balance'});
       },
+      
       _closeEditor: function(event) {
         this.editedEntity = null;
       },
+      
       _getCardHeading: function(item) {
         return this.toDisplayDate(item.opDate) + " " + this.weekDay(item.opDate) + " - " + item.opType;
       },

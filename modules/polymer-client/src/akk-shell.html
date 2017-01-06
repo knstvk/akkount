@@ -13,7 +13,6 @@
 <link rel="import" href="akk-menu.html"> 
 <link rel="import" href="akk-user-menu.html"> 
 <link rel="import" href="akk-login.html"> 
-<link rel="import" href="home/akk-home.html"> 
 <link rel="import" href="akk-operation/akk-operation-cards.html">
 <dom-module id="akk-shell"> 
  <template> 
@@ -62,9 +61,6 @@
      </paper-toolbar> 
      <iron-lazy-pages selected="[[_computeSelectedPage(routeData.page)]]" attr-for-selected="data-route" class="content fit"> 
       <template is="iron-lazy-page" data-route=""> 
-       <akk-home></akk-home> 
-      </template>  
-      <template is="iron-lazy-page" data-route="akk-operation-cards"> 
        <akk-operation-cards></akk-operation-cards> 
       </template>
      </iron-lazy-pages> 

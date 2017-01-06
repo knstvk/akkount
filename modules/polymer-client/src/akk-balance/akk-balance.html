@@ -1,13 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../shared-styles.html">
-<link rel="import" href="../../bower_components/cuba-data/cuba-service.html"> 
-<link rel="import" href="../../bower_components/iron-signals/iron-signals.html"> 
+<link rel="import" href="../../bower_components/cuba-data/cuba-service.html">
+<link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
 
 <dom-module id="akk-balance">
   <template>
     <style include="shared-styles">
       :host {
         display: block;
+      }
+
+      paper-card {
+        margin: 20px;
       }
 
       table.balance-table {
@@ -25,28 +29,48 @@
     </style>
 
     <cuba-service id="portalService" service-name="akk_PortalService" method="getBalance" params="{}" handle-as="json" data="{{balance}}"></cuba-service>
-    
-    <iron-signals on-iron-signal-operation-commit="_refresh"></iron-signals>
 
-    <paper-card heading="Balance" class="page-widget">
-      <div class="card-content">
+    <iron-signals on-iron-signal-refresh-balance="_refresh"></iron-signals>
+
+    <paper-card heading="Balance">
+      <div class="card-content"> 
         <table class="balance-table">
           <template is="dom-repeat" items="[[balance.totals]]">
-          <tr><td></td><td class="amount total">[[item.amount]]</td><td class="total">[[item.currency]]</td></tr>
+            <tr>
+              <td></td>
+              <td class="amount total">[[item.amount]]</td>
+              <td class="total">[[item.currency]]</td>
+            </tr>
           </template>
-          <tr><td colspan="3"><hr/></td></tr>
+          <tr>
+            <td colspan="3">
+              <hr/>
+            </td>
+          </tr>
           <template is="dom-repeat" items="[[balance.includedAccounts]]">
-          <tr><td>[[item.name]]</td><td class="amount">[[item.amount]]</td><td>[[item.currency]]</td></tr>
+            <tr>
+              <td>[[item.name]]</td>
+              <td class="amount">[[item.amount]]</td>
+              <td>[[item.currency]]</td>
+            </tr>
           </template>
-          <tr><td colspan="3"><hr/></td></tr>
+          <tr>
+            <td colspan="3">
+              <hr/>
+            </td>
+          </tr>
           <template is="dom-repeat" items="[[balance.excludedAccounts]]">
-          <tr><td>[[item.name]]</td><td class="amount">[[item.amount]]</td><td>[[item.currency]]</td></tr>
+            <tr>
+              <td>[[item.name]]</td>
+              <td class="amount">[[item.amount]]</td>
+              <td>[[item.currency]]</td>
+            </tr>
           </template>
         </table>
       </div>
     </paper-card>
   </template>
-  
+
   <script>
     Polymer({
       is: 'akk-balance',
@@ -58,7 +82,7 @@
         }
       },
 
-      _refresh: function(e) {
+      _refresh: function (e) {
         this.$.portalService.load();
       }
 

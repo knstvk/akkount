@@ -24,16 +24,6 @@
         <paper-card>
           <div class="card-content">
             <div>[[entity.opType]]</div>
-<!--             <vaadin-combo-box label="[[msg('akk$Operation.opType')]]"
-                  items="[[enumValues('akkount.entity.OperationType')]]"
-                  value="{{entity.opType}}"
-                  error-message="[[serverErrors.opType]]"
-                  invalid="[[_isInvalid(serverErrors.opType)]]"
-                  required>
-            </vaadin-combo-box> -->
-
-            <!-- i18n="[[_getDatePickerI18N()]]" -->
-
             <vaadin-date-picker value="{{entity.opDate}}"
                                 label="[[msg('akk$Operation.opDate')]]"
                                 required
@@ -108,6 +98,11 @@
             <paper-button on-tap="_save">
               [[msg('Save')]]
             </paper-button>
+            <template is="dom-if" if="[[entity._entityName]]">
+              <paper-button on-tap="_delete">
+                [[msg('Delete')]]
+              </paper-button>
+            </template>
           </div>
         </paper-card>
       </cuba-entity-form>
@@ -124,6 +119,11 @@
           type: Object,
           value: null
         }
+      },
+
+      _delete: function() {
+        this.fire("delete-entity", this.entity);
+        this.fire("cancel");
       },
 
       _save: function() {
