@@ -1,0 +1,45 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../bower_components/cuba-app/cuba-localize-behavior.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="akk-user-menu">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      .user-menu-button {
+        width: 70px;
+        text-align: right;
+      }
+      .user-menu {
+        padding: 0;
+      }
+      .user-menu paper-item {
+        cursor: pointer;
+      }
+    </style>
+    <app-location path="{{path}}" use-hash-as-path></app-location>
+    <paper-menu-button class="user-menu-button">
+      <iron-icon icon="social:person" class="dropdown-trigger"></iron-icon>
+      <paper-menu class="dropdown-content user-menu">
+        <paper-item on-tap="_logout">[[msg('Logout')]]</paper-item>
+      </paper-menu>
+    </paper-menu-button>
+  </template>
+  <script>
+    Polymer({
+      is: 'akk-user-menu',
+      behaviors: [CubaLocalizeBehavior],
+      properties: {
+        path: String
+      },
+      _logout: function () {
+        cubaApp.logout().then(function () {
+          window.location.href = document.querySelector('base').href;
+        });
+      }
+    })
+  </script>
+</dom-module>

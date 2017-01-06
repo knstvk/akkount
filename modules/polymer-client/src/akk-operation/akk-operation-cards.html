@@ -1,0 +1,109 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/cuba-app/cuba-localize-behavior.html">
+
+<link rel="import" href="../shared-styles.html">
+<link rel="import" href="akk-operation-edit.html">
+<link rel="import" href="../akk-shared-behavior.html">
+
+<dom-module id="akk-operation-cards">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      paper-card {
+        cursor: pointer;
+      }
+      .actions {
+        text-align: right;
+      }
+    </style>
+    <cuba-entities id="data"
+                   entity-name="akk$Operation"
+                   data="{{entities}}"
+                   view="operation-browse"
+                   limit="100" sort="-opDate">
+    </cuba-entities>
+    <akk-operation-edit entity="{{editedEntity}}" on-commit="_onEditorCommit" on-cancel="_closeEditor" optype="[[optype]]"></akk-operation-edit>
+    <template is="dom-if" if="[[!editedEntity]]">
+      <div class="actions">
+        <paper-button on-tap="_createExpense"><iron-icon icon="add"></iron-icon>Expense</paper-button>
+        <paper-button on-tap="_createIncome"><iron-icon icon="add"></iron-icon>Income</paper-button>
+        <paper-button on-tap="_createTransfer"><iron-icon icon="add"></iron-icon>Transfer</paper-button>
+      </div>
+      <template is="dom-repeat" items="{{entities}}">
+        <paper-card heading="[[_getCardHeading(item)]]" class="page-widget" on-tap="_edit">
+          <div class="card-content">
+            <template is="dom-if" if="[[_showExpense(item)]]">
+                [[msg('akk$Operation.acc1')]]: [[item.acc1.name]]<br>
+                [[msg('akk$Operation.amount1')]]: [[item.amount1]]<br>                
+            </template>
+            <template is="dom-if" if="[[_showIncome(item)]]">
+                [[msg('akk$Operation.acc2')]]: [[item.acc2.name]]<br>
+                [[msg('akk$Operation.amount2')]]: [[item.amount2]]<br>
+            </template>
+            <template is="dom-if" if="[[_showCategory(item)]]">
+                [[msg('akk$Operation.category')]]: [[item.category.name]]<br>
+            </template>
+            [[msg('akk$Operation.comments')]]: [[item.comments]]<br>
+          </div>
+        </paper-card>
+      </template>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'akk-operation-cards',
+      behaviors: [CubaLocalizeBehavior, AkkBehavior],
+      properties: {
+        entities: Array,
+        editedEntity: {
+          type: Object,
+          value: null
+        }
+      },
+      _createExpense: function(event) {
+        this.editedEntity = {
+            opType: "EXPENSE"
+        };
+      },
+      _createIncome: function(event) {
+        this.editedEntity = {
+            opType: "INCOME"
+        };
+      },
+      _createTransfer: function(event) {
+        this.editedEntity = {
+            opType: "TRANSFER"
+        };
+      },
+      _edit: function(event) {
+        this.editedEntity = event.model.item;
+      },
+      _onEditorCommit: function(event) {
+        this.$.data.load();
+        this._closeEditor();
+        this.fire('iron-signal', {name: 'operation-commit', data: null});
+      },
+      _closeEditor: function(event) {
+        this.editedEntity = null;
+      },
+      _getCardHeading: function(item) {
+        return this.toDisplayDate(item.opDate) + " " + this.weekDay(item.opDate) + " - " + item.opType;
+      },
+
+      _showExpense: function(item) {
+        return item.opType == "EXPENSE" || item.opType == "TRANSFER";
+      },
+
+      _showIncome: function(item) {
+        return item.opType == "INCOME" || item.opType == "TRANSFER";
+      },
+
+      _showCategory: function(item) {
+        return item.opType != "TRANSFER";
+      }
+
+    });
+  </script>
+</dom-module>

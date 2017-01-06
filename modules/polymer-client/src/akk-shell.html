@@ -1,0 +1,120 @@
+<link rel="import" href="../bower_components/polymer/polymer.html"> 
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html"> 
+<link rel="import" href="../bower_components/iron-lazy-pages/iron-lazy-pages.html"> 
+<link rel="import" href="../bower_components/paper-elements/paper-elements.html"> 
+<link rel="import" href="../bower_components/cuba-app/cuba-app.html"> 
+<link rel="import" href="../bower_components/cuba-app/cuba-localize-behavior.html"> 
+<link rel="import" href="../bower_components/cuba-data/cuba-data.html"> 
+<link rel="import" href="../bower_components/cuba-form/cuba-form.html"> 
+<link rel="import" href="../bower_components/cuba-login/cuba-login.html"> 
+<link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html"> 
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html"> 
+<link rel="import" href="shared-styles.html"> 
+<link rel="import" href="akk-menu.html"> 
+<link rel="import" href="akk-user-menu.html"> 
+<link rel="import" href="akk-login.html"> 
+<link rel="import" href="home/akk-home.html"> 
+<link rel="import" href="akk-operation/akk-operation-cards.html">
+<dom-module id="akk-shell"> 
+ <template> 
+  <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      iron-lazy-pages > :not(.full) {
+        max-width: 1080px;
+        margin: 12px auto;
+        padding: 12px 24px;
+      }
+      @media (max-width: 1366px) {
+        iron-lazy-pages > :not(.full) {
+          margin-top: 6px;
+          padding: 6px 12px;
+        }
+      }
+    </style> 
+  <cuba-app api-url="/app/rest/" on-cuba-token-expired="_handleTokenExpired"> 
+  </cuba-app> 
+  <app-location route="{{route}}" use-hash-as-path></app-location> 
+  <app-route route="{{route}}" pattern="/:page" data="{{routeData}}"> 
+  </app-route> 
+  <template is="dom-if" if="[[!authenticated]]"> 
+   <akk-login on-cuba-login-success="_handleLogin"> 
+   </akk-login> 
+  </template> 
+  <template is="dom-if" if="[[authenticated]]" restamp="true"> 
+   <paper-drawer-panel id="drawerPanel"> 
+    <paper-header-panel drawer> 
+     <paper-toolbar> 
+      <div class="title">
+       [[msg('akkount')]]
+      </div> 
+     </paper-toolbar> 
+     <div class="content fit drawer-content"> 
+      <akk-menu on-menu-navigate="_closeDrawer"></akk-menu> 
+     </div> 
+    </paper-header-panel> 
+    <paper-header-panel main> 
+     <paper-toolbar class="main-toolbar"> 
+      <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button> 
+      <div class="flex"></div> 
+      <akk-user-menu></akk-user-menu> 
+     </paper-toolbar> 
+     <iron-lazy-pages selected="[[_computeSelectedPage(routeData.page)]]" attr-for-selected="data-route" class="content fit"> 
+      <template is="iron-lazy-page" data-route=""> 
+       <akk-home></akk-home> 
+      </template>  
+      <template is="iron-lazy-page" data-route="akk-operation-cards"> 
+       <akk-operation-cards></akk-operation-cards> 
+      </template>
+     </iron-lazy-pages> 
+    </paper-header-panel> 
+   </paper-drawer-panel> 
+  </template> 
+ </template> 
+ <script>
+    Polymer({
+      is: 'akk-shell',
+      behaviors: [CubaLocalizeBehavior],
+      properties: {
+        route: Object,
+        routeData: Object,
+        authenticated: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      listeners: {
+        'operationCommit': '_onOperationCommit'
+      },
+
+      _onOperationCommit: function(e) {
+        console.log('_onOperationCommit: ' + e)
+      },
+
+      ready: function () {
+        if (cubaApp.restApiToken) {
+          this.authenticated = true;
+          cubaApp.getUserInfo();
+        }
+      },
+      _handleLogin: function() {
+        cubaApp.loadEnums();
+        cubaApp.loadEntitiesMessages();
+        this.authenticated = true;
+      },
+      _handleTokenExpired: function() {
+        this.authenticated = false;
+      },
+      _closeDrawer: function() {
+        this.async(function(){
+          this.$$('#drawerPanel').closeDrawer();
+        }.bind(this));
+      },
+      _computeSelectedPage: function(page) {
+        return page || '';
+      }
+    });
+  </script> 
+</dom-module>

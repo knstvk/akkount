@@ -1,0 +1,84 @@
+<!doctype html>
+
+<html>
+<head>
+  <title>akkount</title>
+  <base href="/app-front/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <meta name="theme-color" content="#2196F3">
+
+  <!-- iOS: run in full-screen mode and display upper status bar as translucent -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    // Setup Polymer options
+    window.Polymer = {
+      dom: 'shadow',
+      lazyRegister: true
+    };
+
+    // Load webcomponentsjs polyfill if browser does not support native
+    // Web Components
+    (function() {
+      'use strict';
+
+      if (!window.fetch) {
+        var fetchScript = document.createElement('script');
+        fetchScript.src = 'bower_components/fetch/fetch.js';
+        document.head.appendChild(fetchScript);
+      }
+
+      var onload = function() {
+        // For native Imports, manually fire WebComponentsReady so user code
+        // can use the same code path for native and polyfill'd imports.
+        if (!window.HTMLImports) {
+          document.dispatchEvent(
+            new CustomEvent('WebComponentsReady', {bubbles: true})
+          );
+        }
+      };
+
+      var webComponentsSupported = (
+        'registerElement' in document
+        && 'import' in document.createElement('link')
+        && 'content' in document.createElement('template')
+      );
+
+      if (!webComponentsSupported) {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+        script.onload = onload;
+        document.head.appendChild(script);
+      } else {
+        onload();
+      }
+
+    })();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+  </script>
+
+  <link rel="import" href="src/akk-shell.html">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', 'Noto', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <akk-shell></akk-shell>
+</body>
+</html>

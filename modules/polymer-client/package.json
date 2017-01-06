@@ -1,0 +1,13 @@
+{
+  "name": "akkount",
+  "version": "0.0.1",
+  "devDependencies": {
+    "bower": "^1.7.9",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "merge-stream": "^1.0.0",
+    "polymer-build": "^0.5.0",
+    "polyserve": "^0.13.0"
+  },
+  "private": true
+}

@@ -1,0 +1,46 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="akk-locale-select">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      paper-dropdown-menu-light {
+        --paper-dropdown-menu-input: {
+          border-bottom: none;
+          text-align: center;
+        };
+        --paper-dropdown-menu-label: {
+          text-align: center;
+        }
+      }
+    </style>
+    
+    <paper-radio-group selected="[[locale]]" on-selected-changed="_changeLocale">
+      <paper-radio-button name="en">English</paper-radio-button>
+<paper-radio-button name="ru">Russian</paper-radio-button>
+
+    </paper-radio-group>
+    
+  </template>
+  <script>
+    Polymer({
+      is: 'akk-locale-select',
+      properties: {
+        locale: {
+          type: String,
+          value: function() {
+            return cubaApp.locale;
+          }
+        }
+      },
+      _changeLocale: function(e,d) {
+        cubaApp.locale = d.value;
+      }
+    })
+  </script>
+</dom-module>

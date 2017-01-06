@@ -1,0 +1,164 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/cuba-app/cuba-localize-behavior.html">
+<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../akk-shared-behavior.html">
+
+<dom-module id="akk-operation-edit">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      paper-card {
+        display: block;
+      }
+    </style>    
+    <template is="dom-if" if="[[entity]]" restamp="true">     
+      <cuba-entity entity-name="akk$Operation" entity-id="[[entity.id]]" view="operation-edit" data="{{entity}}"></cuba-entity>
+      <cuba-entity-form id="form"
+                        entity-name="akk$Operation"
+                        entity="{{entity}}"
+                        on-cuba-form-response="_onSuccess"
+                        on-cuba-form-error="_onError"
+                        server-errors="{{serverErrors}}">
+        <paper-card>
+          <div class="card-content">
+            <div>[[entity.opType]]</div>
+<!--             <vaadin-combo-box label="[[msg('akk$Operation.opType')]]"
+                  items="[[enumValues('akkount.entity.OperationType')]]"
+                  value="{{entity.opType}}"
+                  error-message="[[serverErrors.opType]]"
+                  invalid="[[_isInvalid(serverErrors.opType)]]"
+                  required>
+            </vaadin-combo-box> -->
+
+            <!-- i18n="[[_getDatePickerI18N()]]" -->
+
+            <vaadin-date-picker value="{{entity.opDate}}"
+                                label="[[msg('akk$Operation.opDate')]]"
+                                required
+                                error-message="[[serverErrors.opDate]]"
+                                invalid="[[_isInvalid(serverErrors.opDate)]]">
+            </vaadin-date-picker>
+
+            <template is="dom-if" if="[[_showExpense()]]">
+              <cuba-entities entity-name="akk$Account" view="_minimal" data="{{entity_acc1Options}}" sort="name"></cuba-entities>
+              <vaadin-combo-box label="[[msg('akk$Operation.acc1')]]"
+                                items="[[entity_acc1Options]]"
+                                selected-item="{{entity.acc1}}"
+                                item-label-path="_instanceName"
+                                item-value-path="id"
+                                value="[[entity.acc1.id]]"
+                                error-message="[[serverErrors.acc1]]"
+                                invalid="[[_isInvalid(serverErrors.acc1)]]">
+              </vaadin-combo-box>
+              <paper-input type="number"
+                           value="{{entity.amount1}}"
+                           label="[[msg('akk$Operation.amount1')]]"
+                           step="any"
+                           error-message="[[serverErrors.amount1]]"
+                           invalid="[[_isInvalid(serverErrors.amount1)]]">
+              </paper-input>
+            </template>
+
+            <template is="dom-if" if="[[_showIncome()]]">
+              <cuba-entities entity-name="akk$Account" view="_minimal" data="{{entity_acc2Options}}" sort="name"></cuba-entities>
+              <vaadin-combo-box label="[[msg('akk$Operation.acc2')]]"
+                                items="[[entity_acc2Options]]"
+                                selected-item="{{entity.acc2}}"
+                                item-label-path="_instanceName"
+                                item-value-path="id"
+                                value="[[entity.acc2.id]]"
+                                error-message="[[serverErrors.acc2]]"
+                                invalid="[[_isInvalid(serverErrors.acc2)]]">
+              </vaadin-combo-box>
+              <paper-input type="number"
+                           value="{{entity.amount2}}"
+                           label="[[msg('akk$Operation.amount2')]]"
+                           step="any"
+                           error-message="[[serverErrors.amount2]]"
+                           invalid="[[_isInvalid(serverErrors.amount2)]]">
+              </paper-input>
+            </template>
+
+            <template is="dom-if" if="[[_showCategory()]]">
+              <cuba-entities entity-name="akk$Category" view="_minimal" data="{{entity_categoryOptions}}" sort="name"></cuba-entities>
+              <vaadin-combo-box label="[[msg('akk$Operation.category')]]"
+                                items="[[entity_categoryOptions]]"
+                                selected-item="{{entity.category}}"
+                                item-label-path="_instanceName"
+                                item-value-path="id"
+                                value="[[entity.category.id]]"
+                                error-message="[[serverErrors.category]]"
+                                invalid="[[_isInvalid(serverErrors.category)]]">
+              </vaadin-combo-box>
+            </template>
+
+            <paper-input value="{{entity.comments}}"
+                         label="[[msg('akk$Operation.comments')]]"
+                         maxlength="200"
+                         error-message="[[serverErrors.comments]]"
+                         invalid="[[_isInvalid(serverErrors.comments)]]">
+            </paper-input>
+          </div>
+          <div class="card-actions">
+            <paper-button on-tap="_cancel">
+              [[msg('Cancel')]]
+            </paper-button>
+            <paper-button on-tap="_save">
+              [[msg('Save')]]
+            </paper-button>
+          </div>
+        </paper-card>
+      </cuba-entity-form>
+      <paper-toast id="successMessage">[[msg('Successfully saved')]]</paper-toast>
+      <paper-toast id="errorMessage">[[msg('Failed to save')]]</paper-toast>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'akk-operation-edit',
+      behaviors: [CubaLocalizeBehavior],
+      properties: {
+        entity: {
+          type: Object,
+          value: null
+        }
+      },
+
+      _save: function() {
+        this.$$('#form').submit();
+      },
+
+      _onSuccess: function() {
+        this.fire("commit");
+        this.$$('#successMessage').show();
+      },
+
+      _onError: function() {
+        this.$$('#errorMessage').show();
+      },
+
+      _cancel: function() {
+        this.set("serverErrors", {});
+        this.fire("cancel");
+      },
+
+      _isInvalid: function(err) {
+        return typeof err !== 'undefined';
+      },
+
+      _showExpense: function() {
+        return this.entity.opType == "EXPENSE" || this.entity.opType == "TRANSFER";
+      },
+
+      _showIncome: function() {
+        return this.entity.opType == "INCOME" || this.entity.opType == "TRANSFER";
+      },
+
+      _showCategory: function() {
+        return this.entity.opType != "TRANSFER";
+      }
+    });
+  </script>
+</dom-module>

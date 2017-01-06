@@ -1,19 +1,23 @@
 
 buildscript {
-    ext.cubaVersion = '6.3.1'
+    ext.cubaVersion = '6.4-SNAPSHOT'
     repositories {
         mavenLocal()
         maven {
-            url 'https://repo.cuba-platform.com/content/groups/work'
+            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
             credentials {
                 username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
+
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
+
         classpath "com.haulmont.cuba:cuba-global:$cubaVersion"
+
+
     }
 }
 
@@ -22,9 +26,9 @@ def coreModule = project(':app-core')
 def guiModule = project(':app-gui')
 def webModule = project(':app-web')
 def portalModule = project(':app-portal')
-def webThemesModule = project(':app-web-themes')
+def webThemesModule= project(':app-web-themes')
+def polymerClientModule = project(':app-polymer-client')
 
-def hsql = 'org.hsqldb:hsqldb:2.2.9'
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
 
 
@@ -38,13 +42,15 @@ cuba {
         isSnapshot = true
     }
     tomcat {
-        dir = "$project.rootDir/build/tomcat"
+        dir = "$project.rootDir/deploy/tomcat"
     }
     ide {
+        copyright = '''Copyright (c) 2015 akkount''' // Copyright Notice for IDEA project
         vcs = 'Git'
-        copyright = 'Copyright (c) 2015 akkount'
     }
 }
+
+def hsql = 'org.hsqldb:hsqldb:2.2.9'
 
 configure([globalModule, coreModule, guiModule, webModule, portalModule]) {
     apply(plugin: 'java')
@@ -67,11 +73,9 @@ configure([globalModule, coreModule, guiModule, webModule, portalModule]) {
 }
 
 configure(globalModule) {
-    dependencies {
+    task enhance(type: CubaEnhancing)
 
-    }
 
-    task enhance(type: CubaEnhancing) 
 }
 
 configure(coreModule) {
@@ -89,7 +93,16 @@ configure(coreModule) {
 
     }
 
-    task deploy(dependsOn: assemble, type: CubaDeployment) {
+    task cleanConf(description: 'Cleans up conf directory') << {
+        def dir = new File(cuba.tomcat.dir, '/conf/app-core')
+        if (dir.isDirectory()) {
+            ant.delete(includeemptydirs: true) {
+                fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
+            }
+        }
+    }
+
+    task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
         appName = 'app-core'
         appJars('app-global', 'app-core')
     }
@@ -106,7 +119,7 @@ configure(coreModule) {
         dbPassword = ''
     }
 
-    task updateDb(dependsOn: assemble, description: 'Updates local database', type: CubaDbUpdate) {
+    task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbms = 'hsql'
         host = 'localhost'
         dbName = 'akk'
@@ -149,19 +162,16 @@ configure(guiModule) {
 configure(webModule) {
     configurations {
         webcontent
-        themes
     }
 
     dependencies {
         provided(servletApi)
-        compile(globalModule)
         compile(guiModule)
-        themes("com.haulmont.cuba:cuba-web-themes:$cubaVersion")
-        provided("com.haulmont.cuba:cuba-web-themes:$cubaVersion")
 
     }
-
+    
     task webArchive(type: Zip) {
+        from file("$buildDir/web")
         from file('web')
         classifier = 'web'
     }
@@ -195,8 +205,62 @@ configure(webModule) {
         appJars('app-global', 'app-gui', 'app-web')
     }
     task buildScssThemes(type: CubaWebScssThemeCreation)
+    task deployThemes(type: CubaDeployThemeTask, dependsOn: buildScssThemes)
     assemble.dependsOn buildScssThemes
 }
+
+
+
+configure(portalModule) {
+    dependencies {
+        provided(servletApi)
+        compile(globalModule)
+
+    }
+
+    def webappName = 'app-portal'
+    def resourcesDir = "$cuba.tomcat.dir/webapps/$webappName/resources"
+    def ftlDir = "$cuba.tomcat.dir/webapps/$webappName/WEB-INF/templates"
+
+    task deploy(dependsOn: assemble, type: CubaDeployment) {
+        appName = webappName
+        appJars('app-global', 'app-portal')
+    }
+
+    task deployStatic() << {
+        copy {
+            from file('web/resources')
+            include '**/*.css'
+            include '**/*.js'
+            include '**/*.png'
+            include '**/*.gif'
+            include '**/*.jpg'
+            into resourcesDir
+        }
+        copy {
+            from file('web/WEB-INF/templates')
+            include '**/*.ftl'
+            into ftlDir
+        }
+    }
+
+    task cleanStatic() << {
+        delete resourcesDir
+        delete ftlDir
+    }
+
+    task webArchive(type: Zip) {
+        from file('web')
+        from file("$buildDir/web")
+        exclude '**/web.xml', '**/app.properties'
+        classifier = 'web'
+    }
+
+    artifacts {
+        archives webArchive
+    }
+}
+
 
 configure(webThemesModule) {
     apply(plugin: 'java')
@@ -219,56 +283,42 @@ configure(webThemesModule) {
     }
 }
 
-configure(portalModule) {
-    dependencies {
-        provided(servletApi)
-        compile(globalModule)
 
+configure(polymerClientModule) {
+    apply(plugin: 'cuba')
+    apply(plugin: 'idea')
+
+    task installBowerPackages(type: NodeTask, dependsOn: npmInstall) {
+        script = file("node_modules/bower/bin/bower")
+        args = ['install','-F']
+        inputs.file "bower.json"
+        outputs.dir "bower_components"
     }
 
-    def webappName = 'app-portal'
-    def webRootDir = "$cuba.tomcat.dir/webapps/$webappName"
-    def resourcesDir = "$webRootDir/akkount"
-
-    task deploy(dependsOn: assemble, type: CubaDeployment) {
-        appName = webappName
-        appJars('app-global', 'app-portal')
+    task assemble(type: NodeTask, dependsOn: installBowerPackages) {
+        script = file("node_modules/gulp/bin/gulp.js")
+        args = ['build']
+        inputs.dir "./"
+        outputs.dir "build"
     }
 
-    task deployStatic() << {
-        copy {
-            from file('web/akkount')
-            include '**/*'
-            into resourcesDir
-        }
-        copy {
-            from file('web/index.html')
-            into webRootDir
-        }
+    task servePolymer(type: NodeTask, dependsOn: assemble) {
+        script = file("node_modules/gulp/bin/gulp.js")
+        args = ['serve']
     }
 
-    task cleanStatic() << {
-        delete resourcesDir
-    }
-
-    task webArchive(type: Zip) {
-        from file('web')
-        from file("$buildDir/web")
-        exclude '**/web.xml', '**/app.properties'
-        classifier = 'web'
-    }
-
-    artifacts {
-        archives webArchive
+    task deploy(type: Copy, dependsOn: assemble) {
+        from file('build/bundled')
+        into "$cuba.tomcat.dir/webapps/app-front"
     }
 }
-
 
 task undeploy(type: Delete, dependsOn: ':app-web:cleanConf') {
     delete("$cuba.tomcat.dir/shared")
     delete("$cuba.tomcat.dir/webapps/app-core")
     delete("$cuba.tomcat.dir/webapps/app")
     delete("$cuba.tomcat.dir/webapps/app-portal")
+    delete("$cuba.tomcat.dir/webapps/app-front")
 }
 
 task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy', ':app-portal:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
@@ -281,14 +331,16 @@ task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy', ':app-po
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+    gradleVersion = '3.1'
 }
 
+
+
 task buildWar(type: CubaWarBuilding) {
-    singleWar = false
-    appProperties = ['cuba.automaticDatabaseUpdate':'true', 'cuba.web.loginDialogDefaultUser':'<disabled>', 'cuba.web.loginDialogDefaultPassword':'<disabled>', 'akk.shutdownDatabaseOnExit':'true']
-    includeContextXml = true
     coreContextXmlPath = 'modules/core/web/META-INF/prod-context.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate':'true', 'cuba.web.loginDialogDefaultUser':'<disabled>', 'cuba.web.loginDialogDefaultPassword':'<disabled>', 'akk.shutdownDatabaseOnExit':'true']
+    singleWar = false
+    includeContextXml = true
     includeJdbcDriver = true
     appHome = '/home/ubuntu/akkount/app_home'
 }

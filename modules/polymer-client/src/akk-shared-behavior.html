@@ -1,0 +1,51 @@
+<script>
+
+  /**
+   * @polymerBehavior AkkBehavior
+   */
+  AkkBehavior = {
+
+    toDisplayDate: function(date) {
+        if (date instanceof Date) {
+            return date.toISOString().slice(0, 10).split("-").reverse().join("/");
+        } else {
+            var parts = date.split("-");
+            if (parts.length == 3) {
+                return parts.reverse().join("/");
+            } else if (date.indexOf("/") == 2) {
+                return date;
+            } else {
+                this.log("Invalid date: " + date);
+                return date;
+            }
+        }
+    },
+
+    weekDay: function(date) {
+        var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        if (date instanceof Date) {
+            return dayNames[date.getDay()];
+        } else {
+            var parts = date.split("-");
+            return dayNames[new Date(parts[0], parts[1] - 1, parts[2]).getDay()];
+        }
+    },
+
+    toServerDate: function(date) {
+        if (date instanceof Date) {
+            return date.toISOString().slice(0, 10);
+        } else {
+            var parts = date.split("/");
+            if (parts.length == 3) {
+                return parts.reverse().join("-");
+            } else if (date.indexOf("-") == 4) {
+                return date;
+            } else {
+                this.log("Invalid date: " + date);
+                return date;
+            }
+        }
+    }
+
+  }
+</script>
