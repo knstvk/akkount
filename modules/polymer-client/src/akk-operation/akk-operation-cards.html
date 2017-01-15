@@ -18,13 +18,25 @@
         text-align: right;
       }
     </style>
+    
+    <cuba-service id="lastExpenseAccount" service-name="akk_PortalService" method="getLastAccount" 
+      params='{"opType": "opExpenseAccount"}' auto="false"></cuba-service>
+
+    <cuba-service id="lastIncomeAccount" service-name="akk_PortalService" method="getLastAccount" 
+      params='{"opType": "opIncomeAccount"}' auto="false"></cuba-service>
+
+    <cuba-entities entity-name="akk$Category" view="_local" data="{{categories}}" sort="name"></cuba-entities>
+
     <cuba-entities id="data"
                    entity-name="akk$Operation"
                    data="{{entities}}"
                    view="operation-browse"
                    limit="100" sort="-opDate">
     </cuba-entities>
-    <akk-operation-edit entity="{{editedEntity}}" on-commit="_onEditorCommit" on-cancel="_closeEditor" optype="[[optype]]"></akk-operation-edit>
+
+    <akk-operation-edit entity="{{editedEntity}}" categories="[[categories]]" on-commit="_onEditorCommit" on-cancel="_closeEditor" 
+      optype="[[optype]]"></akk-operation-edit>
+
     <template is="dom-if" if="[[!editedEntity]]">
       <div class="actions">
         <paper-button on-tap="_createExpense">Expense</paper-button>
@@ -45,7 +57,9 @@
             <template is="dom-if" if="[[_showCategory(item)]]">
                 [[msg('akk$Operation.category')]]: [[item.category.name]]<br>
             </template>
-            [[msg('akk$Operation.comments')]]: [[item.comments]]<br>
+            <template is="dom-if" if="[[_showComments(item)]]">
+              [[msg('akk$Operation.comments')]]: [[item.comments]]<br>
+            </template>
           </div>
         </paper-card>
       </template>
@@ -62,11 +76,18 @@
         editedEntity: {
           type: Object,
           value: null
-        }
+        },
+        categories: Array
       },
 
       listeners: {
         'delete-entity': '_deleteEntity'
+      },
+
+      lastUsedDate: undefined,
+
+      _newOpDate: function() {
+        return this.toServerDate(this.lastUsedDate ? this.lastUsedDate : new Date());
       },
 
       _deleteEntity: function(event) {
@@ -74,22 +95,40 @@
         this.fire('iron-signal', {name: 'refresh-balance'});
       },
 
-
       _createExpense: function(event) {
-        this.editedEntity = {
-            opType: "EXPENSE"
-        };
+        this.$.lastExpenseAccount.load().then(
+          function(data) {
+            this.editedEntity = {
+                opType: "EXPENSE",
+                acc1: data,
+                opDate: this._newOpDate()
+            };
+          }.bind(this), 
+          function(error) {
+            console.log(error);
+          }
+        );
       },
       
       _createIncome: function(event) {
-        this.editedEntity = {
-            opType: "INCOME"
-        };
+        this.$.lastIncomeAccount.load().then(
+          function(data) {
+            this.editedEntity = {
+                opType: "INCOME",
+                acc2: data,
+                opDate: this._newOpDate()
+            };
+          }.bind(this), 
+          function(error) {
+            console.log(error);
+          }
+        );
       },
       
       _createTransfer: function(event) {
         this.editedEntity = {
-            opType: "TRANSFER"
+            opType: "TRANSFER",
+            opDate: this._newOpDate()
         };
       },
       
@@ -98,6 +137,7 @@
       },
       
       _onEditorCommit: function(event) {
+        this.lastUsedDate = event.detail.opDate;
         this.$.data.load();
         this._closeEditor();
         this.fire('iron-signal', {name: 'refresh-balance'});
@@ -121,6 +161,10 @@
 
       _showCategory: function(item) {
         return item.opType != "TRANSFER";
+      },
+
+      _showComments: function(item) {
+        return item.comments;
       }
 
     });

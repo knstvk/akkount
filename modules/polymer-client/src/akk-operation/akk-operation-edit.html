@@ -72,9 +72,8 @@
             </template>
 
             <template is="dom-if" if="[[_showCategory()]]">
-              <cuba-entities entity-name="akk$Category" view="_minimal" data="{{entity_categoryOptions}}" sort="name"></cuba-entities>
               <vaadin-combo-box label="[[msg('akk$Operation.category')]]"
-                                items="[[entity_categoryOptions]]"
+                                items="[[_getCategories()]]"
                                 selected-item="{{entity.category}}"
                                 item-label-path="_instanceName"
                                 item-value-path="id"
@@ -113,12 +112,13 @@
   <script>
     Polymer({
       is: 'akk-operation-edit',
-      behaviors: [CubaLocalizeBehavior],
+      behaviors: [CubaLocalizeBehavior, AkkBehavior],
       properties: {
         entity: {
           type: Object,
           value: null
-        }
+        },
+        categories: Array
       },
 
       _delete: function() {
@@ -131,7 +131,7 @@
       },
 
       _onSuccess: function() {
-        this.fire("commit");
+        this.fire("commit", this.entity);
         this.$$('#successMessage').show();
       },
 
@@ -158,7 +158,14 @@
 
       _showCategory: function() {
         return this.entity.opType != "TRANSFER";
+      },
+
+      _getCategories: function() {
+        return this.categories.filter(function(category) {
+          return category.catType == this.entity.opType;
+        }.bind(this));
       }
+
     });
   </script>
 </dom-module>
