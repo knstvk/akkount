@@ -1,6 +1,11 @@
 {
   "entrypoint": "index.html",
   "shell": "src/akk-shell.html",
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
   "extraDependencies": [
     "manifest.json",
     "service-worker.js",

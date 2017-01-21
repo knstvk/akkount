@@ -1,10 +1,10 @@
 
 buildscript {
-    ext.cubaVersion = '6.4-SNAPSHOT'
+    ext.cubaVersion = '6.4.0.RC0'
     repositories {
         mavenLocal()
         maven {
-            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
+            url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
                 username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')

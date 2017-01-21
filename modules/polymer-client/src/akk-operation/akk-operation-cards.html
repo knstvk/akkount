@@ -42,6 +42,7 @@
         <paper-button on-tap="_createExpense">Expense</paper-button>
         <paper-button on-tap="_createIncome">Income</paper-button>
         <paper-button on-tap="_createTransfer">Transfer</paper-button>
+        <paper-icon-button icon="refresh" on-tap="_reload"></paper-icon-button>
       </div>
       <template is="dom-repeat" items="{{entities}}">
         <paper-card heading="[[_getCardHeading(item)]]" class="page-widget" on-tap="_edit">
@@ -132,6 +133,10 @@
         };
       },
       
+      _reload: function() {
+        this.$.data.load();
+      },
+
       _edit: function(event) {
         this.editedEntity = event.model.item;
       },

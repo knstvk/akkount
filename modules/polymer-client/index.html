@@ -2,19 +2,30 @@
 
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
   <title>akkount</title>
   <base href="/app-front/">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="icon" href="images/favicon.ico">
+  <link rel="icon" href="images/app-icon/icon-32x32.png" sizes="32x32">
+  <link rel="icon" href="images/app-icon/icon-64x64.png" sizes="64x64">
+
+  <link rel="manifest" href="manifest.json">
 
   <meta name="theme-color" content="#2196F3">
 
-  <!-- iOS: run in full-screen mode and display upper status bar as translucent -->
+  <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="test-polymer">
+
+  <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <link rel="manifest" href="manifest.json">
+  <!-- Homescreen icons -->
+  <link rel="apple-touch-icon" href="images/app-icon/icon-48x48.png">
 
   <script>
     // Setup Polymer options

@@ -11,10 +11,11 @@
     "iron-icons": "PolymerElements/iron-icons#^1.1.3",
     "vaadin-combo-box": "^1.1.5",
     "vaadin-date-picker": "^1.1.4",
-    "cuba-app": "0.0.3",
-    "cuba-data": "0.0.4",
-    "cuba-form": "0.0.3",
-    "cuba-login": "0.0.3",
+    "cuba-app": "cuba-elements/cuba-app#^0.1.0",
+    "cuba-data": "cuba-elements/cuba-data#^0.1.0",
+    "cuba-form": "cuba-elements/cuba-form#^0.1.0",
+    "cuba-login": "cuba-elements/cuba-login#^0.1.0",
+    "cuba-styles": "cuba-elements/cuba-styles#^0.1.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "iron-signals": "PolymerElements/iron-signals#^1.0.3"
   },
@@ -22,8 +23,5 @@
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
     "web-component-tester": "^4.0.0"
-  },
-  "resolutions": {
-    "cuba-app": "0.0.3"
   }
 }

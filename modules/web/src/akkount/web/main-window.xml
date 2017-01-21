@@ -8,11 +8,11 @@
               height="40px"
               margin="false,false,false,true"
               spacing="true"
-              stylename="cuba-app-menubar cuba-inverse-header"
+              stylename="c-app-menubar c-inverse-header"
               width="100%">
             <embedded id="logoImage"
                       align="MIDDLE_LEFT"
-                      stylename="cuba-app-icon"
+                      stylename="c-app-icon"
                       type="IMAGE"/>
             <main:menu id="mainMenu"
                        align="MIDDLE_LEFT"/>
@@ -22,7 +22,7 @@
                                     align="MIDDLE_LEFT"/>
             <hbox id="mainButtonsBox"
                   align="MIDDLE_LEFT"
-                  stylename="cuba-main-buttons">
+                  stylename="c-main-buttons">
                 <main:newWindowButton id="newWindowButton"
                                       description="msg://newWindowBtnDescription"
                                       icon="app/images/new-window.png"/>
@@ -37,10 +37,10 @@
                width="100%">
             <vbox expand="foldersPane"
                   height="100%"
-                  stylename="cuba-folders-pane">
+                  stylename="c-folders-pane">
                 <vbox id="balanceLayout"
                       margin="true">
-                    <label stylename="cuba-folders-pane-caption"
+                    <label stylename="c-folders-pane-caption"
                            value="Balance"/>
                 </vbox>
                 <main:foldersPane id="foldersPane"/>
