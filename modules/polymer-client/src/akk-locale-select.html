@@ -34,12 +34,12 @@
         locale: {
           type: String,
           value: function() {
-            return cubaApp.locale;
+            return cuba.getApp().locale;
           }
         }
       },
       _changeLocale: function(e,d) {
-        cubaApp.locale = d.value;
+        cuba.getApp().locale = d.value;
       }
     })
   </script>

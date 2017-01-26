@@ -90,14 +90,14 @@
       },
 
       ready: function () {
-        if (cubaApp.restApiToken) {
+        if (cuba.getApp().restApiToken) {
           this.authenticated = true;
-          cubaApp.getUserInfo();
+          cuba.getApp().getUserInfo();
         }
       },
       _handleLogin: function() {
-        cubaApp.loadEnums();
-        cubaApp.loadEntitiesMessages();
+        cuba.getApp().loadEnums();
+        cuba.getApp().loadEntitiesMessages();
         this.authenticated = true;
       },
       _handleTokenExpired: function() {
