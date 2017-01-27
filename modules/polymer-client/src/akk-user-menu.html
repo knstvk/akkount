@@ -36,7 +36,7 @@
         path: String
       },
       _logout: function () {
-        cubaApp.logout().then(function () {
+        cuba.getApp().logout().then(function () {
           window.location.href = document.querySelector('base').href;
         });
       }

@@ -3,8 +3,9 @@
 <link rel="import" href="../bower_components/iron-lazy-pages/iron-lazy-pages.html"> 
 <link rel="import" href="../bower_components/paper-elements/paper-elements.html"> 
 <link rel="import" href="../bower_components/cuba-app/cuba-app.html"> 
-<link rel="import" href="../bower_components/cuba-app/cuba-localize-behavior.html"> 
-<link rel="import" href="../bower_components/cuba-data/cuba-data.html"> 
+<link rel="import" href="../bower_components/cuba-app/cuba-app-aware-behavior.html">
+<link rel="import" href="../bower_components/cuba-app/cuba-localize-behavior.html">
+<link rel="import" href="../bower_components/cuba-data/cuba-data.html">
 <link rel="import" href="../bower_components/cuba-form/cuba-form.html"> 
 <link rel="import" href="../bower_components/cuba-login/cuba-login.html"> 
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html"> 
@@ -71,7 +72,7 @@
  <script>
     Polymer({
       is: 'akk-shell',
-      behaviors: [CubaLocalizeBehavior],
+      behaviors: [CubaAppAwareBehavior, CubaLocalizeBehavior],
       properties: {
         route: Object,
         routeData: Object,
@@ -81,6 +82,10 @@
         }
       },
 
+      observers: [
+        '_initApplication(app)'
+      ],
+
       listeners: {
         'operationCommit': '_onOperationCommit'
       },
@@ -89,15 +94,14 @@
         console.log('_onOperationCommit: ' + e)
       },
 
-      ready: function () {
-        if (cubaApp.restApiToken) {
+      _initApplication: function (app) {
+        if (app.restApiToken) {
+          this._loadMessages();
           this.authenticated = true;
-          cubaApp.getUserInfo();
         }
       },
       _handleLogin: function() {
-        cubaApp.loadEnums();
-        cubaApp.loadEntitiesMessages();
+        this._loadMessages();
         this.authenticated = true;
       },
       _handleTokenExpired: function() {
@@ -110,6 +114,10 @@
       },
       _computeSelectedPage: function(page) {
         return page || '';
+      },
+      _loadMessages: function() {
+        this.app.loadEnums();
+        this.app.loadEntitiesMessages();
       }
     });
   </script> 
