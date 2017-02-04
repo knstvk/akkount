@@ -18,8 +18,8 @@ Some details:
 * Categories report shows the summary by two arbitrary periods of time to allow quick visual comparison. Any category can be excluded from the report. You can "drill down" into any row to see operations that comprise the row.
 * The system consists of three web applications deployed onto one Tomcat instance:
    1. Middleware
-   2. Full-functional CUBA UI
-   3. Responsive UI built on Backbone.js + Bootstrap to simplify entering operations on mobile devices. 
+   2. Full-functional CUBA Generic UI
+   3. Polymer UI for mobile devices. 
 
 Usage
 -----
@@ -31,12 +31,12 @@ gradlew setupTomcat deploy
 ```
 During the build process you will be prompted to accept CUBA platform license agreement. CUBA is free while you have five or less simultaneous user sessions. This should be more than enough for home usage. 
 
-Now start HSQL server and create database in ```data``` directory:
+Now start HSQL server and create database in `data` directory:
 ```
 gradlew startDb
 gradlew createDb
 ```
-To run Tomcat use ```gradlew start``` Gradle command or ```startup.*``` scripts in ```build/tomcat/bin```.
+To run Tomcat use `gradlew start` Gradle command or `startup.*` scripts in `build/tomcat/bin`.
 
-Main UI is available on ```http://localhost:8080/app```, responsive UI on ```http://localhost:8080/app-portal```. 
-Username: ```admin```, password: ```admin```.
+Main UI is available on `http://localhost:8080/app`, mobile-friendly UI on `http://localhost:8080/app-front`. 
+Username: `admin`, password: `admin`.

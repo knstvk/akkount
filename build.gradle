@@ -25,7 +25,6 @@ def globalModule = project(':app-global')
 def coreModule = project(':app-core')
 def guiModule = project(':app-gui')
 def webModule = project(':app-web')
-def portalModule = project(':app-portal')
 def webThemesModule= project(':app-web-themes')
 def polymerClientModule = project(':app-polymer-client')
 
@@ -52,7 +51,7 @@ cuba {
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
 
-configure([globalModule, coreModule, guiModule, webModule, portalModule]) {
+configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
     apply(plugin: 'idea')
@@ -211,57 +210,6 @@ configure(webModule) {
 
 
 
-configure(portalModule) {
-    dependencies {
-        provided(servletApi)
-        compile(globalModule)
-
-    }
-
-    def webappName = 'app-portal'
-    def resourcesDir = "$cuba.tomcat.dir/webapps/$webappName/resources"
-    def ftlDir = "$cuba.tomcat.dir/webapps/$webappName/WEB-INF/templates"
-
-    task deploy(dependsOn: assemble, type: CubaDeployment) {
-        appName = webappName
-        appJars('app-global', 'app-portal')
-    }
-
-    task deployStatic() << {
-        copy {
-            from file('web/resources')
-            include '**/*.css'
-            include '**/*.js'
-            include '**/*.png'
-            include '**/*.gif'
-            include '**/*.jpg'
-            into resourcesDir
-        }
-        copy {
-            from file('web/WEB-INF/templates')
-            include '**/*.ftl'
-            into ftlDir
-        }
-    }
-
-    task cleanStatic() << {
-        delete resourcesDir
-        delete ftlDir
-    }
-
-    task webArchive(type: Zip) {
-        from file('web')
-        from file("$buildDir/web")
-        exclude '**/web.xml', '**/app.properties'
-        classifier = 'web'
-    }
-
-    artifacts {
-        archives webArchive
-    }
-}
-
-
 configure(webThemesModule) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
@@ -317,11 +265,10 @@ task undeploy(type: Delete, dependsOn: ':app-web:cleanConf') {
     delete("$cuba.tomcat.dir/shared")
     delete("$cuba.tomcat.dir/webapps/app-core")
     delete("$cuba.tomcat.dir/webapps/app")
-    delete("$cuba.tomcat.dir/webapps/app-portal")
     delete("$cuba.tomcat.dir/webapps/app-front")
 }
 
-task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy', ':app-portal:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
+task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
     ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
         not {
             socket(server: 'localhost', port: '8787')
