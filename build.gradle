@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.4.0.RC1'
+    ext.cubaVersion = '6.4.0'
     repositories {
         mavenLocal()
         maven {
