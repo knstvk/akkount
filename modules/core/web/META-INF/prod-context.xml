@@ -6,16 +6,13 @@
       type="javax.sql.DataSource"
       maxActive="20"
       maxIdle="2"
-      maxWait="5000"
+      maxWaitMillis="5000"
       driverClassName="org.hsqldb.jdbc.JDBCDriver"
-      url="jdbc:hsqldb:file:/home/ubuntu/akkount/db/akk;shutdown=true"
+      url="jdbc:hsqldb:file:${app.home}/db/akk;shutdown=true"
       username="sa"
       password=""/>
 
     <!-- Switch off session serialization -->
-    <Manager className="org.apache.catalina.session.PersistentManager" debug="0" distributable="false"
-             saveOnRestart="false">
-        <Store className="org.apache.catalina.session.FileStore"/>
-    </Manager>
+    <Manager pathname=""/>
 
 </Context>

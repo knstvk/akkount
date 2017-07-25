@@ -1,15 +1,14 @@
 
 buildscript {
-    ext.cubaVersion = '6.5.3'
+    ext.cubaVersion = '6.6.0.RC1'
     repositories {
         mavenLocal()
         maven {
-            url 'https://dl.bintray.com/cuba-platform/main'
-        }
-        mavenCentral()
-        jcenter()
-        maven {
-            url 'http://maven.vaadin.com/vaadin-addons'
+            url 'https://repo.cuba-platform.com/content/groups/work'
+            credentials {
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
+            }
         }
     }
     dependencies {
@@ -273,14 +272,17 @@ task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy'], descrip
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '3.4'
 }
 
 task buildWar(type: CubaWarBuilding) {
+    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     coreContextXmlPath = 'modules/core/web/META-INF/prod-context.xml'
-    appProperties = ['cuba.automaticDatabaseUpdate':'true', 'cuba.web.loginDialogDefaultUser':'<disabled>', 'cuba.web.loginDialogDefaultPassword':'<disabled>', 'akk.shutdownDatabaseOnExit':'true']
-    singleWar = false
+    appProperties = ['cuba.automaticDatabaseUpdate':'true', 
+    'cuba.web.loginDialogDefaultUser':'<disabled>', 
+    'cuba.web.loginDialogDefaultPassword':'<disabled>', 
+    'akk.shutdownDatabaseOnExit':'true']
     includeContextXml = true
     includeJdbcDriver = true
-    appHome = '/home/ubuntu/akkount/app_home'
+    appHome = '${app.home}'
 }

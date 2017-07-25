@@ -37,9 +37,9 @@ create table AKK_CURRENCY (
 -- begin AKK_BALANCE
 create table AKK_BALANCE (
     ID varchar(36) not null,
+    VERSION integer not null,
     CREATE_TS timestamp,
     CREATED_BY varchar(50),
-    VERSION integer,
     UPDATE_TS timestamp,
     UPDATED_BY varchar(50),
     DELETE_TS timestamp,
@@ -73,9 +73,9 @@ create table AKK_CATEGORY (
 -- begin AKK_OPERATION
 create table AKK_OPERATION (
     ID varchar(36) not null,
+    VERSION integer not null,
     CREATE_TS timestamp,
     CREATED_BY varchar(50),
-    VERSION integer,
     UPDATE_TS timestamp,
     UPDATED_BY varchar(50),
     DELETE_TS timestamp,

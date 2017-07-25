@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 @Entity(name = "akk$Operation")
 @Listeners("akkount.entitylisteners.OperationEntityListener")
 public class Operation extends StandardEntity {
+    private static final long serialVersionUID = 7040817103549067673L;
+
     @Column(name = "OP_TYPE", nullable = false)
     protected String opType;
 
@@ -45,8 +47,6 @@ public class Operation extends StandardEntity {
 
     @Column(name = "COMMENTS", length = 200)
     protected String comments;
-
-    private static final long serialVersionUID = 7040817103549067673L;
 
     public void setOpType(OperationType opType) {
         this.opType = opType == null ? null : opType.getId();

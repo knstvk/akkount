@@ -15,6 +15,8 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 @Table(name = "AKK_BALANCE")
 @Entity(name = "akk$Balance")
 public class Balance extends StandardEntity {
+    private static final long serialVersionUID = 918143020139005638L;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "BALANCE_DATE", nullable = false)
     protected Date balanceDate;
@@ -25,11 +27,6 @@ public class Balance extends StandardEntity {
 
     @Column(name = "AMOUNT")
     protected BigDecimal amount = BigDecimal.ZERO;
-
-    private static final long serialVersionUID = 918143020139005638L;
-
-
-
 
     public void setBalanceDate(Date balanceDate) {
         this.balanceDate = balanceDate;

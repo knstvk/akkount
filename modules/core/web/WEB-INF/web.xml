@@ -6,8 +6,7 @@
     <!-- Application properties config files -->
     <context-param>
         <param-name>appPropertiesConfig</param-name>
-        <param-value>classpath:cuba-app.properties
-            classpath:app.properties
+        <param-value>classpath:app.properties
             /WEB-INF/local.app.properties
             file:${catalina.home}/conf/app-core/local.app.properties</param-value>
     </context-param>

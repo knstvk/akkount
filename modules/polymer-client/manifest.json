@@ -1,7 +1,7 @@
 {
   "name": "akkount",
   "short_name": "akkount",
-  "start_url": "/app-front/",
+  "start_url": "/app/front/",
   "display": "standalone",
   "background_color": "#2196F3",
   "icons": [
