@@ -1,13 +1,13 @@
 
 buildscript {
-    ext.cubaVersion = '6.6.0.RC1'
+    ext.cubaVersion = '6.7-SNAPSHOT'
     repositories {
         mavenLocal()
         maven {
-            url 'https://repo.cuba-platform.com/content/groups/work'
+            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
             credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'developer')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'Haul2010')
             }
         }
     }
@@ -285,4 +285,5 @@ task buildWar(type: CubaWarBuilding) {
     includeContextXml = true
     includeJdbcDriver = true
     appHome = '${app.home}'
+    polymerBuildDir = 'bundled'
 }

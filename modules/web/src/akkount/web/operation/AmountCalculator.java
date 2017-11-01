@@ -1,6 +1,7 @@
 package akkount.web.operation;
 
 import com.haulmont.chile.core.datatypes.Datatype;
+import com.haulmont.chile.core.datatypes.DatatypeRegistry;
 import com.haulmont.chile.core.datatypes.Datatypes;
 import com.haulmont.cuba.core.global.Scripting;
 import com.haulmont.cuba.core.global.UserSessionSource;
@@ -30,12 +31,14 @@ public class AmountCalculator {
     @Inject
     private UserSessionSource userSessionSource;
 
-    private Datatype<BigDecimal> decimalDatatype = Datatypes.getNN(BigDecimal.class);
+    @Inject
+    private DatatypeRegistry datatypeRegistry;
 
     public void initAmount(TextField amountField, BigDecimal value) {
         com.vaadin.ui.TextField vTextField = (com.vaadin.ui.TextField) WebComponentsHelper.unwrap(amountField);
         new CalcExtension(vTextField);
 
+        Datatype<BigDecimal> decimalDatatype = datatypeRegistry.getNN(BigDecimal.class);
         amountField.setValue(decimalDatatype.format(value, userSessionSource.getUserSession().getLocale()));
     }
 
