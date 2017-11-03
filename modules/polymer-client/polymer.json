@@ -9,7 +9,14 @@
   "extraDependencies": [
     "manifest.json",
     "service-worker.js",
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js",
+    "bower_components/webcomponentsjs/*.js",
     "bower_components/fetch/fetch.js"
+  ],
+  "builds": [
+    {
+      "preset": "es6-unbundled",
+      "basePath": "/app-front/",
+      "addServiceWorker": false
+    }
   ]
 }

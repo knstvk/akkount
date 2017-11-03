@@ -1,13 +1,13 @@
 
 buildscript {
-    ext.cubaVersion = '6.7-SNAPSHOT'
+    ext.cubaVersion = '6.7.2'
     repositories {
         mavenLocal()
         maven {
-            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
+            url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'developer')
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'Haul2010')
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
     }
@@ -230,6 +230,8 @@ configure(polymerClientModule) {
     apply(plugin: 'cuba')
     apply(plugin: 'idea')
 
+    def frontAppDir = 'app-front'
+
     task installBowerPackages(type: NodeTask, dependsOn: npmInstall) {
         script = file("node_modules/bower/bin/bower")
         args = ['install','-F']
@@ -238,20 +240,27 @@ configure(polymerClientModule) {
     }
 
     task assemble(type: NodeTask, dependsOn: installBowerPackages) {
-        script = file("node_modules/gulp/bin/gulp.js")
+        script = file("node_modules/polymer-cli/bin/polymer")
         args = ['build']
         inputs.dir "./"
         outputs.dir "build"
     }
 
+    task deployUnbundled(type: Copy) {
+        from file('./')
+        include 'bower_components/**'
+        include 'src/**'
+        into "$cuba.tomcat.dir/webapps/$frontAppDir"
+    }
+
+    task deploy(type: Copy, dependsOn: [assemble, deployUnbundled]) {
+        from file('build/es6-unbundled')
+        into "$cuba.tomcat.dir/webapps/$frontAppDir"
+    }
+
     task servePolymer(type: NodeTask, dependsOn: assemble) {
         script = file("node_modules/gulp/bin/gulp.js")
         args = ['serve']
-    }
-
-    task deploy(type: Copy, dependsOn: assemble) {
-        from file('build/bundled')
-        into "$cuba.tomcat.dir/webapps/app-front"
     }
 }
 
@@ -285,5 +294,4 @@ task buildWar(type: CubaWarBuilding) {
     includeContextXml = true
     includeJdbcDriver = true
     appHome = '${app.home}'
-    polymerBuildDir = 'bundled'
 }
