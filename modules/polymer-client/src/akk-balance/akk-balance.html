@@ -1,7 +1,6 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../shared-styles.html">
 <link rel="import" href="../../bower_components/cuba-data/cuba-service.html">
-<!--<link rel="import" href="../../bower_components/iron-signals/iron-signals.html">-->
 
 <dom-module id="akk-balance">
   <template>
@@ -30,8 +29,6 @@
 
     <cuba-service id="portalService" service-name="akk_PortalService" method="getBalance" params="{}" 
       handle-as="json" data="{{balance}}"></cuba-service>
-
-    <!--<iron-signals on-iron-signal-refresh-balance="_refresh"></iron-signals>-->
 
     <paper-card heading="Balance">
       <div class="card-content"> 
@@ -73,20 +70,30 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'akk-balance',
-
-      properties: {
-        balance: {
-          type: Object,
-          value: null
-        }
-      },
-
-      _refresh: function (e) {
-        this.$.portalService.load();
+    class AkkBalance extends Polymer.Element {
+      static get is() {
+        return 'akk-balance';
       }
 
-    });
+      static get properties() {
+        return {
+            balance: {
+              type: Object,
+              value: null
+            }
+          }
+      }
+
+      constructor() {
+        super();
+        document.addEventListener('refresh-balance', this._refresh.bind(this));
+      }
+
+      _refresh(e) {
+        this.$.portalService.load();
+      }
+    }
+
+    customElements.define(AkkBalance.is, AkkBalance);
   </script>
 </dom-module>

@@ -93,7 +93,7 @@
 
       _deleteEntity: function(event) {
         this.$.data.remove(event.detail);
-        this.fire('iron-signal', {name: 'refresh-balance'});
+        document.dispatchEvent(new Event('refresh-balance'))
       },
 
       _createExpense: function(event) {
@@ -145,7 +145,7 @@
         this.lastUsedDate = event.detail.opDate;
         this.$.data.load();
         this._closeEditor();
-        this.fire('iron-signal', {name: 'refresh-balance'});
+        document.dispatchEvent(new Event('refresh-balance'))
       },
       
       _closeEditor: function(event) {

@@ -18,8 +18,6 @@
     "paper-toast": "PolymerElements/paper-toast#^2.0.0",
     "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
     "paper-item": "PolymerElements/paper-item#^2.0.0",
-    "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^2.0.0",
-    "paper-header-panel": "PolymerElements/paper-header-panel#^2.0.0",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.0",
     "iron-lazy-pages": "TimvdLippe/iron-lazy-pages#^2.0.2",
     "iron-icons": "PolymerElements/iron-icons#^2.0.1",
@@ -30,7 +28,8 @@
     "cuba-form": "cuba-elements/cuba-form#^0.4.0",
     "cuba-login": "cuba-elements/cuba-login#^0.3.0",
     "cuba-styles": "cuba-elements/cuba-styles#^0.3.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "app-layout": "PolymerElements/app-layout#^2.0.4"
   },
   "resolutions": {
     "iron-location": "1 - 2",

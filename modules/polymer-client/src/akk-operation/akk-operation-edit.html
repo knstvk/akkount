@@ -17,7 +17,7 @@
       <cuba-entity entity-name="akk$Operation" entity-id="[[entity.id]]" view="operation-edit" data="{{entity}}"></cuba-entity>
       <cuba-entity-form id="form"
                         entity-name="akk$Operation"
-                        entity="{{entity}}"
+                        entity="[[entity]]"
                         on-cuba-form-response="_onSuccess"
                         on-cuba-form-error="_onError"
                         server-errors="{{serverErrors}}">
