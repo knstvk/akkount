@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.7.3'
+    ext.cubaVersion = '6.8.1'
     repositories {
         mavenLocal()
         maven {
@@ -281,7 +281,7 @@ task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy'], descrip
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.4'
+    gradleVersion = '4.3.1'
 }
 
 task buildWar(type: CubaWarBuilding) {

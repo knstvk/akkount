@@ -3,4 +3,8 @@
     <settings>
         <columnLengthOfEnums>50</columnLengthOfEnums>
     </settings>
+    <functionalitySettings>
+        <functionality id="oneToOneIndex"
+                       state="ENABLE"/>
+    </functionalitySettings>
 </studio>
