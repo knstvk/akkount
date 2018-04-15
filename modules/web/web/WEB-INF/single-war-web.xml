@@ -16,9 +16,9 @@
         <description>List of app properties files for Web Client</description>
         <param-name>appPropertiesConfigWeb</param-name>
         <param-value>
-            
             classpath:web-app.properties
             /WEB-INF/local.app.properties
+            "file:${app.home}/app/conf/local.app.properties"
         </param-value>
     </context-param>
     
@@ -35,9 +35,9 @@
         <description>List of app properties files for Middleware</description>
         <param-name>appPropertiesConfigCore</param-name>
         <param-value>
-            
             classpath:app.properties
             /WEB-INF/local.app.properties
+            "file:${app.home}/app-core/conf/local.app.properties"
         </param-value>
     </context-param>
     <!--Application components-->

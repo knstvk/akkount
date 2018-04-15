@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.9-SNAPSHOT'
+    ext.cubaVersion = '6.9.0.BETA2'
     repositories {
         mavenLocal()
         maven {
@@ -38,7 +38,7 @@ cuba {
         dir = "$project.rootDir/deploy/tomcat"
     }
     ide {
-        copyright = '''Copyright (c) 2015 akkount''' // Copyright Notice for IDEA project
+        
         vcs = 'Git'
     }
 }
@@ -74,6 +74,8 @@ configure(globalModule) {
 }
 
 configure(coreModule) {
+    apply(plugin: 'groovy')
+
     configurations {
         jdbc
         dbscripts
@@ -84,7 +86,17 @@ configure(coreModule) {
         provided(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
+        testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-2') {
+            exclude(group: 'org.codehaus.groovy', module: 'groovy-all')
+        }
+    }
 
+    sourceSets {
+        test {
+            groovy {
+                srcDir 'testspec'
+            }
+        }
     }
 
     task cleanConf(description: 'Cleans up conf directory') << {

@@ -28,6 +28,8 @@
                        value="akkount.service.ReportService"/>
                 <entry key="akk_PortalService"
                        value="akkount.service.PortalService"/>
+                <entry key="akk_BotService"
+                       value="akkount.service.BotService"/>
             </map>
         </property>
     </bean>
