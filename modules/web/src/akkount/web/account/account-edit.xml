@@ -16,8 +16,9 @@
             </query>
         </collectionDatasource>
     </dsContext>
-    <layout expand="windowActions"
-            spacing="true">
+    <dialogMode forceDialog="true"
+                width="AUTO"/>
+    <layout spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="accountDs">
             <field id="name"
@@ -33,6 +34,8 @@
                    width="250px"/>
         </fieldGroup>
         <frame id="windowActions"
-                screen="editWindowActions"/>
+               align="TOP_CENTER"
+               screen="editWindowActions"
+               width="AUTO"/>
     </layout>
 </window>

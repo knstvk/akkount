@@ -2,7 +2,6 @@ package akkount.service;
 
 import akkount.entity.Account;
 import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.TimeSource;
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.stereotype.Service;
@@ -35,9 +34,9 @@ public class PortalServiceBean implements PortalService {
     @Override
     public Balance getBalance() {
         Balance result = new Balance();
-        LoadContext<Account> loadContext = LoadContext.create(Account.class);
-        loadContext.setQueryString("select a from akk$Account a where a.active = true order by a.name");
-        List<Account> accounts = dataManager.loadList(loadContext);
+        List<Account> accounts = dataManager.load(Account.class)
+                .query("select a from akk$Account a where a.active = true order by a.name")
+                .list();
         if (accounts.size() > 0) {
             DecimalFormat format = new DecimalFormat("#,###");
 

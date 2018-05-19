@@ -85,9 +85,12 @@ public class BalanceWorker {
 
     private void removeBalanceRecords(UUID accountId) {
         EntityManager em = persistence.getEntityManager();
-        Query query = em.createQuery("delete from akk$Balance b where b.account.id = ?1");
+        TypedQuery<Balance> query = em.createQuery("select b from akk$Balance b where b.account.id = ?1", Balance.class);
         query.setParameter(1, accountId);
-        query.executeUpdate();
+        List<Balance> list = query.getResultList();
+        for (Balance balance : list) {
+            em.remove(balance);
+        }
     }
 
     private void addOperation(TreeMap<Date, Balance> balances, Operation operation, UUID accountId) {

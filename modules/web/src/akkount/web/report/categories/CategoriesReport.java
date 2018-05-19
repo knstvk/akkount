@@ -1,6 +1,8 @@
 package akkount.web.report.categories;
 
-import akkount.entity.*;
+import akkount.entity.Category;
+import akkount.entity.CategoryAmount;
+import akkount.entity.CategoryType;
 import akkount.entity.Currency;
 import akkount.service.UserDataKeys;
 import akkount.service.UserDataService;
@@ -8,15 +10,12 @@ import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.ItemTrackingAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import org.apache.commons.lang.time.DateUtils;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
-
-import com.haulmont.cuba.gui.data.ValueListener;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import org.apache.commons.lang.time.DateUtils;
 
 public class CategoriesReport extends AbstractWindow {
 
@@ -82,13 +81,10 @@ public class CategoriesReport extends AbstractWindow {
         }
         currencyField.setValue(currency);
 
-        currencyField.addListener(new ValueListener() {
-            @Override
-            public void valueChanged(Object source, String property, @Nullable Object prevValue, @Nullable Object value) {
-                refreshDs1();
-                refreshDs2();
-                userDataService.saveEntity(UserDataKeys.CAT_REP_CURRENCY, (Currency) value);
-            }
+        currencyField.addValueChangeListener(event -> {
+            refreshDs1();
+            refreshDs2();
+            userDataService.saveEntity(UserDataKeys.CAT_REP_CURRENCY, (Currency) event.getValue());
         });
     }
 
@@ -99,12 +95,9 @@ public class CategoriesReport extends AbstractWindow {
         categoryTypeGroup.setOptionsList(categoryTypes);
         categoryTypeGroup.setValue(CategoryType.EXPENSE);
 
-        categoryTypeGroup.addListener(new ValueListener() {
-            @Override
-            public void valueChanged(Object source, String property, @Nullable Object prevValue, @Nullable Object value) {
-                refreshDs1();
-                refreshDs2();
-            }
+        categoryTypeGroup.addValueChangeListener(event -> {
+            refreshDs1();
+            refreshDs2();
         });
     }
 
@@ -119,23 +112,20 @@ public class CategoriesReport extends AbstractWindow {
         periodTypeField.setOptionsMap(options);
         periodTypeField.setValue(1);
 
-        periodTypeField.addListener(new ValueListener() {
-            @Override
-            public void valueChanged(Object source, String property, @Nullable Object prevValue, @Nullable Object value) {
-                Integer months = (Integer) value;
-                if (months != null) {
-                    doNotRefresh = true;
-                    try {
-                        Date end = to2.getValue();
-                        from2.setValue(DateUtils.addMonths(end, -1 * months));
-                        to1.setValue(DateUtils.addMonths(end, -1 * months));
-                        from1.setValue(DateUtils.addMonths(end, -2 * months));
-                    } finally {
-                        doNotRefresh = false;
-                    }
-                    refreshDs1();
-                    refreshDs2();
+        periodTypeField.addValueChangeListener(event -> {
+            Integer months = (Integer) event.getValue();
+            if (months != null) {
+                doNotRefresh = true;
+                try {
+                    Date end = to2.getValue();
+                    from2.setValue(DateUtils.addMonths(end, -1 * months));
+                    to1.setValue(DateUtils.addMonths(end, -1 * months));
+                    from1.setValue(DateUtils.addMonths(end, -2 * months));
+                } finally {
+                    doNotRefresh = false;
                 }
+                refreshDs1();
+                refreshDs2();
             }
         });
     }
@@ -149,23 +139,13 @@ public class CategoriesReport extends AbstractWindow {
         from2.setValue(DateUtils.addMonths(now, -1));
         to2.setValue(now);
 
-        ValueListener period1Listener = new ValueListener() {
-            @Override
-            public void valueChanged(Object source, String property, @Nullable Object prevValue, @Nullable Object value) {
-                refreshDs1();
-            }
-        };
-        from1.addListener(period1Listener);
-        to1.addListener(period1Listener);
+        ValueChangeListener period1Listener = event -> refreshDs1();
+        from1.addValueChangeListener(period1Listener);
+        to1.addValueChangeListener(period1Listener);
 
-        ValueListener period2Listener = new ValueListener() {
-            @Override
-            public void valueChanged(Object source, String property, @Nullable Object prevValue, @Nullable Object value) {
-                refreshDs2();
-            }
-        };
-        from2.addListener(period2Listener);
-        to2.addListener(period2Listener);
+        ValueChangeListener period2Listener = event -> refreshDs2();
+        from2.addValueChangeListener(period2Listener);
+        to2.addValueChangeListener(period2Listener);
     }
 
     private void initExcludedCategories() {

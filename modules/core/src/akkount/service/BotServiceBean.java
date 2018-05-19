@@ -6,12 +6,16 @@ import akkount.entity.Category;
 import akkount.entity.Operation;
 import akkount.entity.OperationType;
 import com.google.common.base.Splitter;
-import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.core.global.View;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service(BotService.NAME)
 public class BotServiceBean implements BotService {
@@ -56,33 +60,27 @@ public class BotServiceBean implements BotService {
             return "Expected [account name] amount [category name]";
         }
 
-
-//        if (parts.size() == 3) {
-//            acc = parts.get(0);
-//            amount = new BigDecimal(parts.get(1));
-//            cat = parts.get(2);
-//        } else if (parts.size() == 2) {
-//            acc = akkConfig.getDefaultAccount();
-//            amount = new BigDecimal(parts.get(0));
-//            cat = parts.get(1);
-//        } else {
-//            return "Expected [acc amount category] or [amount category]";
-//        }
         return createExpense(acc, amount, cat);
     }
 
     private String createExpense(String acc, BigDecimal amount, String cat) {
-        LoadContext.Query accQuery = LoadContext.createQuery("select a from akk$Account a where lower(a.name) = :name")
-                .setParameter("name", acc.toLowerCase());
-        Account account = dataManager.load(LoadContext.create(Account.class).setQuery(accQuery).setView(View.MINIMAL));
-        if (account == null)
+        Optional<Account> optionalAccount = dataManager.load(Account.class)
+                .query("select a from akk$Account a where lower(a.name) = :name")
+                .parameter("name", acc.toLowerCase())
+                .view(View.MINIMAL)
+                .optional();
+        if (!optionalAccount.isPresent())
             return String.format("Account %s not found", acc);
+        Account account = optionalAccount.get();
 
-        LoadContext.Query catQuery = LoadContext.createQuery("select c from akk$Category c where lower(c.name) = :name")
-                .setParameter("name", cat.toLowerCase());
-        Category category = dataManager.load(LoadContext.create(Category.class).setQuery(catQuery).setView(View.MINIMAL));
-        if (category == null)
+        Optional<Category> optionalCategory = dataManager.load(Category.class)
+                .query("select c from akk$Category c where lower(c.name) = :name")
+                .parameter("name", cat.toLowerCase())
+                .view(View.MINIMAL)
+                .optional();
+        if (!optionalCategory.isPresent())
             return String.format("Category %s not found", cat);
+        Category category = optionalCategory.get();
 
         Operation operation = metadata.create(Operation.class);
         operation.setOpDate(timeSource.currentTimestamp());

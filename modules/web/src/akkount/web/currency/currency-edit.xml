@@ -9,8 +9,9 @@
                     class="akkount.entity.Currency"
                     view="_local"/>
     </dsContext>
-    <layout expand="windowActions"
-            spacing="true">
+    <dialogMode forceDialog="true"
+                width="AUTO"/>
+    <layout spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="currencyDs">
             <field id="code"
@@ -19,6 +20,8 @@
                    width="250px"/>
         </fieldGroup>
         <frame id="windowActions"
-                screen="editWindowActions"/>
+               align="TOP_CENTER"
+               screen="editWindowActions"
+               width="AUTO"/>
     </layout>
 </window>
