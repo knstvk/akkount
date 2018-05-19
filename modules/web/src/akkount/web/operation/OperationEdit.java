@@ -11,7 +11,6 @@ import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.GroupBoxLayout;
 import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.security.global.UserSession;
-import com.haulmont.cuba.web.AppUI;
 import org.apache.commons.lang.time.DateUtils;
 
 import javax.inject.Inject;
@@ -48,10 +47,6 @@ public class OperationEdit extends AbstractEditor<Operation> {
         operationFrame = (OperationFrame) openFrame(frameContainer, frameId, params);
 
         frameContainer.setCaption(messages.getMessage(operation.getOpType()));
-
-        getDsContext().addAfterCommitListener((context, result) -> {
-            ((akkount.web.MainWindow) AppUI.getCurrent().getTopLevelWindow()).refreshBalance();
-        });
     }
 
     @Override

@@ -1,6 +1,7 @@
 package akkount.web;
 
 import akkount.entity.Account;
+import akkount.event.BalanceChangedEvent;
 import akkount.service.BalanceService;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.LoadContext;
@@ -10,12 +11,17 @@ import com.haulmont.cuba.gui.components.mainwindow.AppMenu;
 import com.haulmont.cuba.gui.data.DataSupplier;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import org.apache.commons.lang.BooleanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
 
 public class MainWindow extends AbstractMainWindow {
+
+    private static final Logger log = LoggerFactory.getLogger(MainWindow.class);
 
     @Inject
     protected AppMenu mainMenu;
@@ -39,7 +45,9 @@ public class MainWindow extends AbstractMainWindow {
         refreshBalance();
     }
 
+    @EventListener(BalanceChangedEvent.class)
     public void refreshBalance() {
+        log.info("Refreshing balance");
         TimeSource timeSource = AppBeans.get(TimeSource.class);
         BalanceService balanceService = AppBeans.get(BalanceService.class);
 

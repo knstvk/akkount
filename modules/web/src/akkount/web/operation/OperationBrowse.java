@@ -9,13 +9,10 @@ import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.components.actions.EditAction;
-import com.haulmont.cuba.gui.components.actions.RemoveAction;
-import com.haulmont.cuba.web.AppUI;
 
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 
 public class OperationBrowse extends AbstractLookup {
 
@@ -46,9 +43,6 @@ public class OperationBrowse extends AbstractLookup {
         createTransferBtn.setAction(createTransferAction);
 
         operationTable.addAction(new OperationEditAction());
-
-        operationTable.addAction(new OperationRemoveAction());
-
     }
 
     protected class OperationCreateAction extends CreateAction {
@@ -75,18 +69,6 @@ public class OperationBrowse extends AbstractLookup {
         @Override
         protected void afterCommit(Entity entity) {
             operationTable.getDatasource().refresh();
-        }
-    }
-
-    protected class OperationRemoveAction extends RemoveAction {
-
-        public OperationRemoveAction() {
-            super(OperationBrowse.this.operationTable);
-        }
-
-        @Override
-        protected void afterRemove(Set selected) {
-            ((akkount.web.MainWindow) AppUI.getCurrent().getTopLevelWindow()).refreshBalance();
         }
     }
 }
