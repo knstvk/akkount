@@ -1,20 +1,15 @@
 package akkount.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
+import javax.persistence.*;
+
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 @NamePattern("%s|name")
 @Table(name = "AKK_ACCOUNT")
 @Entity(name = "akk$Account")
-@Listeners("akkount.entitylisteners.AccountEntityListener")
+//@Listeners("akkount.entitylisteners.AccountEntityListener")
 public class Account extends StandardEntity {
     @Column(name = "NAME", nullable = false, length = 20, unique = true)
     protected String name;
@@ -36,6 +31,12 @@ public class Account extends StandardEntity {
     protected Boolean includeInTotal = true;
 
     private static final long serialVersionUID = 1024314820562143050L;
+
+    @PrePersist
+    @PreUpdate
+    private void onChange() {
+        setCurrencyCode(getCurrency().getCode());
+    }
 
     public void setIncludeInTotal(Boolean includeInTotal) {
         this.includeInTotal = includeInTotal;

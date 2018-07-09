@@ -9,6 +9,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -16,7 +17,8 @@ import javax.persistence.ManyToOne;
 
 @Table(name = "AKK_OPERATION")
 @Entity(name = "akk$Operation")
-@Listeners("akkount.entitylisteners.OperationEntityListener")
+@PublishEntityChangedEvents
+//@Listeners("akkount.entitylisteners.OperationEntityListener")
 public class Operation extends StandardEntity {
     private static final long serialVersionUID = 7040817103549067673L;
 

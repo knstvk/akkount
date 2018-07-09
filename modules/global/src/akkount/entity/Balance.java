@@ -11,9 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 
 @Table(name = "AKK_BALANCE")
 @Entity(name = "akk$Balance")
+@PublishEntityChangedEvents
 public class Balance extends StandardEntity {
     private static final long serialVersionUID = 918143020139005638L;
 
