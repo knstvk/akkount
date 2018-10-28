@@ -1,7 +1,8 @@
 rootProject.name = 'akkount'
-include(':app-global', ':app-core', ':app-web', ':app-web-themes', ':app-polymer-client')
-project(':app-global').projectDir = new File(settingsDir, 'modules/global')
-project(':app-core').projectDir = new File(settingsDir, 'modules/core')
-project(':app-web').projectDir = new File(settingsDir, 'modules/web')
-project(':app-web-themes').projectDir = new File(settingsDir, 'modules/web/themes')
-project(':app-polymer-client').projectDir = new File(settingsDir, 'modules/polymer-client')
+def modulePrefix = 'app'
+include(":${modulePrefix}-global" , ":${modulePrefix}-core" , ":${modulePrefix}-web" , ":${modulePrefix}-web-themes" , ":${modulePrefix}-polymer-client" )
+project(":${modulePrefix}-global" ).projectDir = new File(settingsDir, 'modules/global')
+project(":${modulePrefix}-core" ).projectDir = new File(settingsDir, 'modules/core')
+project(":${modulePrefix}-web" ).projectDir = new File(settingsDir, 'modules/web')
+project(":${modulePrefix}-web-themes" ).projectDir = new File(settingsDir, 'modules/web/themes')
+project(":${modulePrefix}-polymer-client" ).projectDir = new File(settingsDir, 'modules/polymer-client')
