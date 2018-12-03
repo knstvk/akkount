@@ -8,3 +8,4 @@ modules/*/build/*
 out
 test-run
 deploy/*
+package-lock.json
