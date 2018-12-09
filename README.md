@@ -3,6 +3,12 @@ akkount
 
 A simple personal finance application built on [CUBA Platform](https://www.cuba-platform.com).
 
+![1-login](https://github.com/knstvk/akkount/blob/master/img/1-login.png)
+
+![2-overview](https://github.com/knstvk/akkount/blob/master/img/2-overview.png)
+
+![3-operations-mobile](https://github.com/knstvk/akkount/blob/master/img/3-operations-mobile.png)
+
 Features
 --------
 
