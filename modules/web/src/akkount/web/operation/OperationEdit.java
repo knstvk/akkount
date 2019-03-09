@@ -5,20 +5,24 @@ import akkount.entity.Operation;
 import akkount.entity.OperationType;
 import akkount.service.UserDataKeys;
 import akkount.service.UserDataService;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.TimeSource;
-import com.haulmont.cuba.gui.WindowParams;
-import com.haulmont.cuba.gui.components.AbstractEditor;
+import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.components.GroupBoxLayout;
 import com.haulmont.cuba.gui.components.ValidationErrors;
+import com.haulmont.cuba.gui.model.DataContext;
+import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 import javax.inject.Inject;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 
-public class OperationEdit extends AbstractEditor<Operation> {
+@UiController("akk$Operation.edit")
+@UiDescriptor("operation-edit.xml")
+@EditedEntityContainer("operationDc")
+public class OperationEdit extends StandardEditor<Operation> {
 
     public static final String LAST_OPERATION_DATE_ATTR = "lastOperationDate";
 
@@ -36,50 +40,54 @@ public class OperationEdit extends AbstractEditor<Operation> {
 
     private OperationFrame operationFrame;
 
-    @Override
-    public void init(Map<String, Object> params) {
-        Operation operation = (Operation) WindowParams.ITEM.getEntity(params);
+    @Inject
+    private Messages messages;
+
+    @Inject
+    private Fragments fragments;
+
+    @Subscribe
+    public void onBeforeShow(BeforeShowEvent beforeShowEvent) {
+        Operation operation = getEditedEntity();
         if (operation.getOpType() == null)
             operation.setOpType(OperationType.EXPENSE);
+        frameContainer.setCaption(messages.getMessage(operation.getOpType()));
 
         String frameId = operation.getOpType().name().toLowerCase() + "-frame";
 
-        operationFrame = (OperationFrame) openFrame(frameContainer, frameId, params);
-
-        frameContainer.setCaption(messages.getMessage(operation.getOpType()));
+        operationFrame = (OperationFrame) fragments.create(this, frameId);
+        operationFrame.postInit(getEditedEntity());
+        frameContainer.add(operationFrame.getFragment());
     }
 
-    @Override
-    protected void initNewItem(Operation item) {
-        item.setOpDate(loadDate());
-        switch (item.getOpType()) {
+    @Subscribe
+    protected void initNewItem(InitEntityEvent<Operation> initEntityEvent) {
+        Operation operation = initEntityEvent.getEntity();
+        operation.setOpDate(loadDate());
+        switch (operation.getOpType()) {
             case EXPENSE:
-                item.setAcc1(loadAccount(UserDataKeys.OP_EXPENSE_ACCOUNT));
+                operation.setAcc1(loadAccount(UserDataKeys.OP_EXPENSE_ACCOUNT));
                 break;
             case INCOME:
-                item.setAcc2(loadAccount(UserDataKeys.OP_INCOME_ACCOUNT));
+                operation.setAcc2(loadAccount(UserDataKeys.OP_INCOME_ACCOUNT));
                 break;
             case TRANSFER:
-                item.setAcc1(loadAccount(UserDataKeys.OP_TRANSFER_EXPENSE_ACCOUNT));
-                item.setAcc2(loadAccount(UserDataKeys.OP_TRANSFER_INCOME_ACCOUNT));
+                operation.setAcc1(loadAccount(UserDataKeys.OP_TRANSFER_EXPENSE_ACCOUNT));
+                operation.setAcc2(loadAccount(UserDataKeys.OP_TRANSFER_INCOME_ACCOUNT));
                 break;
         }
     }
 
     @Override
-    protected void postInit() {
-        operationFrame.postInit(getItem());
+    protected ValidationErrors validateScreen() {
+        ValidationErrors validationErrors = super.validateScreen();
+        operationFrame.postValidate(validationErrors);
+        return validationErrors;
     }
 
-    @Override
-    protected void postValidate(ValidationErrors errors) {
-        operationFrame.postValidate(errors);
-    }
-
-    @Override
-    protected boolean postCommit(boolean committed, boolean close) {
-        userSession.setAttribute(LAST_OPERATION_DATE_ATTR, getItem().getOpDate());
-        return true;
+    @Subscribe(target = Target.DATA_CONTEXT)
+    protected void postCommit(DataContext.PostCommitEvent postCommitEvent) {
+        userSession.setAttribute(LAST_OPERATION_DATE_ATTR, getEditedEntity().getOpDate());
     }
 
     private Account loadAccount(String key) {
@@ -90,5 +98,4 @@ public class OperationEdit extends AbstractEditor<Operation> {
         Date date = userSession.getAttribute(LAST_OPERATION_DATE_ATTR);
         return date != null ? date : DateUtils.truncate(timeSource.currentTimestamp(), Calendar.DAY_OF_MONTH);
     }
-
 }

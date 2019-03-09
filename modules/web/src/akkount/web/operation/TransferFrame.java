@@ -1,31 +1,35 @@
 package akkount.web.operation;
 
 import akkount.entity.Operation;
-import com.haulmont.cuba.gui.components.AbstractFrame;
 import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.components.ValidationErrors;
-import com.haulmont.cuba.gui.data.Datasource;
-import org.apache.commons.lang.StringUtils;
+import com.haulmont.cuba.gui.model.InstanceContainer;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
+import com.haulmont.cuba.gui.screen.UiController;
+import com.haulmont.cuba.gui.screen.UiDescriptor;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 
-public class TransferFrame extends AbstractFrame implements OperationFrame {
+@UiController("transfer-frame")
+@UiDescriptor("transfer-frame.xml")
+public class TransferFrame extends ScreenFragment implements OperationFrame {
 
     @Inject
-    private Datasource<Operation> operationDs;
+    private InstanceContainer<Operation> operationDc;
 
     @Inject
-    private TextField amount1Field;
+    private TextField<String> amount1Field;
     @Inject
-    private TextField amount2Field;
+    private TextField<String> amount2Field;
 
     @Inject
-    private Label currency1Lab;
+    private Label<String> currency1Lab;
 
     @Inject
-    private Label currency2Lab;
+    private Label<String> currency2Lab;
 
     @Inject
     private AmountCalculator amountCalculator;
@@ -44,7 +48,7 @@ public class TransferFrame extends AbstractFrame implements OperationFrame {
         setCurrency1Label(item);
         setCurrency2Label(item);
 
-        operationDs.addItemPropertyChangeListener(e -> {
+        operationDc.addItemPropertyChangeListener(e -> {
             switch (e.getProperty()) {
                 case "acc1":
                     setCurrency1Label(e.getItem());
@@ -60,11 +64,11 @@ public class TransferFrame extends AbstractFrame implements OperationFrame {
     public void postValidate(ValidationErrors errors) {
         BigDecimal value1 = amountCalculator.calculateAmount(amount1Field, errors);
         if (value1 != null)
-            operationDs.getItem().setAmount1(value1);
+            operationDc.getItem().setAmount1(value1);
 
         BigDecimal value2 = amountCalculator.calculateAmount(amount2Field, errors);
         if (value2 != null)
-            operationDs.getItem().setAmount2(value2);
+            operationDc.getItem().setAmount2(value2);
     }
 
     private void setCurrency2Label(Operation operation) {

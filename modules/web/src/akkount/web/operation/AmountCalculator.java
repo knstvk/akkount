@@ -8,7 +8,7 @@ import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.components.ValidationErrors;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
@@ -43,7 +43,7 @@ public class AmountCalculator {
     }
 
     @Nullable
-    public BigDecimal calculateAmount(TextField amountField, ValidationErrors errors) {
+    public BigDecimal calculateAmount(TextField<String> amountField, ValidationErrors errors) {
         String text = amountField.getValue();
         if (StringUtils.isBlank(text))
             return null;

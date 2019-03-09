@@ -1,57 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="akkount.web.operation.ExpenseFrame"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         messagesPack="akkount.web.operation">
-    <dsContext>
-        <collectionDatasource id="categoriesDs"
-                              class="akkount.entity.Category"
-                              view="_minimal">
-            <query>
-                <![CDATA[select e from akk$Category e where e.catType = 'E' order by e.name]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
+    <data>
+        <collection id="categoriesDc"
+                    class="akkount.entity.Category"
+                    view="_minimal">
+            <loader>
+                <query><![CDATA[select e from akk$Category e where e.catType = 'E' order by e.name]]></query>
+            </loader>
+        </collection>
+        <instance id="operationDc"
+                  class="akkount.entity.Operation"
+                  view="operation-edit"
+                  provided="true"/>
+        <collection id="accountsDc" class="akkount.entity.Account" view="_local" provided="true"/>
+    </data>
     <layout>
-        <grid spacing="true"
-              width="100%">
+        <grid spacing="true" width="100%">
             <columns>
                 <column flex="0.0"/>
                 <column flex="1.0"/>
             </columns>
             <rows>
                 <row>
-                    <label align="MIDDLE_LEFT"
-                           value="msg://account"/>
-                    <lookupPickerField datasource="operationDs"
-                                       optionsDatasource="accountsDs"
-                                       property="acc1"
-                                       required="true"
-                                       width="100%">
+                    <label align="MIDDLE_LEFT" value="msg://account"/>
+                    <lookupPickerField dataContainer="operationDc" optionsContainer="accountsDc" property="acc1"
+                                       required="true" width="100%">
                         <actions>
                             <action id="lookup"/>
                         </actions>
                     </lookupPickerField>
                 </row>
                 <row>
-                    <label align="MIDDLE_LEFT"
-                           value="msg://amount"/>
-                    <hbox spacing="true"
-                          width="100%">
-                        <textField id="amountField"
-                                   required="true"
-                                   requiredMessage="msg://amountIsRequired"
+                    <label align="MIDDLE_LEFT" value="msg://amount"/>
+                    <hbox spacing="true" width="100%">
+                        <textField id="amountField" required="true" requiredMessage="msg://amountIsRequired"
                                    width="100%"/>
-                        <label id="currencyLab"
-                               align="MIDDLE_LEFT"
-                               width="30px"/>
+                        <label id="currencyLab" align="MIDDLE_LEFT" width="30px"/>
                     </hbox>
                 </row>
                 <row>
-                    <label align="MIDDLE_LEFT"
-                           value="msg://category"/>
-                    <lookupPickerField datasource="operationDs"
-                                       optionsDatasource="categoriesDs"
-                                       property="category"
+                    <label align="MIDDLE_LEFT" value="msg://category"/>
+                    <lookupPickerField dataContainer="operationDc" optionsContainer="categoriesDc" property="category"
                                        width="100%">
                         <actions>
                             <action id="lookup"/>
@@ -59,12 +49,8 @@
                     </lookupPickerField>
                 </row>
                 <row>
-                    <label align="MIDDLE_LEFT"
-                           value="msg://comment"/>
-                    <textArea datasource="operationDs"
-                              property="comments"
-                              rows="3"
-                              width="100%"/>
+                    <label align="MIDDLE_LEFT" value="msg://comment"/>
+                    <textArea dataContainer="operationDc" property="comments" rows="3" width="100%"/>
                 </row>
             </rows>
         </grid>

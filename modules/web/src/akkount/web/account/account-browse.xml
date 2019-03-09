@@ -1,31 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        caption="msg://browseCaption"
-        class="akkount.web.account.AccountBrowse"
-        lookupComponent="accountTable"
-        messagesPack="akkount.web.account">
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd" caption="msg://browseCaption"
+        class="akkount.web.account.AccountBrowse" lookupComponent="accountTable" messagesPack="akkount.web.account">
     <dsContext>
-        <collectionDatasource id="accountDs"
-                              class="akkount.entity.Account"
-                              view="account-with-currency">
-            <query>
-                <![CDATA[select e from akk$Account e]]>
-            </query>
+        <collectionDatasource id="accountDs" class="akkount.entity.Account" view="account-with-currency">
+            <query><![CDATA[select e from akk$Account e]]></query>
         </collectionDatasource>
     </dsContext>
     <layout spacing="true">
-        <table id="accountTable"
-               height="100%"
-               multiselect="true"
-               width="100%">
+        <table id="accountTable" height="100%" multiselect="true" width="100%">
             <actions>
                 <action id="create"/>
                 <action id="edit"/>
                 <action id="remove"/>
                 <action id="refresh"/>
-                <action id="recalcBalance"
-                        caption="msg://recalcBalance"
-                        invoke="onRecalcBalance"/>
+                <action id="recalcBalance" caption="msg://recalcBalance" invoke="onRecalcBalance"/>
             </actions>
             <columns>
                 <column id="name"/>
@@ -36,16 +24,11 @@
             </columns>
             <rows datasource="accountDs"/>
             <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
-                <button id="createBtn"
-                        action="accountTable.create"/>
-                <button id="editBtn"
-                        action="accountTable.edit"/>
-                <button id="removeBtn"
-                        action="accountTable.remove"/>
-                <button id="refreshBtn"
-                        action="accountTable.refresh"/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="createBtn" action="accountTable.create"/>
+                <button id="editBtn" action="accountTable.edit"/>
+                <button id="removeBtn" action="accountTable.remove"/>
+                <button id="refreshBtn" action="accountTable.refresh"/>
                 <button action="accountTable.recalcBalance"/>
             </buttonsPanel>
         </table>

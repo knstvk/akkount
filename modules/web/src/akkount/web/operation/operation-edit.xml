@@ -1,42 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editCaption"
-        class="akkount.web.operation.OperationEdit"
-        datasource="operationDs"
         messagesPack="akkount.web.operation">
-    <dsContext>
-        <datasource id="operationDs"
-                    class="akkount.entity.Operation"
-                    view="operation-edit"/>
-        <collectionDatasource id="accountsDs"
-                              class="akkount.entity.Account"
-                              view="_local">
-            <query>
-                <![CDATA[select e from akk$Account e order by e.name]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
-    <layout expand="windowActions"
+    <data>
+        <instance id="operationDc"
+                  class="akkount.entity.Operation"
+                  view="operation-edit">
+            <loader/>
+        </instance>
+        <collection id="accountsDc"
+                    class="akkount.entity.Account"
+                    view="_local">
+            <loader id="accountsLd">
+                <query><![CDATA[select e from akk$Account e order by e.name]]></query>
+            </loader>
+        </collection>
+    </data>
+    <layout expand="editActions"
             margin="true"
             spacing="true">
         <hbox spacing="true">
             <label align="MIDDLE_LEFT"
                    value="msg://dateLab"/>
-            <dateField datasource="operationDs"
+            <dateField dataContainer="operationDc"
                        property="opDate"/>
-            <label id="weekDayLab"
-                   align="MIDDLE_LEFT"
-                   datasource="operationDs"
-                   property="opDate">
-                <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
-                           format="EEEE"/>
+            <label id="weekDayLab" align="MIDDLE_LEFT" dataContainer="operationDc" property="opDate">
+                <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="EEEE"/>
             </label>
         </hbox>
         <groupBox id="frameContainer"
                   stylename="light"
                   width="400px"/>
-        <frame id="windowActions"
-               screen="editWindowActions"
-               stylename="window-actions"/>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
     </layout>
 </window>

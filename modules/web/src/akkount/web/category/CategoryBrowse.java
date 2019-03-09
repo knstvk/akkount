@@ -1,6 +1,11 @@
 package akkount.web.category;
 
-import com.haulmont.cuba.gui.components.AbstractLookup;
+import akkount.entity.Category;
+import com.haulmont.cuba.gui.screen.*;
 
-public class CategoryBrowse extends AbstractLookup {
+@UiController("akk$Category.lookup")
+@UiDescriptor("category-browse.xml")
+@LookupComponent("categoryTable")
+@LoadDataBeforeShow
+public class CategoryBrowse extends StandardLookup<Category> {
 }

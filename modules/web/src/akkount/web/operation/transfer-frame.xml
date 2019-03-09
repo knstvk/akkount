@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="akkount.web.operation.TransferFrame"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         messagesPack="akkount.web.operation">
-    <dsContext/>
+    <data>
+        <instance id="operationDc"
+                  class="akkount.entity.Operation"
+                  view="operation-edit"
+                  provided="true"/>
+        <collection id="accountsDc" class="akkount.entity.Account" view="_local" provided="true"/>
+    </data>
     <layout>
         <grid spacing="true"
               width="100%">
@@ -13,8 +18,8 @@
             <rows>
                 <row>
                     <label value="msg://account1"/>
-                    <lookupPickerField datasource="operationDs"
-                                       optionsDatasource="accountsDs"
+                    <lookupPickerField dataContainer="operationDc"
+                                       optionsContainer="accountsDc"
                                        property="acc1"
                                        required="true"
                                        width="100%">
@@ -38,8 +43,8 @@
                 </row>
                 <row>
                     <label value="msg://account2"/>
-                    <lookupPickerField datasource="operationDs"
-                                       optionsDatasource="accountsDs"
+                    <lookupPickerField dataContainer="operationDc"
+                                       optionsContainer="accountsDc"
                                        property="acc2"
                                        required="true"
                                        width="100%">
@@ -63,7 +68,7 @@
                 </row>
                 <row>
                     <label value="msg://comment"/>
-                    <textArea datasource="operationDs"
+                    <textArea dataContainer="operationDc"
                               property="comments"
                               rows="3"
                               width="100%"/>

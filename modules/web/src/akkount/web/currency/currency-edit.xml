@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editCaption"
-        class="akkount.web.currency.CurrencyEdit"
-        datasource="currencyDs"
         messagesPack="akkount.web.currency">
-    <dsContext>
-        <datasource id="currencyDs"
+    <data>
+        <instance id="currencyDc"
                     class="akkount.entity.Currency"
-                    view="_local"/>
-    </dsContext>
+                    view="_local">
+            <loader/>
+        </instance>
+    </data>
     <dialogMode forceDialog="true"
                 width="AUTO"/>
-    <layout spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="currencyDs">
-            <field id="code"
+    <layout spacing="true" expand="editActions">
+        <form id="fieldGroup"
+                    dataContainer="currencyDc">
+            <textField id="codeField" property="code"
                    width="250px"/>
-            <field id="name"
+            <textField id="nameField" property="name"
                    width="250px"/>
-        </fieldGroup>
-        <frame id="windowActions"
-               align="TOP_CENTER"
-               screen="editWindowActions"
-               width="AUTO"/>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
     </layout>
 </window>

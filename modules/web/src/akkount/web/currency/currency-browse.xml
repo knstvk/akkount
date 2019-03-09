@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://browseCaption"
-        class="akkount.web.currency.CurrencyBrowse"
-        lookupComponent="currencyTable"
         messagesPack="akkount.web.currency">
-    <dsContext>
-        <collectionDatasource id="currencyDs"
+    <data>
+        <collection id="currencyDc"
                               class="akkount.entity.Currency"
                               view="_local">
-            <query>
-                <![CDATA[select e from akk$Currency e]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
+            <loader>
+                <query>
+                    <![CDATA[select e from akk$Currency e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <layout spacing="true">
         <table id="currencyTable"
                height="100%"
-               width="100%">
+               width="100%" dataContainer="currencyDc">
             <actions>
-                <action id="create"/>
-                <action id="edit"/>
-                <action id="remove"/>
-                <action id="refresh"/>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+                <action id="refresh" type="refresh"/>
             </actions>
             <columns>
                 <column id="code"/>
                 <column id="name"/>
             </columns>
-            <rows datasource="currencyDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">

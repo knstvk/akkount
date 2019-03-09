@@ -1,8 +1,7 @@
 
 buildscript {
-    ext.cubaVersion = '6.10.4'
+    ext.cubaVersion = '7.0-SNAPSHOT'
     repositories {
-        mavenLocal()
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
@@ -21,12 +20,10 @@ def modulePrefix = 'app'
 def globalModule = project(":${modulePrefix}-global" )
 def coreModule = project(":${modulePrefix}-core" )
 def webModule = project(":${modulePrefix}-web" )
-def webThemesModule= project(":${modulePrefix}-web-themes" )
 def polymerClientModule = project(":${modulePrefix}-polymer-client" )
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
-apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 cuba {
@@ -49,12 +46,11 @@ dependencies {
     appComponent("com.haulmont.addon.globalevents:cubaglevt-global:0.3.0")
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.2.9'
+def hsql = 'org.hsqldb:hsqldb:2.4.1'
 
 configure([globalModule, coreModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'idea')
     apply(plugin: 'cuba')
 
     dependencies {
@@ -73,7 +69,9 @@ configure([globalModule, coreModule, webModule]) {
 
 configure(globalModule) {
     entitiesEnhancing {
-        main { enabled = true }
+        main {
+            enabled = true
+        }
     }
 }
 
@@ -87,7 +85,7 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        provided(servletApi)
+        compileOnly(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
         testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-2') {
@@ -157,7 +155,7 @@ configure(webModule) {
     }
 
     dependencies {
-        provided(servletApi)
+        compileOnly(servletApi)
         compile(globalModule)
 
     }
@@ -203,30 +201,9 @@ configure(webModule) {
 
 
 
-configure(webThemesModule) {
-    apply(plugin: 'java')
-    apply(plugin: 'maven')
-    apply(plugin: 'cuba')
-
-    appModuleType = 'web-themes'
-
-    buildDir = file('../build/scss-themes')
-
-    sourceSets {
-        main {
-            java {
-                srcDir '.'
-            }
-            resources {
-                srcDir '.'
-            }
-        }
-    }
-}
 
 configure(polymerClientModule) {
     apply(plugin: 'cuba')
-    apply(plugin: 'idea')
 
     def frontAppDir = "${modulePrefix}-front"
 
@@ -279,7 +256,7 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy" , ":${modulePref
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
+    gradleVersion = '4.10.1'
 }
 
 task buildWar(type: CubaWarBuilding) {

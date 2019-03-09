@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://browseCaption"
-        class="akkount.web.category.CategoryBrowse"
-        lookupComponent="categoryTable"
         messagesPack="akkount.web.category">
-    <dsContext>
-        <collectionDatasource id="categoryDs"
+    <data>
+        <collection id="categoryDc"
                               class="akkount.entity.Category"
                               view="_local">
-            <query>
-                <![CDATA[select e from akk$Category e]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
+            <loader>
+                <query>
+                    <![CDATA[select e from akk$Category e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <layout spacing="true">
         <table id="categoryTable"
                height="100%"
-               width="100%">
+               width="100%" dataContainer="categoryDc">
             <actions>
-                <action id="create"/>
-                <action id="edit"/>
-                <action id="remove"/>
-                <action id="refresh"/>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+                <action id="refresh" type="refresh"/>
             </actions>
             <columns>
                 <column id="name"/>
                 <column id="description"/>
                 <column id="catType"/>
             </columns>
-            <rows datasource="categoryDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">

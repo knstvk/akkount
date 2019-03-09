@@ -11,28 +11,29 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.ItemTrackingAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class CategoriesReport extends AbstractWindow {
 
     @Inject
     protected OptionsGroup categoryTypeGroup;
     @Inject
-    protected LookupField currencyField;
+    protected LookupField<Currency> currencyField;
     @Inject
-    protected LookupField periodTypeField;
+    protected LookupField<Integer> periodTypeField;
     @Inject
-    protected DateField from1;
+    protected DateField<Date> from1;
     @Inject
-    protected DateField from2;
+    protected DateField<Date> from2;
     @Inject
-    protected DateField to1;
+    protected DateField<Date> to1;
     @Inject
-    protected DateField to2;
+    protected DateField<Date> to2;
     @Inject
     protected Table table1;
     @Inject
@@ -84,7 +85,7 @@ public class CategoriesReport extends AbstractWindow {
         currencyField.addValueChangeListener(event -> {
             refreshDs1();
             refreshDs2();
-            userDataService.saveEntity(UserDataKeys.CAT_REP_CURRENCY, (Currency) event.getValue());
+            userDataService.saveEntity(UserDataKeys.CAT_REP_CURRENCY, event.getValue());
         });
     }
 
@@ -102,7 +103,7 @@ public class CategoriesReport extends AbstractWindow {
     }
 
     private void initPeriodTypes() {
-        Map<String, Object> options = new LinkedHashMap<>();
+        Map<String, Integer> options = new LinkedHashMap<>();
         options.put(getMessage("1month"), 1);
         options.put(getMessage("2months"), 2);
         options.put(getMessage("3months"), 3);
@@ -113,7 +114,7 @@ public class CategoriesReport extends AbstractWindow {
         periodTypeField.setValue(1);
 
         periodTypeField.addValueChangeListener(event -> {
-            Integer months = (Integer) event.getValue();
+            Integer months = event.getValue();
             if (months != null) {
                 doNotRefresh = true;
                 try {
@@ -139,11 +140,11 @@ public class CategoriesReport extends AbstractWindow {
         from2.setValue(DateUtils.addMonths(now, -1));
         to2.setValue(now);
 
-        ValueChangeListener period1Listener = event -> refreshDs1();
+        Consumer<HasValue.ValueChangeEvent<Date>> period1Listener = event -> refreshDs1();
         from1.addValueChangeListener(period1Listener);
         to1.addValueChangeListener(period1Listener);
 
-        ValueChangeListener period2Listener = event -> refreshDs2();
+        Consumer<HasValue.ValueChangeEvent<Date>> period2Listener = event -> refreshDs2();
         from2.addValueChangeListener(period2Listener);
         to2.addValueChangeListener(period2Listener);
     }

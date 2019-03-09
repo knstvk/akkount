@@ -1,12 +1,11 @@
 package akkount.web.currency;
 
-import java.util.Map;
-import com.haulmont.cuba.gui.components.AbstractEditor;
 import akkount.entity.Currency;
+import com.haulmont.cuba.gui.screen.*;
 
-public class CurrencyEdit extends AbstractEditor<Currency> {
-
-    @Override
-    public void init(Map<String, Object> params) {
-    }
+@UiController("akk$Currency.edit")
+@UiDescriptor("currency-edit.xml")
+@EditedEntityContainer("currencyDc")
+@LoadDataBeforeShow
+public class CurrencyEdit extends StandardEditor<Currency> {
 }

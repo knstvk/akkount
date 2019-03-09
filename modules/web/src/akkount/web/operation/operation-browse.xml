@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://browseCaption"
-        class="akkount.web.operation.OperationBrowse"
         focusComponent="operationTable"
-        lookupComponent="operationTable"
         messagesPack="akkount.web.operation">
-    <dsContext>
-        <groupDatasource id="operationDs"
+    <data>
+        <collection id="operationsDc"
                          class="akkount.entity.Operation"
                          view="operation-browse">
-            <query>
-                <![CDATA[select e from akk$Operation e order by e.opDate desc, e.createTs desc]]>
-            </query>
-        </groupDatasource>
-    </dsContext>
+            <loader id="operationsDl">
+                <query>
+                    <![CDATA[select e from akk$Operation e order by e.opDate desc, e.createTs desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <layout expand="operationTable"
             spacing="true">
         <filter id="filter"
-                datasource="operationDs">
+                dataLoader="operationsDl">
             <properties include=".*"/>
         </filter>
         <groupTable id="operationTable"
-                    width="100%">
+                    width="100%" dataContainer="operationsDc">
             <actions>
-                <action id="edit"/>
-                <action id="remove"/>
-                <action id="excel"/>
+                <action id="createExpense" caption="msg://akkount.entity/OperationType.EXPENSE"/>
+                <action id="createIncome" caption="msg://akkount.entity/OperationType.INCOME"/>
+                <action id="createTransfer" caption="msg://akkount.entity/OperationType.TRANSFER"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+                <action id="excel" type="excel"/>
             </actions>
             <columns>
                 <column id="opType"/>
@@ -45,13 +48,12 @@
                 <column id="comments"/>
                 <column id="createdBy"/>
             </columns>
-            <rows datasource="operationDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createExpenseBtn"/>
-                <button id="createIncomeBtn"/>
-                <button id="createTransferBtn"/>
+                <button id="createExpenseBtn" action="operationTable.createExpense"/>
+                <button id="createIncomeBtn" action="operationTable.createIncome"/>
+                <button id="createTransferBtn" action="operationTable.createTransfer"/>
                 <button id="editBtn"
                         action="operationTable.edit"/>
                 <button id="removeBtn"
