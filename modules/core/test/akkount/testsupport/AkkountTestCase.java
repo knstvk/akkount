@@ -1,43 +1,26 @@
 package akkount.testsupport;
 
+import akkount.AkkTestContainer;
 import akkount.entity.Account;
 import akkount.entity.Currency;
 import com.haulmont.bali.db.QueryRunner;
-import com.haulmont.cuba.core.CubaTestCase;
 import com.haulmont.cuba.core.Transaction;
-import com.haulmont.cuba.testsupport.TestContext;
-import com.haulmont.cuba.testsupport.TestDataSource;
+import org.junit.Before;
+import org.junit.ClassRule;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
-public class AkkountTestCase extends CubaTestCase {
+public class AkkountTestCase {
+
+    @ClassRule
+    public static AkkTestContainer cont = AkkTestContainer.Common.INSTANCE;
 
     protected UUID account1Id;
     protected UUID account2Id;
 
-    @Override
-    protected void initDataSources() throws Exception {
-        Class.forName("org.hsqldb.jdbc.JDBCDriver");
-        TestDataSource ds = new TestDataSource("jdbc:hsqldb:hsql://localhost:9002/akk_test", "sa", "");
-        TestContext.getInstance().bind("java:comp/env/jdbc/CubaDS", ds);
-    }
-
-    @Override
-    protected List<String> getTestAppProperties() {
-        String[] files = {
-                "cuba-app.properties",
-                "app.properties",
-                "test-app.properties",
-        };
-        return Arrays.asList(files);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         cleanupTable("AKK_OPERATION");
         cleanupTable("AKK_BALANCE");
         cleanupTable("AKK_ACCOUNT");
@@ -47,33 +30,30 @@ public class AkkountTestCase extends CubaTestCase {
     }
 
     private void initTestData() {
-        Transaction tx = persistence.createTransaction();
-        try {
+        try (Transaction tx = cont.persistence().createTransaction()) {
             Currency currency1 = new Currency();
             currency1.setCode("TST");
             currency1.setName("Test Currency");
-            persistence.getEntityManager().persist(currency1);
+            cont.persistence().getEntityManager().persist(currency1);
 
             Account account1 = new Account();
             account1.setCurrency(currency1);
             account1.setName("TestAccount1");
-            persistence.getEntityManager().persist(account1);
+            cont.persistence().getEntityManager().persist(account1);
             account1Id = account1.getId();
 
             Account account2 = new Account();
             account2.setCurrency(currency1);
             account2.setName("TestAccount2");
-            persistence.getEntityManager().persist(account2);
+            cont.persistence().getEntityManager().persist(account2);
             account2Id = account2.getId();
 
             tx.commit();
-        } finally {
-            tx.end();
         }
     }
 
     protected void cleanupTable(String table) throws SQLException {
-        QueryRunner runner = new QueryRunner(persistence.getDataSource());
+        QueryRunner runner = new QueryRunner(cont.persistence().getDataSource());
         runner.update("delete from " + table);
     }
 }

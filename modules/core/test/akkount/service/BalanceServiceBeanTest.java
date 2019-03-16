@@ -6,6 +6,7 @@ import akkount.entity.Operation;
 import akkount.entity.OperationType;
 import akkount.testsupport.AkkountTestCase;
 import com.haulmont.cuba.core.EntityManager;
+import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.TypedQuery;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -16,11 +17,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import static org.junit.Assert.*;
+
 public class BalanceServiceBeanTest extends AkkountTestCase {
+
+    private Persistence persistence;
 
     public void setUp() throws Exception {
         super.setUp();
-
+        persistence = cont.persistence();
     }
 
     private Date date(String dateStr) {
