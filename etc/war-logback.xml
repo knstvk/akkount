@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration debug="false" packagingData="true">
+
+    <property name="logDir" value="${app.home}/logs"/>
+
+    <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/app.log</file>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${logDir}/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread%X{cubaApp}%X{cubaUser}] %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %-40logger{36}- %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root>
+        <appender-ref ref="Console"/>
+        <appender-ref ref="File"/>
+    </root>
+
+    <!-- Begin CUBA -->
+
+    <logger name="com.haulmont.cuba" level="DEBUG"/>
+
+    <logger name="com.haulmont.cuba.core.sys" level="INFO"/>
+
+    <logger name="com.haulmont.cuba.core.sys.CubaDefaultListableBeanFactory" level="WARN"/>
+    
+    <logger name="com.haulmont.cuba.core.app.scheduling" level="INFO"/>
+
+    <logger name="com.haulmont.cuba.web.sys" level="INFO"/>
+
+    <logger name="com.haulmont.cuba.portal" level="INFO"/>
+
+    <logger name="com.haulmont.restapi.sys" level="INFO"/>
+
+    <logger name="com.haulmont.cuba.core.app.LockManager" level="INFO"/>
+
+    <!-- End CUBA -->
+
+    <logger name="eclipselink" level="WARN"/>
+
+    <logger name="eclipselink.sql" level="INFO"/>
+
+    <logger name="org.springframework" level="WARN"/>
+
+    <logger name="com.vaadin" level="WARN"/>
+
+    <logger name="org.atmosphere" level="WARN"/>
+
+    <logger name="org.activiti" level="INFO"/>
+
+    <logger name="org.jgroups" level="INFO"/>
+    
+    <logger name="freemarker" level="INFO"/>
+
+    <logger name="org.thymeleaf.TemplateEngine" level="INFO"/>
+
+    <logger name="org.docx4j" level="WARN"/>
+    
+	<logger name="org.xlsx4j" level="WARN"/>
+
+    <logger name="org.apache.fop.apps.FOUserAgent" level="WARN"/>
+
+    <logger name="org.hibernate" level="WARN"/>
+
+    <logger name="sun" level="INFO"/>
+
+    <logger name="com.sun" level="INFO"/>
+
+    <logger name="javax" level="INFO"/>
+
+    <logger name="org.apache" level="INFO"/>
+
+    <logger name="org.eclipse.jetty" level="INFO"/>
+
+    <logger name="org.docx4j.utils.ResourceUtils" level="ERROR"/>
+
+    <logger name="org.docx4j.Docx4jProperties" level="ERROR"/>
+
+    <logger name="org.xlsx4j.jaxb.Context" level="ERROR"/>
+
+    <logger name="org.docx4j.utils.XSLTUtils" level="ERROR"/>
+
+    <logger name="org.docx4j.jaxb.JaxbValidationEventHandler" level="ERROR"/>
+
+    <logger name="org.docx4j.TraversalUtil" level="ERROR"/>
+
+    <logger name="org.docx4j.fonts" level="ERROR"/>
+
+    <!-- Begin Perf4J  -->
+
+    <appender name="PerfStatFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/perfstat.log</file>
+        <append>true</append>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/perfstat.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CoalescingStatistics" class="org.perf4j.logback.AsyncCoalescingStatisticsAppender">
+        <param name="TimeSlice" value="60000"/>
+        <appender-ref ref="PerfStatFile"/>
+    </appender>
+
+    <appender name="UIPerfStatFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/perfstat-ui.log</file>
+        <append>true</append>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/perfstat-ui.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="UICoalescingStatistics" class="org.perf4j.logback.AsyncCoalescingStatisticsAppender">
+        <param name="TimeSlice" value="120000"/>
+        <appender-ref ref="UIPerfStatFile"/>
+    </appender>
+
+    <logger name="org.perf4j.TimingLogger" additivity="false" level="INFO">
+        <appender-ref ref="CoalescingStatistics"/>
+    </logger>
+
+    <logger name="com.haulmont.cuba.gui.logging.UIPerformanceLogger" additivity="false" level="INFO">
+        <appender-ref ref="UICoalescingStatistics"/>
+    </logger>
+
+    <!-- End Perf4J  -->
+
+</configuration>
