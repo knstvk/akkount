@@ -27,7 +27,7 @@
                     <lookupPickerField dataContainer="operationDc" optionsContainer="accountsDc" property="acc1"
                                        required="true" width="100%">
                         <actions>
-                            <action id="lookup"/>
+                            <action id="lookup" type="picker_lookup"/>
                         </actions>
                     </lookupPickerField>
                 </row>
@@ -44,7 +44,7 @@
                     <lookupPickerField dataContainer="operationDc" optionsContainer="categoriesDc" property="category"
                                        width="100%">
                         <actions>
-                            <action id="lookup"/>
+                            <action id="lookup" type="picker_lookup"/>
                         </actions>
                     </lookupPickerField>
                 </row>

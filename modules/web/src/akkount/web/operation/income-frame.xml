@@ -33,7 +33,7 @@
                                        required="true"
                                        width="100%">
                         <actions>
-                            <action id="lookup"/>
+                            <action id="lookup" type="picker_lookup"/>
                         </actions>
                     </lookupPickerField>
                 </row>
@@ -57,7 +57,7 @@
                                        property="category"
                                        width="100%">
                         <actions>
-                            <action id="lookup"/>
+                            <action id="lookup" type="picker_lookup"/>
                         </actions>
                     </lookupPickerField>
                 </row>

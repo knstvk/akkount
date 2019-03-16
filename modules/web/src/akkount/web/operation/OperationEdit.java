@@ -10,6 +10,7 @@ import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.Fragments;
 import com.haulmont.cuba.gui.components.GroupBoxLayout;
 import com.haulmont.cuba.gui.components.ValidationErrors;
+import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.DataContext;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
@@ -22,6 +23,7 @@ import java.util.Date;
 @UiController("akk$Operation.edit")
 @UiDescriptor("operation-edit.xml")
 @EditedEntityContainer("operationDc")
+@LoadDataBeforeShow
 public class OperationEdit extends StandardEditor<Operation> {
 
     public static final String LAST_OPERATION_DATE_ATTR = "lastOperationDate";
@@ -48,6 +50,8 @@ public class OperationEdit extends StandardEditor<Operation> {
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent beforeShowEvent) {
+        getScreenData().loadAll();
+
         Operation operation = getEditedEntity();
         if (operation.getOpType() == null)
             operation.setOpType(OperationType.EXPENSE);

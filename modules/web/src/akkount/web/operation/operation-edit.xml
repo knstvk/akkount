@@ -11,7 +11,7 @@
         <collection id="accountsDc"
                     class="akkount.entity.Account"
                     view="_local">
-            <loader id="accountsLd">
+            <loader id="accountsDl">
                 <query><![CDATA[select e from akk$Account e order by e.name]]></query>
             </loader>
         </collection>
