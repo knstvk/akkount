@@ -1,7 +1,7 @@
 akkount
 =======
 
-<a href="https://travis-ci.org/knstvk/akkount"><img src="https://api.travis-ci.org/knstvk/akkount.svg?branch=master" alt="Build Status" title=""></a>
+<a href="https://travis-ci.com/knstvk/akkount"><img src="https://api.travis-ci.com/knstvk/akkount.svg?branch=master" alt="Build Status" title=""></a>
 
 A simple personal finance application built on [CUBA Platform](https://www.cuba-platform.com).
 
