@@ -23,9 +23,9 @@
         <groupTable id="operationTable"
                     width="100%" dataContainer="operationsDc">
             <actions>
-                <action id="createExpense" caption="msg://akkount.entity/OperationType.EXPENSE"/>
-                <action id="createIncome" caption="msg://akkount.entity/OperationType.INCOME"/>
-                <action id="createTransfer" caption="msg://akkount.entity/OperationType.TRANSFER"/>
+                <action id="createExpense" caption="msg://akkount.entity/OperationType.EXPENSE" shortcut="CTRL-SHIFT-KEY1"/>
+                <action id="createIncome" caption="msg://akkount.entity/OperationType.INCOME" shortcut="CTRL-SHIFT-KEY2"/>
+                <action id="createTransfer" caption="msg://akkount.entity/OperationType.TRANSFER" shortcut="CTRL-SHIFT-KEY3"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
                 <action id="excel" type="excel"/>

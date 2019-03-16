@@ -30,6 +30,7 @@ public class Slack {
     private static final Logger log = LoggerFactory.getLogger(Slack.class);
 
     public String sendMessage(String channel, String message) {
+        log.debug("Sending '{}' to '{}'", message, channel);
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 
             HttpPost httpPost = new HttpPost("https://slack.com/api/chat.postMessage");

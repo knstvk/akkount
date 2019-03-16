@@ -76,6 +76,7 @@ public class SlackController {
             JSONObject jsonObj = new JSONObject(json);
             String token = jsonObj.getString("token");
             if (!token.equals(akkConfig.getSlackVerificationToken())) {
+                log.warn("invalid token: {}", token);
                 return "invalid token";
             }
             String type = jsonObj.getString("type");

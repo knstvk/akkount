@@ -10,6 +10,8 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -32,7 +34,11 @@ public class BotServiceBean implements BotService {
     @Inject
     private TimeSource timeSource;
 
+    private static final Logger log = LoggerFactory.getLogger(BotServiceBean.class);
+
     public String processMessage(String message) {
+        log.debug("Process message '{}'", message);
+
         List<String> parts = Splitter.on(' ').omitEmptyStrings().trimResults().splitToList(message);
 
         BigDecimal amount = null;
