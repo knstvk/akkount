@@ -11,7 +11,7 @@
                 <![CDATA[select o from akk$Operation o order by o.opDate desc, o.createTs desc]]>
                 <filter>
                     <and>
-                        <c>o.category.id = :param$category</c>
+                        <c>o.category = :param$category</c>
                         <c>@dateAfter(o.opDate, :param$fromDate)</c>
                         <c>@dateBefore(o.opDate, :param$toDate)</c>
                         <c>o.acc1.currencyCode = :param$currency1</c>
