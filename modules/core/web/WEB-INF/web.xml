@@ -24,6 +24,6 @@
     </servlet-mapping>
     <context-param>
         <param-name>appComponents</param-name>
-        <param-value>com.haulmont.cuba com.haulmont.addon.globalevents</param-value>
+        <param-value>com.haulmont.cuba com.haulmont.addon.globalevents com.haulmont.addon.restapi</param-value>
     </context-param>
 </web-app>

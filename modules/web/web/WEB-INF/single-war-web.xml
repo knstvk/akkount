@@ -32,7 +32,7 @@
     <!--Application components-->
     <context-param>
         <param-name>appComponents</param-name>
-        <param-value>com.haulmont.cuba com.haulmont.addon.globalevents</param-value>
+        <param-value>com.haulmont.cuba com.haulmont.addon.globalevents com.haulmont.addon.restapi</param-value>
     </context-param>
     <!-- Servlet context listeners that load the application blocks -->
     <listener>
