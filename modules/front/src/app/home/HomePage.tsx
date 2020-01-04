@@ -1,12 +1,10 @@
 import * as React from "react";
-import { FormattedMessage } from "react-intl";
+import Balance from "../balance/Balance";
 
 class HomePage extends React.Component {
   render() {
     return (
-      <div>
-        <FormattedMessage id="home.welcome" /> akkount!
-      </div>
+      <Balance />
     );
   }
 }
