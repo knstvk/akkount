@@ -1,3 +1,4 @@
+import { OperationManagement } from "./app/operation/OperationManagement";
 import { AccountManagement } from "./app/account/AccountManagement";
 import { CurrencyManagement } from "./app/currency/CurrencyManagement";
 import { CategoryManagement } from "./app/category/CategoryManagement";
@@ -43,4 +44,11 @@ menuItems.push({
   menuLink: "/currencyManagement",
   component: CurrencyManagement,
   caption: "CurrencyManagement"
+});
+
+menuItems.push({
+  pathPattern: "/operationManagement/:entityId?",
+  menuLink: "/operationManagement",
+  component: OperationManagement,
+  caption: "OperationManagement"
 });
