@@ -1,3 +1,5 @@
+import { AccountManagement } from "./app/account/AccountManagement";
+import { CurrencyManagement } from "./app/currency/CurrencyManagement";
 import { CategoryManagement } from "./app/category/CategoryManagement";
 import { getMenuItems } from "@cuba-platform/react";
 
@@ -23,8 +25,22 @@ menuItems.push(userSettingsSubMenu);
 */
 
 menuItems.push({
+  pathPattern: "/accountManagement/:entityId?",
+  menuLink: "/accountManagement",
+  component: AccountManagement,
+  caption: "AccountManagement"
+});
+
+menuItems.push({
   pathPattern: "/categoryManagement/:entityId?",
   menuLink: "/categoryManagement",
   component: CategoryManagement,
   caption: "CategoryManagement"
+});
+
+menuItems.push({
+  pathPattern: "/currencyManagement/:entityId?",
+  menuLink: "/currencyManagement",
+  component: CurrencyManagement,
+  caption: "CurrencyManagement"
 });

@@ -11,6 +11,8 @@
   "management.editor.error": "Error",
   "management.editor.cancel": "Cancel",
   "management.editor.submit": "Submit",
+  "router.AccountManagement": "AccountManagement",
+  "router.CurrencyManagement": "CurrencyManagement",
   "router.CategoryManagement": "CategoryManagement",
   "common.alt.logo": "Logo",
   "home.welcome": "Welcome to",
