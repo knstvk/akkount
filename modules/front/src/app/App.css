@@ -1,0 +1,13 @@
+.main-layout {
+  height: 100%;
+}
+
+.narrow-layout {
+  max-width: 1024px;
+  margin: auto;
+}
+
+.narrow-layout.ant-card {
+  max-width: 1024px;
+  margin: auto;
+}
