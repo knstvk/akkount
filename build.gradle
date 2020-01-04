@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '7.1.2'
+    ext.cubaVersion = '7.1.3'
     repositories { 
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
@@ -20,7 +20,6 @@ def modulePrefix = 'app'
 def globalModule = project(":${modulePrefix}-global" )
 def coreModule = project(":${modulePrefix}-core" )
 def webModule = project(":${modulePrefix}-web" )
-def polymerClientModule = project(":${modulePrefix}-polymer-client" )
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
@@ -201,50 +200,10 @@ configure(webModule) {
 }
 
 
-
-
-configure(polymerClientModule) {
-    apply(plugin: 'cuba')
-
-    def frontAppDir = "${modulePrefix}-front"
-
-    task installBowerPackages(type: NodeTask, dependsOn: npmInstall) {
-        script = file("node_modules/bower/bin/bower")
-        args = ['install','-F']
-        inputs.file "bower.json"
-        outputs.dir "bower_components"
-    }
-
-    task assemble(type: NodeTask, dependsOn: installBowerPackages) {
-        script = file("node_modules/polymer-cli/bin/polymer")
-        args = ['build']
-        inputs.dir "./"
-        outputs.dir "build"
-    }
-
-    task deployUnbundled(type: Copy) {
-        from file('./')
-        include 'bower_components/**'
-        include 'src/**'
-        into "$cuba.tomcat.dir/webapps/$frontAppDir"
-    }
-
-    task deploy(type: Copy, dependsOn: [assemble, deployUnbundled]) {
-        from file('build/es6-unbundled')
-        into "$cuba.tomcat.dir/webapps/$frontAppDir"
-    }
-
-    task servePolymer(type: NodeTask, dependsOn: assemble) {
-        script = file("node_modules/gulp/bin/gulp.js")
-        args = ['serve']
-    }
-}
-
 task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf" ) {
     delete("$cuba.tomcat.dir/shared")
     delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core" )
     delete("$cuba.tomcat.dir/webapps/${modulePrefix}" )
-    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-front" )
 }
 
 task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy" , ":${modulePrefix}-web:deploy" ], description: 'Redeploys applications and restarts local Tomcat') << {
@@ -254,10 +213,6 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy" , ":${modulePref
         }
     }
     start.execute()
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.1'
 }
 
 task buildWar(type: CubaWarBuilding) {

@@ -1,7 +1,6 @@
 rootProject.name = 'akkount'
 def modulePrefix = 'app'
-include(":${modulePrefix}-global" , ":${modulePrefix}-core" , ":${modulePrefix}-web", ":${modulePrefix}-polymer-client" )
+include(":${modulePrefix}-global" , ":${modulePrefix}-core" , ":${modulePrefix}-web")
 project(":${modulePrefix}-global" ).projectDir = new File(settingsDir, 'modules/global')
 project(":${modulePrefix}-core" ).projectDir = new File(settingsDir, 'modules/core')
 project(":${modulePrefix}-web" ).projectDir = new File(settingsDir, 'modules/web')
-project(":${modulePrefix}-polymer-client" ).projectDir = new File(settingsDir, 'modules/polymer-client')
