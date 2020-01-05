@@ -1,27 +1,17 @@
 import * as React from "react";
 import "./App.css";
 
-import { Icon, Layout, Menu } from "antd";
-import { observer } from "mobx-react";
+import {Layout} from "antd";
+import {observer} from "mobx-react";
 import Login from "./login/Login";
 import Centered from "./common/Centered";
 import AppHeader from "./header/AppHeader";
-import { NavLink, Route, Switch } from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import HomePage from "./home/HomePage";
-import { menuItems } from "../routing";
-import {
-  injectMainStore,
-  MainStoreInjected,
-  RouteItem,
-  SubMenu
-} from "@cuba-platform/react";
-import { CenteredLoader } from "./CenteredLoader";
-import {
-  FormattedMessage,
-  injectIntl,
-  IntlFormatters,
-  WrappedComponentProps
-} from "react-intl";
+import {menuItems} from "../routing";
+import {injectMainStore, MainStoreInjected, RouteItem, SubMenu} from "@cuba-platform/react";
+import {CenteredLoader} from "./CenteredLoader";
+import {injectIntl, WrappedComponentProps} from "react-intl";
 
 @injectMainStore
 @observer
@@ -43,8 +33,6 @@ class AppComponent extends React.Component<
         </Centered>
       );
     }
-
-    const menuIdx = 1;
 
     return (
       <Layout className="main-layout">
@@ -70,43 +58,6 @@ class AppComponent extends React.Component<
       </Layout>
     );
   }
-}
-
-function menuItem(
-  item: RouteItem | SubMenu,
-  keyString: string,
-  intl: IntlFormatters
-) {
-  // Sub Menu
-
-  if ((item as any).items != null) {
-    //recursively walk through sub menus
-    return (
-      <Menu.SubMenu
-        key={keyString}
-        title={intl.formatMessage({
-          id: "router." + item.caption
-        })}
-      >
-        {(item as SubMenu).items.map((ri, index) =>
-          menuItem(ri, keyString + "-" + (index + 1), intl)
-        )}
-      </Menu.SubMenu>
-    );
-  }
-
-  // Route Item
-
-  const { menuLink } = item as RouteItem;
-
-  return (
-    <Menu.Item key={keyString}>
-      <NavLink to={menuLink}>
-        <Icon type="bars" />
-        <FormattedMessage id={"router." + item.caption} />
-      </NavLink>
-    </Menu.Item>
-  );
 }
 
 function collectRouteItems(items: Array<RouteItem | SubMenu>): RouteItem[] {

@@ -1,32 +1,22 @@
 import * as React from "react";
 
-import { observer } from "mobx-react";
+import {observer} from "mobx-react";
 
-import { Modal, Button, List, Icon, Spin } from "antd";
+import {Button, Icon, List, Modal, Spin} from "antd";
 
-import { Category } from "../../cuba/entities/akk$Category";
-import { Link } from "react-router-dom";
+import {Category} from "../../cuba/entities/akk$Category";
+import {Link} from "react-router-dom";
 
-import {
-  collection,
-  injectMainStore,
-  MainStoreInjected,
-  EntityProperty
-} from "@cuba-platform/react";
+import {collection, EntityProperty, injectMainStore, MainStoreInjected} from "@cuba-platform/react";
 
-import { SerializedEntity } from "@cuba-platform/rest";
-import { CategoryManagement } from "./CategoryManagement";
-import {
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps
-} from "react-intl";
+import {SerializedEntity} from "@cuba-platform/rest";
+import {CategoryManagement} from "./CategoryManagement";
+import {injectIntl, WrappedComponentProps} from "react-intl";
 
 @injectMainStore
 @observer
-class CategoryListComponent extends React.Component<
-  MainStoreInjected & WrappedComponentProps
-> {
+class CategoryListComponent extends React.Component<MainStoreInjected & WrappedComponentProps> {
+
   dataCollection = collection<Category>(Category.NAME, {
     view: "_local",
     sort: "name"

@@ -24,7 +24,6 @@ class Balance extends React.Component<any, BalState> {
 
   componentDidMount(): void {
     restServices.akk_PortalService.getBalance(cubaREST)().then((value: string) => {
-      console.log(value);
       this.setState({balance: JSON.parse(value)});
     });
   }

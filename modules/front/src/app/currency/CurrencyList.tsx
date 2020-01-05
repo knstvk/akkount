@@ -1,32 +1,22 @@
 import * as React from "react";
 
-import { observer } from "mobx-react";
+import {observer} from "mobx-react";
 
-import { Modal, Button, List, Icon, Spin } from "antd";
+import {Button, Icon, List, Modal, Spin} from "antd";
 
-import { Currency } from "../../cuba/entities/akk$Currency";
-import { Link } from "react-router-dom";
+import {Currency} from "../../cuba/entities/akk$Currency";
+import {Link} from "react-router-dom";
 
-import {
-  collection,
-  injectMainStore,
-  MainStoreInjected,
-  EntityProperty
-} from "@cuba-platform/react";
+import {collection, EntityProperty, injectMainStore, MainStoreInjected} from "@cuba-platform/react";
 
-import { SerializedEntity } from "@cuba-platform/rest";
-import { CurrencyManagement } from "./CurrencyManagement";
-import {
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps
-} from "react-intl";
+import {SerializedEntity} from "@cuba-platform/rest";
+import {CurrencyManagement} from "./CurrencyManagement";
+import {injectIntl, WrappedComponentProps} from "react-intl";
 
 @injectMainStore
 @observer
-class CurrencyListComponent extends React.Component<
-  MainStoreInjected & WrappedComponentProps
-> {
+class CurrencyListComponent extends React.Component<MainStoreInjected & WrappedComponentProps> {
+
   dataCollection = collection<Currency>(Currency.NAME, {
     view: "_local",
     sort: "code"

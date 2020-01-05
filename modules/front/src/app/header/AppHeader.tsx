@@ -1,21 +1,16 @@
 import {Button, Icon, Menu, Modal} from "antd";
 import * as React from "react";
-import { observer } from "mobx-react";
+import {observer} from "mobx-react";
 import "./AppHeader.css";
-import logo from "./logo.png";
-import { injectMainStore, MainStoreInjected } from "@cuba-platform/react";
-import { LanguageSwitcher } from "../../i18n/LanguageSwitcher";
+import {injectMainStore, MainStoreInjected} from "@cuba-platform/react";
 import {FormattedMessage, injectIntl, WrappedComponentProps} from "react-intl";
 import {NavLink} from "react-router-dom";
 
 @injectMainStore
 @observer
-class AppHeader extends React.Component<
-  MainStoreInjected & WrappedComponentProps
-> {
-  render() {
-    // const appState = this.props.mainStore!;
+class AppHeader extends React.Component<MainStoreInjected & WrappedComponentProps> {
 
+  render() {
     return (
       <div className="app-header">
         <Menu
