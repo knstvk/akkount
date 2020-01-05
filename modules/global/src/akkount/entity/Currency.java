@@ -1,15 +1,18 @@
 package akkount.entity;
 
+import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.StandardEntity;
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Column;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import com.haulmont.chile.core.annotations.NamePattern;
 
 @NamePattern("%s|code")
 @Table(name = "AKK_CURRENCY")
 @Entity(name = "akk$Currency")
 public class Currency extends StandardEntity {
+    @Length(max = 3)
     @Column(name = "CODE", nullable = false, length = 3)
     protected String code;
 
