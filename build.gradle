@@ -29,7 +29,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'akkount'
-        version = '0.2'
+        version = '0.3'
         isSnapshot = true
     }
     tomcat {
@@ -264,4 +264,5 @@ task buildWar(type: CubaWarBuilding) {
     includeJdbcDriver = true
     appHome = '${app.home}'
     logbackConfigurationFile = 'etc/war-logback.xml'
+    polymerBuildDir = '../build'
 }
