@@ -32,12 +32,9 @@ class Balance extends React.Component<any, BalState> {
   render() {
     return (
       <div>
-        <div>Totals</div>
         <BalanceTotals values={this.state.balance.totals}/>
-        <div>Included Accounts</div>
-        <BalanceAccounts values={this.state.balance.includedAccounts}/>
-        <div>Excluded Accounts</div>
-        <BalanceAccounts values={this.state.balance.excludedAccounts}/>
+        <BalanceAccounts title="Included in Total" values={this.state.balance.includedAccounts}/>
+        <BalanceAccounts title="Not Included in Total" values={this.state.balance.excludedAccounts}/>
       </div>
     )
   }

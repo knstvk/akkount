@@ -5,5 +5,6 @@ export interface AccountBalanceVal {
 }
 
 export interface BalancePartProps {
+  title?: string,
   values: AccountBalanceVal[]
 }
