@@ -1,76 +1,46 @@
 import * as React from "react";
 
-import { observer } from "mobx-react";
+import {observer} from "mobx-react";
 
-import { Modal, Button, Card, Icon, Spin } from "antd";
+import {Button, Card, Icon, Modal, Pagination, Spin} from "antd";
 
-import { Operation } from "../../cuba/entities/akk$Operation";
-import { Link } from "react-router-dom";
+import {Operation} from "../../cuba/entities/akk$Operation";
+import {Link} from "react-router-dom";
 
-import {
-  collection,
-  injectMainStore,
-  MainStoreInjected,
-  EntityProperty
-} from "@cuba-platform/react";
+import {collection, EntityProperty, injectMainStore, MainStoreInjected} from "@cuba-platform/react";
 
-import { SerializedEntity } from "@cuba-platform/rest";
-import { OperationManagement } from "./OperationManagement";
-import {
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps
-} from "react-intl";
+import {SerializedEntity} from "@cuba-platform/rest";
+import {OperationManagement} from "./OperationManagement";
+import {FormattedMessage, injectIntl, WrappedComponentProps} from "react-intl";
+import {OperationType} from "../../cuba/enums/enums";
+
+const PAGE_SIZE = 20;
 
 @injectMainStore
 @observer
-class OperationListComponent extends React.Component<
-  MainStoreInjected & WrappedComponentProps
-> {
+class OperationListComponent extends React.Component<MainStoreInjected & WrappedComponentProps> {
+
   dataCollection = collection<Operation>(Operation.NAME, {
     view: "operation-browse",
-    sort: "-updateTs"
+    sort: "-createTs",
+    limit: PAGE_SIZE
   });
 
   fields = [
     "id",
-
-    "version",
-
-    "createTs",
-
-    "createdBy",
-
-    "updateTs",
-
-    "updatedBy",
-
-    "deleteTs",
-
-    "deletedBy",
-
-    "opType",
-
-    "opDate",
-
-    "amount1",
-
-    "amount2",
-
-    "comments",
-
     "acc1",
-
+    "amount1",
     "acc2",
-
-    "category"
+    "amount2",
+    "category",
+    "comments"
   ];
 
   showDeletionDialog = (e: SerializedEntity<Operation>) => {
     Modal.confirm({
       title: this.props.intl.formatMessage(
         { id: "management.browser.delete.areYouSure" },
-        { instanceName: e._instanceName }
+        { instanceName: e.opType + " on " + e.opDate }
       ),
       okText: this.props.intl.formatMessage({
         id: "management.browser.delete.ok"
@@ -107,12 +77,36 @@ class OperationListComponent extends React.Component<
         <div style={{ marginBottom: "12px" }}>
           <Link
             to={
-              OperationManagement.PATH + "/" + OperationManagement.NEW_SUBPATH
+              OperationManagement.PATH + "/" + OperationManagement.NEW_EXPENSE
             }
           >
-            <Button htmlType="button" type="primary" icon="plus">
+            <Button htmlType="button" type="primary" style={{margin: "0 12px 12px 0"}}>
               <span>
-                <FormattedMessage id="management.browser.create" />
+                Expense
+              </span>
+            </Button>
+          </Link>
+
+          <Link
+            to={
+              OperationManagement.PATH + "/" + OperationManagement.NEW_INCOME
+            }
+          >
+            <Button htmlType="button" type="primary" style={{margin: "0 12px 12px 0"}}>
+              <span>
+                Income
+              </span>
+            </Button>
+          </Link>
+
+          <Link
+            to={
+              OperationManagement.PATH + "/" + OperationManagement.NEW_TRANSFER
+            }
+          >
+            <Button htmlType="button" type="primary" style={{margin: "0 12px 12px 0"}}>
+              <span>
+                Transfer
               </span>
             </Button>
           </Link>
@@ -125,33 +119,50 @@ class OperationListComponent extends React.Component<
         ) : null}
         {items.map(e => (
           <Card
-            title={e._instanceName}
+            title={e.opDate + " - " + e.opType}
             key={e.id}
             style={{ marginBottom: "12px" }}
             actions={[
+              <Link to={OperationManagement.PATH + "/" + e.id} key="edit">
+                <Icon type="edit" />
+              </Link>,
               <Icon
                 type="delete"
                 key="delete"
                 onClick={() => this.showDeletionDialog(e)}
-              />,
-              <Link to={OperationManagement.PATH + "/" + e.id} key="edit">
-                <Icon type="edit" />
-              </Link>
+              />
             ]}
           >
-            {this.fields.map(p => (
-              <EntityProperty
-                entityName={Operation.NAME}
-                propertyName={p}
-                value={e[p]}
-                key={p}
-              />
-            ))}
+            {this.fields
+              .filter(p => e.opType === OperationType.TRANSFER
+                  || (e.opType === OperationType.INCOME && p !== "amount1")
+                  || (e.opType === OperationType.EXPENSE && p !== "amount2"))
+              .map(p => (
+                <EntityProperty
+                  entityName={Operation.NAME}
+                  propertyName={p}
+                  value={e[p]}
+                  key={p}
+                />
+              ))}
           </Card>
         ))}
+        <Pagination style={{ marginBottom: "12px" }}
+          onChange={this.onChange}
+          defaultPageSize={PAGE_SIZE}
+          defaultCurrent={1}
+          total={this.dataCollection.count}
+          current={this.dataCollection.offset ? this.dataCollection.offset / PAGE_SIZE + 1 : 0 }
+        />
       </div>
     );
   }
+
+  onChange = (current: number, size: number) => {
+    console.log(current, size);
+    this.dataCollection.offset = (current - 1) * size;
+    this.dataCollection.load()
+  };
 }
 
 const OperationList = injectIntl(OperationListComponent);

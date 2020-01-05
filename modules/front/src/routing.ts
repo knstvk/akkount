@@ -26,6 +26,13 @@ menuItems.push(userSettingsSubMenu);
 */
 
 menuItems.push({
+  pathPattern: "/operationManagement/:entityId?",
+  menuLink: "/operationManagement",
+  component: OperationManagement,
+  caption: "OperationManagement"
+});
+
+menuItems.push({
   pathPattern: "/accountManagement/:entityId?",
   menuLink: "/accountManagement",
   component: AccountManagement,
@@ -44,11 +51,4 @@ menuItems.push({
   menuLink: "/currencyManagement",
   component: CurrencyManagement,
   caption: "CurrencyManagement"
-});
-
-menuItems.push({
-  pathPattern: "/operationManagement/:entityId?",
-  menuLink: "/operationManagement",
-  component: OperationManagement,
-  caption: "OperationManagement"
 });

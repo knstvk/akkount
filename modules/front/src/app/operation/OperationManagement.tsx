@@ -10,6 +10,9 @@ type Props = RouteComponentProps<{ entityId?: string }>;
 export class OperationManagement extends React.Component<Props> {
   static PATH = "/operationManagement";
   static NEW_SUBPATH = "new";
+  static NEW_EXPENSE = "new_expense";
+  static NEW_INCOME = "new_income";
+  static NEW_TRANSFER = "new_transfer";
 
   render() {
     const { entityId } = this.props.match.params;
