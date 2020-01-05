@@ -51,16 +51,10 @@ class AccountEditComponent extends React.Component<
 
   fields = [
     "name",
-
     "description",
-
-    "currencyCode",
-
+    "currency",
     "active",
-
-    "includeInTotal",
-
-    "currency"
+    "includeInTotal"
   ];
 
   @observable
@@ -153,9 +147,10 @@ class AccountEditComponent extends React.Component<
 
           <Field
             entityName={Account.NAME}
-            propertyName="currencyCode"
+            propertyName="currency"
             form={this.props.form}
             formItemOpts={{ style: { marginBottom: "12px" } }}
+            optionsContainer={this.currencysDc}
             getFieldDecoratorOpts={{
               rules: [{ required: true }]
             }}
@@ -178,17 +173,6 @@ class AccountEditComponent extends React.Component<
             formItemOpts={{ style: { marginBottom: "12px" } }}
             getFieldDecoratorOpts={{
               valuePropName: "checked"
-            }}
-          />
-
-          <Field
-            entityName={Account.NAME}
-            propertyName="currency"
-            form={this.props.form}
-            formItemOpts={{ style: { marginBottom: "12px" } }}
-            optionsContainer={this.currencysDc}
-            getFieldDecoratorOpts={{
-              rules: [{ required: true }]
             }}
           />
 
