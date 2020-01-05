@@ -48,28 +48,10 @@ class AppComponent extends React.Component<
 
     return (
       <Layout className="main-layout">
-        <Layout.Header>
+        <Layout.Header style={{padding: 0}}>
           <AppHeader />
         </Layout.Header>
         <Layout>
-          <Layout.Sider
-            width={200}
-            breakpoint="sm"
-            collapsedWidth={0}
-            style={{ background: "#fff" }}
-          >
-            <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
-              <Menu.Item key={menuIdx}>
-                <NavLink to={"/"}>
-                  <Icon type="home" />
-                  <FormattedMessage id="router.home" />
-                </NavLink>
-              </Menu.Item>
-              {menuItems.map((item, idx) =>
-                menuItem(item, "" + (idx + 1 + menuIdx), this.props.intl)
-              )}
-            </Menu>
-          </Layout.Sider>
           <Layout style={{ padding: "24px 24px 24px" }}>
             <Layout.Content>
               <Switch>
