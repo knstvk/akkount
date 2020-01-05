@@ -27,7 +27,7 @@ class OperationListComponent extends React.Component<MainStoreInjected & Wrapped
   });
 
   fields = [
-    "id",
+    // "id",
     "acc1",
     "amount1",
     "acc2",
@@ -119,7 +119,8 @@ class OperationListComponent extends React.Component<MainStoreInjected & Wrapped
         ) : null}
         {items.map(e => (
           <Card
-            title={e.opDate + " - " + e.opType}
+            size="small"
+            title={e.opDate + " - " + e.opType + " by " + e.createdBy}
             key={e.id}
             style={{ marginBottom: "12px" }}
             actions={[
