@@ -22,12 +22,6 @@ class Balance extends React.Component<any, BalState> {
     this.state = {balance: {excludedAccounts: [], includedAccounts: [], totals: []}}
   }
 
-  componentDidMount(): void {
-    restServices.akk_PortalService.getBalance(cubaREST)().then((value: string) => {
-      this.setState({balance: JSON.parse(value)});
-    });
-  }
-
   render() {
     return (
       <div>
@@ -36,6 +30,12 @@ class Balance extends React.Component<any, BalState> {
         <BalanceAccounts title="Not Included in Total" values={this.state.balance.excludedAccounts}/>
       </div>
     )
+  }
+
+  componentDidMount(): void {
+    restServices.akk_PortalService.getBalance(cubaREST)().then((value: string) => {
+      this.setState({balance: JSON.parse(value)});
+    });
   }
 }
 

@@ -9,7 +9,7 @@ class BalanceAccounts extends React.Component<BalancePartProps> {
       <Card size="small" title={this.props.title} style={{marginBottom: "12px"}}>
         <table>
           <tbody>
-            {this.props.values.map(value => BalanceAccounts.renderRow(value))}
+            {this.props.values ? this.props.values.map(value => BalanceAccounts.renderRow(value)) : null}
           </tbody>
         </table>
       </Card>
