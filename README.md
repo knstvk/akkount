@@ -6,7 +6,10 @@ A simple personal finance application built on [CUBA Platform](https://www.cuba-
 
 ![generic-ui](https://github.com/knstvk/akkount/blob/master/img/generic-ui.png)
 
-![mobile-ui](https://github.com/knstvk/akkount/blob/master/img/mobile-ui.png)
+<p align="center">
+<img src="https://github.com/knstvk/akkount/blob/master/img/mobile-ui.png" width="300"></img>
+</p>
+
 
 ## Features
 
