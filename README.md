@@ -1,18 +1,14 @@
-akkount
-=======
+# akkount
 
 <a href="https://travis-ci.com/knstvk/akkount"><img src="https://api.travis-ci.com/knstvk/akkount.svg?branch=master" alt="Build Status" title=""></a>
 
 A simple personal finance application built on [CUBA Platform](https://www.cuba-platform.com).
 
-![1-login](https://github.com/knstvk/akkount/blob/master/img/1-login.png)
+![generic-ui](https://github.com/knstvk/akkount/blob/master/img/generic-ui.png)
 
-![2-overview](https://github.com/knstvk/akkount/blob/master/img/2-overview.png)
+![mobile-ui](https://github.com/knstvk/akkount/blob/master/img/mobile-ui.png)
 
-![3-operations-mobile](https://github.com/knstvk/akkount/blob/master/img/3-operations-mobile.png)
-
-Features
---------
+## Features
 
 In short, the application solves two problems:
  1. It shows the current balance by all accounts: cash, credit cards, deposits, debts, etc.
@@ -24,26 +20,56 @@ Some details:
 * A _category_ can be set for expense or income operations.
 * The current balance is constantly displayed and is recalculated after each operation.
 * Categories report shows the summary by two arbitrary periods of time to allow quick visual comparison. Any category can be excluded from the report. You can "drill down" into any row to see operations that comprise the row.
-* The system consists of three web applications deployed onto one Tomcat instance:
-   1. Middleware
-   2. Full-functional CUBA Generic UI
-   3. Polymer UI for mobile devices. 
+* The system has a full-functional CUBA Generic UI and a mobile-friendly UI based on React. 
 
-Usage
------
+## Development
 
-Install JDK 8 or above and set JAVA_HOME environment variable to the JDK root dir.
-Open command line in the project directory and run the following command to build the application:
+You should have Java 8+, npm 12+ and CUBA Studio 12+ installed.
+
+Open the project in CUBA Studio and run the application server using *CUBA Application* run/debug configuration. The application will use the HSQL database served by Studio.
+
+The main UI is available at http://localhost:8080/app. Login as `admin` / `admin`. 
+
+You can generate some test data:
+
+- Open *Administration > JMX Console*, find `app-core.akkount:type=SampleDataGenerator` MBean and open it.
+- Enter the number of days to generate (e.g. 100) in the parameter field of the `generateSampleData` method and click *Invoke*.     
+
+Open the terminal in the `modules/front` directory and run `npm run start`. The mobile-friendly UI will be available at http://localhost:3000.
+
+
+## Building
+
+The application contains a set of scripts and settings to run in a Docker container. In this case, it uses a file-based HSQL database stored in the `/akk-home/db/akk` directory inside the container.
+
+Open the terminal in the project directory and run the following command to build the WAR file:
+
 ```
-gradlew setupTomcat deploy
+./gradlew buildWar
 ```
 
-Now start HSQL server and create database in `data` directory:
-```
-gradlew startDb
-gradlew createDb
-```
-To run Tomcat, use `gradlew start` Gradle command or `startup.*` scripts in `build/tomcat/bin`.
+Copy the WAR file to the `docker` directory:
 
-Main UI is available on `http://localhost:8080/app`, mobile-friendly UI on `http://localhost:8080/app-front`. 
-Username: `admin`, password: `admin`.
+```
+cp build/distributions/war/app.war docker-image
+```
+
+Build the docker image:
+
+```
+docker build -t akkount docker-image
+```
+
+Run the container:
+
+```
+docker run --rm -p 8080:8080 akkount
+```
+
+The main UI is available at http://localhost:8080/app, mobile-friendly UI at http://localhost:8080/app/front. Username: `admin`, password: `admin`.
+
+If you want to keep the database after removal of the container, map the database location to some local directory, for example:
+
+```
+docker run --rm -p 8080:8080 -v /Users/me/akk-home:/akk-home akkount
+```
