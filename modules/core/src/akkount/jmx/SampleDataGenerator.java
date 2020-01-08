@@ -2,9 +2,12 @@ package akkount.jmx;
 
 import akkount.entity.*;
 import akkount.entity.Currency;
+import akkount.event.BalanceChangedEvent;
 import akkount.service.BalanceWorker;
+import akkount.service.OperationWorker;
 import com.haulmont.bali.db.QueryRunner;
 import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.security.app.Authenticated;
@@ -36,6 +39,12 @@ public class SampleDataGenerator implements SampleDataGeneratorMBean {
 
     @Inject
     private Metadata metadata;
+
+    @Inject
+    private Events events;
+
+    @Inject
+    private OperationWorker operationWorker;
 
     private class Context {
 
@@ -221,28 +230,34 @@ public class SampleDataGenerator implements SampleDataGeneratorMBean {
     }
 
     private void createOperations(Date startDate, int numberOfDays, Context context) {
-        for (int i = 0; i < numberOfDays; i++) {
-            Date date = DateUtils.addDays(startDate, i);
+        operationWorker.enableBalanceChangedEvents(false);
+        try {
+            for (int i = 0; i < numberOfDays; i++) {
+                Date date = DateUtils.addDays(startDate, i);
 
-            if (i % 7 == 0) {
-                income(date, context.accounts.get(0), context.salaryCategory, new BigDecimal("16000"));
-            }
-            if (i % 5 == 0) {
-                income(date, context.accounts.get(1), context.otherIncomeCategory, new BigDecimal(1000 + Math.round(Math.random() * 5000)));
-            }
+                if (i % 7 == 0) {
+                    income(date, context.accounts.get(0), context.salaryCategory, new BigDecimal("16000"));
+                }
+                if (i % 5 == 0) {
+                    income(date, context.accounts.get(1), context.otherIncomeCategory, new BigDecimal(1000 + Math.round(Math.random() * 5000)));
+                }
 
-            for (int j = 0; j < Math.random() * 7; j++) {
-                expense(date, context.accounts.get(1), context);
-                if (j % 2 == 0)
-                    expense(date, context.accounts.get(0), context);
-            }
+                for (int j = 0; j < Math.random() * 7; j++) {
+                    expense(date, context.accounts.get(1), context);
+                    if (j % 2 == 0)
+                        expense(date, context.accounts.get(0), context);
+                }
 
-            if (i % 2 == 0) {
-                Account account2 = context.accounts.get((int) (1 + Math.random() * (context.accounts.size() - 1)));
-                transfer(date, context.accounts.get(0), account2);
-            }
+                if (i % 2 == 0) {
+                    Account account2 = context.accounts.get((int) (1 + Math.random() * (context.accounts.size() - 1)));
+                    transfer(date, context.accounts.get(0), account2);
+                }
 
+            }
+        } finally {
+            operationWorker.enableBalanceChangedEvents(true);
         }
+        events.publish(new BalanceChangedEvent(this));
     }
 
     private void income(final Date date, final Account account, final Category category, final BigDecimal amount) {

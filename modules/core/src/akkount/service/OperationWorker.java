@@ -39,6 +39,8 @@ public class OperationWorker {
     @Inject
     private Events events;
 
+    private volatile boolean balanceChangedEventsEnabled = true;
+
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void onOperationChanged(EntityChangedEvent<Operation, UUID> event) {
         if (event.getType() == DELETED || event.getType() == UPDATED) {
@@ -57,7 +59,13 @@ public class OperationWorker {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onOperationChangedAndCommitted(EntityChangedEvent<Operation, UUID> event) {
-        events.publish(new BalanceChangedEvent(this));
+        if (balanceChangedEventsEnabled) {
+            events.publish(new BalanceChangedEvent(this));
+        }
+    }
+
+    public void enableBalanceChangedEvents(boolean enable) {
+        balanceChangedEventsEnabled = enable;
     }
 
     private void removeOperation(Date opDate, Id<Account, UUID> acc1Id, Id<Account, UUID> acc2Id,
