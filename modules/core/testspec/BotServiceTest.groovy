@@ -59,7 +59,8 @@ class BotServiceTest extends Specification {
         category2.name = 'cat two'
         category2.catType = CategoryType.EXPENSE
 
-        dataManager.commit(new CommitContext(this.currency1, this.account1, this.account2, this.category1, this.category2))
+        dataManager.commit(currency1)
+        dataManager.commit(account1, account2, category1, category2)
     }
 
     void cleanup() {

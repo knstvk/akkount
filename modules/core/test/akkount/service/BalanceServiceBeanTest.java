@@ -5,11 +5,8 @@ import akkount.entity.Balance;
 import akkount.entity.Operation;
 import akkount.entity.OperationType;
 import akkount.testsupport.AkkountTestCase;
-import com.haulmont.cuba.core.EntityManager;
-import com.haulmont.cuba.core.Persistence;
-import com.haulmont.cuba.core.Transaction;
-import com.haulmont.cuba.core.TypedQuery;
 import com.haulmont.cuba.core.global.AppBeans;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -17,16 +14,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BalanceServiceBeanTest extends AkkountTestCase {
-
-    private Persistence persistence;
-
-    public void setUp() throws Exception {
-        super.setUp();
-        persistence = cont.persistence();
-    }
 
     private Date date(String dateStr) {
         try {
@@ -37,128 +28,62 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
     }
 
     private UUID income(Date day, BigDecimal amount) {
-        UUID operationId;
-        Transaction tx = persistence.createTransaction();
-        try {
-            EntityManager em = persistence.getEntityManager();
-
-            Operation operation = new Operation();
-            operationId = operation.getId();
-            operation.setOpType(OperationType.INCOME);
-            operation.setOpDate(day);
-            operation.setAcc2(em.getReference(Account.class, account1Id));
-            operation.setAmount2(amount);
-
-            em.persist(operation);
-
-            tx.commit();
-        } finally {
-            tx.end();
-        }
-        return operationId;
+        Operation operation = cont.metadata().create(Operation.class);
+        operation.setOpType(OperationType.INCOME);
+        operation.setOpDate(day);
+        operation.setAcc2(dataManager.getReference(Account.class, account1Id));
+        operation.setAmount2(amount);
+        dataManager.commit(operation);
+        return operation.getId();
     }
 
     private UUID expense(Date day, BigDecimal amount) {
-        UUID operationId;
-        Transaction tx = persistence.createTransaction();
-        try {
-            EntityManager em = persistence.getEntityManager();
-
-            Operation operation = new Operation();
-            operationId = operation.getId();
-            operation.setOpType(OperationType.EXPENSE);
-            operation.setOpDate(day);
-            operation.setAcc1(em.getReference(Account.class, account1Id));
-            operation.setAmount1(amount);
-
-            em.persist(operation);
-
-            tx.commit();
-        } finally {
-            tx.end();
-        }
-        return operationId;
+        Operation operation = cont.metadata().create(Operation.class);
+        operation.setOpType(OperationType.EXPENSE);
+        operation.setOpDate(day);
+        operation.setAcc1(dataManager.getReference(Account.class, account1Id));
+        operation.setAmount1(amount);
+        dataManager.commit(operation);
+        return operation.getId();
     }
 
     private UUID transfer(Date day, BigDecimal amount) {
-        UUID operationId;
-        Transaction tx = persistence.createTransaction();
-        try {
-            EntityManager em = persistence.getEntityManager();
-
-            Operation operation = new Operation();
-            operationId = operation.getId();
-            operation.setOpType(OperationType.INCOME);
-            operation.setOpDate(day);
-            operation.setAcc1(em.getReference(Account.class, account1Id));
-            operation.setAmount1(amount);
-            operation.setAcc2(em.getReference(Account.class, account2Id));
-            operation.setAmount2(amount);
-
-            em.persist(operation);
-
-            tx.commit();
-        } finally {
-            tx.end();
-        }
-        return operationId;
+        Operation operation = cont.metadata().create(Operation.class);
+        operation.setOpType(OperationType.INCOME);
+        operation.setOpDate(day);
+        operation.setAcc1(dataManager.getReference(Account.class, account1Id));
+        operation.setAmount1(amount);
+        operation.setAcc2(dataManager.getReference(Account.class, account2Id));
+        operation.setAmount2(amount);
+        dataManager.commit(operation);
+        return operation.getId();
     }
 
     private void expenseUpdate(UUID operationId, Date day, BigDecimal amount) {
-        Transaction tx = persistence.createTransaction();
-        try {
-            EntityManager em = persistence.getEntityManager();
-
-            Operation operation = em.find(Operation.class, operationId);
-            assertNotNull(operation);
-            operation.setOpType(OperationType.EXPENSE);
-            operation.setOpDate(day);
-            operation.setAcc1(em.getReference(Account.class, account1Id));
-            operation.setAcc2(null);
-            operation.setAmount1(amount);
-            operation.setAmount2(BigDecimal.ZERO);
-
-            em.persist(operation);
-
-            tx.commit();
-        } finally {
-            tx.end();
-        }
+        Operation operation = dataManager.load(Operation.class).id(operationId).view("operation-with-accounts").one();
+        operation.setOpType(OperationType.EXPENSE);
+        operation.setOpDate(day);
+        operation.setAcc1(dataManager.getReference(Account.class, account1Id));
+        operation.setAcc2(null);
+        operation.setAmount1(amount);
+        operation.setAmount2(BigDecimal.ZERO);
+        dataManager.commit(operation);
     }
 
     private void incomeUpdate(UUID operationId, Date day, BigDecimal amount) {
-        Transaction tx = persistence.createTransaction();
-        try {
-            EntityManager em = persistence.getEntityManager();
-
-            Operation operation = em.find(Operation.class, operationId);
-            assertNotNull(operation);
-            operation.setOpType(OperationType.INCOME);
-            operation.setOpDate(day);
-            operation.setAcc1(null);
-            operation.setAcc2(em.getReference(Account.class, account1Id));
-            operation.setAmount1(BigDecimal.ZERO);
-            operation.setAmount2(amount);
-
-            em.persist(operation);
-
-            tx.commit();
-        } finally {
-            tx.end();
-        }
+        Operation operation = dataManager.load(Operation.class).id(operationId).view("operation-with-accounts").one();
+        operation.setOpType(OperationType.INCOME);
+        operation.setOpDate(day);
+        operation.setAcc1(null);
+        operation.setAcc2(dataManager.getReference(Account.class, account1Id));
+        operation.setAmount1(BigDecimal.ZERO);
+        operation.setAmount2(amount);
+        dataManager.commit(operation);
     }
 
     private void removeOperation(UUID operationId) {
-        Transaction tx = persistence.createTransaction();
-        try {
-            EntityManager em = persistence.getEntityManager();
-            Operation operation = em.find(Operation.class, operationId);
-            em.remove(operation);
-
-            tx.commit();
-        } finally {
-            tx.end();
-        }
+        Operation operation = dataManager.load(Operation.class).id(operationId).one();
+        dataManager.remove(operation);
     }
 
     private static void checkEquality(BigDecimal expected, BigDecimal actual) {
@@ -167,23 +92,15 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
     }
 
     private void checkBalanceRecord(Date day, BigDecimal amount) {
-        Transaction tx = persistence.createTransaction();
-        try {
-            EntityManager em = persistence.getEntityManager();
-            TypedQuery<Balance> query = em.createQuery(
-                    "select b from akk$Balance b where b.account.id = ?1 and b.balanceDate = ?2", Balance.class);
-            query.setParameter(1, account1Id);
-            query.setParameter(2, day);
-            Balance balance = query.getFirstResult();
-            assertNotNull("Balance record doesn't exist", balance);
-            checkEquality(amount, balance.getAmount());
-
-            tx.commit();
-        } finally {
-            tx.end();
-        }
+        Balance balance = dataManager.load(Balance.class)
+                .query("select b from akk$Balance b where b.account.id = :accId and b.balanceDate = :balDate")
+                .parameter("accId", account1Id)
+                .parameter("balDate", day)
+                .one();
+        checkEquality(amount, balance.getAmount());
     }
 
+    @Test
     public void testGetBalance() throws Exception {
         BalanceService balanceService = AppBeans.get(BalanceService.class);
 
@@ -305,6 +222,7 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         checkEquality(new BigDecimal("30"), balance);
     }
 
+    @Test
     public void testOperationOnFirstDayOfMonth() {
         BalanceService balanceService = AppBeans.get(BalanceService.class);
 
@@ -344,6 +262,7 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         checkEquality(new BigDecimal("7"), balance);
     }
 
+    @Test
     public void testTransfer() throws Exception {
         BalanceService balanceService = AppBeans.get(BalanceService.class);
 
@@ -367,6 +286,7 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         checkEquality(BigDecimal.ONE, balance);
     }
 
+    @Test
     public void testMissedMonths() throws Exception {
         BalanceService balanceService = AppBeans.get(BalanceService.class);
 
@@ -387,6 +307,7 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
         checkEquality(BigDecimal.ZERO, balance);
     }
 
+    @Test
     public void testRecalculateBalance() throws Exception {
         testGetBalance();
 

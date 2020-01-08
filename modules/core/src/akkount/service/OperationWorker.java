@@ -7,6 +7,7 @@ import akkount.event.BalanceChangedEvent;
 import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.app.events.AttributeChanges;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.Metadata;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
@@ -43,15 +45,26 @@ public class OperationWorker {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void onOperationChanged(EntityChangedEvent<Operation, UUID> event) {
-        if (event.getType() == DELETED || event.getType() == UPDATED) {
-            AttributeChanges changes = event.getChanges();
-            removeOperation(changes.getOldValue("opDate"),
-                    changes.getOldReferenceId("acc1"), changes.getOldReferenceId("acc2"),
-                    changes.getOldValue("amount1"), changes.getOldValue("amount2")
+        AttributeChanges changes = event.getChanges();
+        if (event.getType() == DELETED) {
+            removeOperation(
+                    changes.getOldValue("opDate"),
+                    changes.getOldReferenceId("acc1"),
+                    changes.getOldReferenceId("acc2"),
+                    changes.getOldValue("amount1"),
+                    changes.getOldValue("amount2")
             );
-        }
-        if (event.getType() != DELETED) {
+        } else {
             Operation operation = tdm.load(event.getEntityId()).view("operation-with-accounts").one();
+            if (event.getType() == UPDATED) {
+                removeOperation(
+                        changes.isChanged("opDate") ? changes.getOldValue("opDate") : operation.getOpDate(),
+                        changes.isChanged("acc1") ? changes.getOldReferenceId("acc1") : idOfNullable(operation.getAcc1()),
+                        changes.isChanged("acc2") ? changes.getOldReferenceId("acc2") : idOfNullable(operation.getAcc2()),
+                        changes.isChanged("amount1") ? changes.getOldValue("amount1") : operation.getAmount1(),
+                        changes.isChanged("amount2") ? changes.getOldValue("amount2") : operation.getAmount2()
+                );
+            }
             addOperation(operation);
             saveUserData(operation);
         }
@@ -164,5 +177,10 @@ public class OperationWorker {
                 userDataWorker.saveEntity(UserDataKeys.OP_TRANSFER_INCOME_ACCOUNT, operation.getAcc2(), false);
                 break;
         }
+    }
+
+    @Nullable
+    private <T extends Entity<K>,K> Id<T,K> idOfNullable(@Nullable T entity) {
+        return entity == null ? null : Id.of(entity);
     }
 }
