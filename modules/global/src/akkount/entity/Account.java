@@ -1,20 +1,15 @@
 package akkount.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @NamePattern("%s|name")
 @Table(name = "AKK_ACCOUNT")
 @Entity(name = "akk$Account")
-@Listeners("akkount.entitylisteners.AccountEntityListener")
+@PublishEntityChangedEvents
 public class Account extends StandardEntity {
     @Column(name = "NAME", nullable = false, length = 20, unique = true)
     protected String name;
