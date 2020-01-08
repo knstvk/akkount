@@ -39,6 +39,8 @@ class BotServiceTest extends Specification {
         dataManager = AppBeans.get(DataManager)
         botService = AppBeans.get(BotService)
 
+        cleanup()
+
         currency1 = metadata.create(Currency)
         currency1.code = 'ZZZ'
         currency1.name = 'Zzzzzz'
