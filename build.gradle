@@ -43,9 +43,9 @@ cuba {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent('com.haulmont.addon.globalevents:cubaglevt-global:0.5.0')
     appComponent('com.haulmont.addon.restapi:restapi-global:7.1.0')
-    appComponent('com.haulmont.addon.restapi:restapi-global:7.1.0')
+    appComponent('com.haulmont.addon.restapi:restapi-global:7.1.1')
+    appComponent('com.haulmont.addon.globalevents:cubaglevt-global:0.5.1')
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.4.1'
