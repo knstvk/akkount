@@ -11,7 +11,7 @@ import com.haulmont.cuba.gui.screen.*;
 
 import javax.inject.Inject;
 
-@UiController("akk$Operation.lookup")
+@UiController("akk_Operation.lookup")
 @UiDescriptor("operation-browse.xml")
 @LookupComponent("operationTable")
 @LoadDataBeforeShow

@@ -68,7 +68,7 @@ public class UserDataWorker {
         try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
 
-            String queryString = "select d from akk$UserData d where d.user.id = ?1 and d.key = ?2";
+            String queryString = "select d from akk_UserData d where d.user.id = ?1 and d.key = ?2";
             if (multipleValues)
                 queryString += " and d.value = ?3";
 
@@ -101,7 +101,7 @@ public class UserDataWorker {
         try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
             TypedQuery<UserData> query = em.createQuery(
-                    "select d from akk$UserData d where d.user.id = ?1 and d.key = ?2 and d.value = ?3", UserData.class);
+                    "select d from akk_UserData d where d.user.id = ?1 and d.key = ?2 and d.value = ?3", UserData.class);
             query.setParameter(1, userSessionSource.currentOrSubstitutedUserId());
             query.setParameter(2, key);
             query.setParameter(3, value);
@@ -139,7 +139,7 @@ public class UserDataWorker {
         try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
             TypedQuery<String> query = em.createQuery(
-                    "select d.value from akk$UserData d where d.user.id = ?1 and d.key = ?2", String.class);
+                    "select d.value from akk_UserData d where d.user.id = ?1 and d.key = ?2", String.class);
             query.setParameter(1, userSessionSource.currentOrSubstitutedUserId());
             query.setParameter(2, key);
             list = query.getResultList();

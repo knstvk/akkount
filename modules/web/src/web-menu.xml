@@ -2,13 +2,13 @@
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
     <menu id="application"
           insertBefore="administration">
-        <item id="akk$Operation.lookup"
+        <item id="akk_Operation.lookup"
               shortcut="Ctrl-Shift-O"/>
         <separator/>
         <item id="categories-report"/>
         <separator/>
-        <item id="akk$Currency.lookup"/>
-        <item id="akk$Category.lookup"/>
-        <item id="akk$Account.lookup"/>
+        <item id="akk_Currency.lookup"/>
+        <item id="akk_Category.lookup"/>
+        <item id="akk_Account.lookup"/>
     </menu>
 </menu-config>

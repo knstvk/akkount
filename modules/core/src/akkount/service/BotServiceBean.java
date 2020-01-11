@@ -71,7 +71,7 @@ public class BotServiceBean implements BotService {
 
     private String createExpense(String acc, BigDecimal amount, String cat) {
         Optional<Account> optionalAccount = dataManager.load(Account.class)
-                .query("select a from akk$Account a where lower(a.name) = :name")
+                .query("select a from akk_Account a where lower(a.name) = :name")
                 .parameter("name", acc.toLowerCase())
                 .view(View.MINIMAL)
                 .optional();
@@ -80,7 +80,7 @@ public class BotServiceBean implements BotService {
         Account account = optionalAccount.get();
 
         Optional<Category> optionalCategory = dataManager.load(Category.class)
-                .query("select c from akk$Category c where lower(c.name) = :name")
+                .query("select c from akk_Category c where lower(c.name) = :name")
                 .parameter("name", cat.toLowerCase())
                 .view(View.MINIMAL)
                 .optional();

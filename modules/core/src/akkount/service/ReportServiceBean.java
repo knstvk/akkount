@@ -28,7 +28,7 @@ public class ReportServiceBean implements ReportService {
 
         EntityManager em = persistence.getEntityManager();
 
-        String catQueryString = "select c from akk$Category c where c.catType = ?1";
+        String catQueryString = "select c from akk_Category c where c.catType = ?1";
         if (!excludedCategories.isEmpty())
             catQueryString += " and c.id not in ?2";
 
@@ -42,7 +42,7 @@ public class ReportServiceBean implements ReportService {
 
             String suffix = categoryType == CategoryType.EXPENSE ? "1" : "2";
             Query amountQuery = em.createQuery(
-                    "select sum(o.amount" + suffix + ") from akk$Operation o " +
+                    "select sum(o.amount" + suffix + ") from akk_Operation o " +
                             "where @dateAfter(o.opDate, :fromDate) and @dateBefore(o.opDate, :toDate) " +
                             " and o.category.id = :category " +
                             " and o.acc" + suffix + ".currencyCode = :currency");

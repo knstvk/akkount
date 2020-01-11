@@ -9,7 +9,7 @@
                          view="operation-browse">
             <loader id="operationsDl">
                 <query>
-                    <![CDATA[select e from akk$Operation e order by e.opDate desc, e.createTs desc]]>
+                    <![CDATA[select e from akk_Operation e order by e.opDate desc, e.createTs desc]]>
                 </query>
             </loader>
         </collection>

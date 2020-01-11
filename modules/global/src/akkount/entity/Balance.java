@@ -13,7 +13,7 @@ import javax.persistence.TemporalType;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
 @Table(name = "AKK_BALANCE")
-@Entity(name = "akk$Balance")
+@Entity(name = "akk_Balance")
 public class Balance extends StandardEntity {
     private static final long serialVersionUID = 918143020139005638L;
 

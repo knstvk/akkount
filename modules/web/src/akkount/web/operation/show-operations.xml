@@ -8,7 +8,7 @@
                          class="akkount.entity.Operation"
                          view="operation-browse">
             <query>
-                <![CDATA[select o from akk$Operation o order by o.opDate desc, o.createTs desc]]>
+                <![CDATA[select o from akk_Operation o order by o.opDate desc, o.createTs desc]]>
                 <filter>
                     <and>
                         <c>o.category = :param$category</c>

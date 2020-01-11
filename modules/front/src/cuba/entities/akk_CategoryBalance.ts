@@ -1,7 +1,7 @@
 import { AbstractNotPersistentEntity } from "./base/sys$AbstractNotPersistentEntity";
-import { Category } from "./akk$Category";
+import { Category } from "./akk_Category";
 export class CategoryAmount extends AbstractNotPersistentEntity {
-  static NAME = "akk$CategoryBalance";
+  static NAME = "akk_CategoryBalance";
   category?: Category | null;
   amount?: any | null;
 }

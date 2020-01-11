@@ -7,7 +7,7 @@
                               view="_minimal">
             <loader>
                 <query>
-                    <![CDATA[select e from akk$Category e where e.catType = 'I' order by e.name]]>
+                    <![CDATA[select e from akk_Category e where e.catType = 'I' order by e.name]]>
                 </query>
             </loader>
         </collection>

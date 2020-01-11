@@ -1,9 +1,9 @@
 import { StandardEntity } from "./base/sys$StandardEntity";
 import { OperationType } from "../enums/enums";
-import { Account } from "./akk$Account";
-import { Category } from "./akk$Category";
+import { Account } from "./akk_Account";
+import { Category } from "./akk_Category";
 export class Operation extends StandardEntity {
-  static NAME = "akk$Operation";
+  static NAME = "akk_Operation";
   opType?: OperationType | null;
   opDate?: any | null;
   acc1?: Account | null;

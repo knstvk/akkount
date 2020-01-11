@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import java.util.Calendar;
 import java.util.Date;
 
-@UiController("akk$Operation.edit")
+@UiController("akk_Operation.edit")
 @UiDescriptor("operation-edit.xml")
 @EditedEntityContainer("operationDc")
 @LoadDataBeforeShow

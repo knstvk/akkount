@@ -1,7 +1,7 @@
 import { StandardEntity } from "./base/sys$StandardEntity";
 import { CategoryType } from "../enums/enums";
 export class Category extends StandardEntity {
-  static NAME = "akk$Category";
+  static NAME = "akk_Category";
   name?: string | null;
   description?: string | null;
   catType?: CategoryType | null;

@@ -197,7 +197,7 @@ class BotServiceTest extends Specification {
     }
 
     private List<Operation> loadOperations() {
-        def query = LoadContext.createQuery('select o from akk$Operation o')
+        def query = LoadContext.createQuery('select o from akk_Operation o')
         dataManager.loadList(
                 LoadContext.create(Operation).setQuery(query).setView('operation-browse'))
     }

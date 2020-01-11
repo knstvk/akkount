@@ -28,7 +28,7 @@ public class BalanceWorker {
             EntityManager em = persistence.getEntityManager();
 
             TypedQuery<Balance> balQuery = em.createQuery(
-                    "select b from akk$Balance b where b.account.id = ?1 and b.balanceDate < ?2 order by b.balanceDate desc",
+                    "select b from akk_Balance b where b.account.id = ?1 and b.balanceDate < ?2 order by b.balanceDate desc",
                     Balance.class);
             balQuery.setParameter(1, accountId);
             balQuery.setParameter(2, date);
@@ -36,7 +36,7 @@ public class BalanceWorker {
             Balance startBalance = balQuery.getFirstResult();
             BigDecimal startAmount = startBalance != null ? startBalance.getAmount() : BigDecimal.ZERO;
 
-            String expenseQueryStr = "select sum(o.amount1) from akk$Operation o where o.acc1.id = ?1 and o.opDate <= ?2";
+            String expenseQueryStr = "select sum(o.amount1) from akk_Operation o where o.acc1.id = ?1 and o.opDate <= ?2";
             if (startBalance != null)
                 expenseQueryStr += " and o.opDate >= ?3";
             Query expenseQuery = em.createQuery(expenseQueryStr);
@@ -48,7 +48,7 @@ public class BalanceWorker {
             if (expense == null)
                 expense = BigDecimal.ZERO;
 
-            String incomeQueryStr = "select sum(o.amount2) from akk$Operation o where o.acc2.id = ?1 and o.opDate <= ?2";
+            String incomeQueryStr = "select sum(o.amount2) from akk_Operation o where o.acc2.id = ?1 and o.opDate <= ?2";
             if (startBalance != null)
                 incomeQueryStr += " and o.opDate >= ?3";
             Query incomeQuery = em.createQuery(incomeQueryStr);
@@ -71,7 +71,7 @@ public class BalanceWorker {
             TreeMap<Date, Balance> balances = new TreeMap<>();
 
             EntityManager em = persistence.getEntityManager();
-            TypedQuery<Operation> query = em.createQuery("select op from akk$Operation op " +
+            TypedQuery<Operation> query = em.createQuery("select op from akk_Operation op " +
                     "left join op.acc1 a1 left join op.acc2 a2 " +
                     "where (a1.id = ?1 or a2.id = ?1) order by op.opDate", Operation.class);
             query.setParameter(1, accountId);
@@ -90,7 +90,7 @@ public class BalanceWorker {
 
     private void removeBalanceRecords(UUID accountId) {
         EntityManager em = persistence.getEntityManager();
-        TypedQuery<Balance> query = em.createQuery("select b from akk$Balance b where b.account.id = ?1", Balance.class);
+        TypedQuery<Balance> query = em.createQuery("select b from akk_Balance b where b.account.id = ?1", Balance.class);
         query.setParameter(1, accountId);
         List<Balance> list = query.getResultList();
         for (Balance balance : list) {

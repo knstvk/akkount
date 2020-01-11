@@ -3,7 +3,7 @@ package akkount.web.currency;
 import akkount.entity.Currency;
 import com.haulmont.cuba.gui.screen.*;
 
-@UiController("akk$Currency.lookup")
+@UiController("akk_Currency.lookup")
 @UiDescriptor("currency-browse.xml")
 @LookupComponent("currencyTable")
 @LoadDataBeforeShow

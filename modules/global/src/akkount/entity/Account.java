@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @NamePattern("%s|name")
 @Table(name = "AKK_ACCOUNT")
-@Entity(name = "akk$Account")
+@Entity(name = "akk_Account")
 @PublishEntityChangedEvents
 public class Account extends StandardEntity {
     @Column(name = "NAME", nullable = false, length = 20, unique = true)

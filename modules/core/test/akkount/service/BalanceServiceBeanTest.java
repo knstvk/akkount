@@ -93,7 +93,7 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
 
     private void checkBalanceRecord(Date day, BigDecimal amount) {
         Balance balance = dataManager.load(Balance.class)
-                .query("select b from akk$Balance b where b.account.id = :accId and b.balanceDate = :balDate")
+                .query("select b from akk_Balance b where b.account.id = :accId and b.balanceDate = :balDate")
                 .parameter("accId", account1Id)
                 .parameter("balDate", day)
                 .one();

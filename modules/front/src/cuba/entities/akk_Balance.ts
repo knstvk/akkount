@@ -1,7 +1,7 @@
 import { StandardEntity } from "./base/sys$StandardEntity";
-import { Account } from "./akk$Account";
+import { Account } from "./akk_Account";
 export class Balance extends StandardEntity {
-  static NAME = "akk$Balance";
+  static NAME = "akk_Balance";
   balanceDate?: any | null;
   account?: Account | null;
   amount?: any | null;

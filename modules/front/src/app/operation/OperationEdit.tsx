@@ -20,11 +20,11 @@ import {
 } from "@cuba-platform/react";
 
 import "../../app/App.css";
-import {Operation} from "../../cuba/entities/akk$Operation";
+import {Operation} from "../../cuba/entities/akk_Operation";
 
-import {Account} from "../../cuba/entities/akk$Account";
+import {Account} from "../../cuba/entities/akk_Account";
 
-import {Category} from "../../cuba/entities/akk$Category";
+import {Category} from "../../cuba/entities/akk_Category";
 import Title from "antd/lib/typography/Title";
 import {OperationType} from "../../cuba/enums/enums";
 

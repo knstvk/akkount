@@ -53,7 +53,7 @@ public class MainWindow extends AbstractMainWindow {
 
         List<Account> accounts = dataSupplier.loadList(
                 LoadContext.create(Account.class).setQuery(
-                        LoadContext.createQuery("select a from akk$Account a where a.active = true order by a.name")));
+                        LoadContext.createQuery("select a from akk_Account a where a.active = true order by a.name")));
 
         if (balanceGrid != null) {
             balanceLayout.remove(balanceGrid);

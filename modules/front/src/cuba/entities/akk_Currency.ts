@@ -1,6 +1,6 @@
 import { StandardEntity } from "./base/sys$StandardEntity";
 export class Currency extends StandardEntity {
-  static NAME = "akk$Currency";
+  static NAME = "akk_Currency";
   code?: string | null;
   name?: string | null;
 }

@@ -4,7 +4,7 @@ import {observer} from "mobx-react";
 
 import {Button, Card, Icon, Modal, Pagination, Spin} from "antd";
 
-import {Operation} from "../../cuba/entities/akk$Operation";
+import {Operation} from "../../cuba/entities/akk_Operation";
 import {Link} from "react-router-dom";
 
 import {collection, EntityProperty, injectMainStore, MainStoreInjected} from "@cuba-platform/react";

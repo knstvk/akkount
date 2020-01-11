@@ -6,7 +6,7 @@ import com.haulmont.cuba.core.entity.AbstractNotPersistentEntity;
 
 import java.math.BigDecimal;
 
-@MetaClass(name = "akk$CategoryBalance")
+@MetaClass(name = "akk_CategoryBalance")
 public class CategoryAmount extends AbstractNotPersistentEntity {
 
     @MetaProperty

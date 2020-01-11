@@ -8,7 +8,7 @@
                               view="_local">
             <loader>
                 <query>
-                    <![CDATA[select e from akk$Currency e]]>
+                    <![CDATA[select e from akk_Currency e]]>
                 </query>
             </loader>
         </collection>

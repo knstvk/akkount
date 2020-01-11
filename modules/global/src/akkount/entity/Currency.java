@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @NamePattern("%s|code")
 @Table(name = "AKK_CURRENCY")
-@Entity(name = "akk$Currency")
+@Entity(name = "akk_Currency")
 public class Currency extends StandardEntity {
     @Length(max = 3)
     @Column(name = "CODE", nullable = false, length = 3)

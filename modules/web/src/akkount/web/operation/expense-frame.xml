@@ -6,7 +6,7 @@
                     class="akkount.entity.Category"
                     view="_minimal">
             <loader>
-                <query><![CDATA[select e from akk$Category e where e.catType = 'E' order by e.name]]></query>
+                <query><![CDATA[select e from akk_Category e where e.catType = 'E' order by e.name]]></query>
             </loader>
         </collection>
         <instance id="operationDc"

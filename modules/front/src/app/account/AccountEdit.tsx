@@ -24,9 +24,9 @@ import {
 } from "@cuba-platform/react";
 
 import "../../app/App.css";
-import { Account } from "../../cuba/entities/akk$Account";
+import { Account } from "../../cuba/entities/akk_Account";
 
-import { Currency } from "../../cuba/entities/akk$Currency";
+import { Currency } from "../../cuba/entities/akk_Currency";
 
 type Props = FormComponentProps & EditorProps;
 

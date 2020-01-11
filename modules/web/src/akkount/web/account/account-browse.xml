@@ -3,7 +3,7 @@
         class="akkount.web.account.AccountBrowse" lookupComponent="accountTable" messagesPack="akkount.web.account">
     <dsContext>
         <collectionDatasource id="accountDs" class="akkount.entity.Account" view="account-with-currency">
-            <query><![CDATA[select e from akk$Account e]]></query>
+            <query><![CDATA[select e from akk_Account e]]></query>
         </collectionDatasource>
     </dsContext>
     <layout spacing="true">

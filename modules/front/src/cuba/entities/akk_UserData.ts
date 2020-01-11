@@ -1,7 +1,7 @@
 import { BaseUuidEntity } from "./base/sys$BaseUuidEntity";
 import { User } from "./base/sec$User";
 export class UserData extends BaseUuidEntity {
-  static NAME = "akk$UserData";
+  static NAME = "akk_UserData";
   user?: User | null;
   key?: string | null;
   value?: string | null;

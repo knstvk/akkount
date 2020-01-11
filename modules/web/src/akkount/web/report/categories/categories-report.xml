@@ -8,21 +8,21 @@
                               class="akkount.entity.CategoryAmount"
                               datasourceClass="akkount.web.report.categories.CategoryAmountDatasource">
             <query>
-                <![CDATA[select e from akk$Category e]]>
+                <![CDATA[select e from akk_Category e]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="ds2"
                               class="akkount.entity.CategoryAmount"
                               datasourceClass="akkount.web.report.categories.CategoryAmountDatasource">
             <query>
-                <![CDATA[select e from akk$Category e]]>
+                <![CDATA[select e from akk_Category e]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="currenciesDs"
                               class="akkount.entity.Currency"
                               view="_minimal">
             <query>
-                <![CDATA[select e from akk$Currency e]]>
+                <![CDATA[select e from akk_Currency e]]>
             </query>
         </collectionDatasource>
     </dsContext>

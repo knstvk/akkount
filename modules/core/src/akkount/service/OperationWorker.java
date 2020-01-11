@@ -142,7 +142,7 @@ public class OperationWorker {
 
     private List<Balance> getBalanceRecords(Date opDate, Id<Account, UUID> accId) {
         return tdm.load(Balance.class)
-                .query("select b from akk$Balance b " +
+                .query("select b from akk_Balance b " +
                         "where b.account.id = :accountId and b.balanceDate > :balanceDate order by b.balanceDate")
                 .parameter("accountId", accId.getValue())
                 .parameter("balanceDate", opDate)
@@ -151,7 +151,7 @@ public class OperationWorker {
 
     private BigDecimal previousBalanceAmount(Account account, Date opDate) {
         Optional<Balance> optBalance = tdm.load(Balance.class)
-                .query("select b from akk$Balance b " +
+                .query("select b from akk_Balance b " +
                         "where b.account.id = :accountId and b.balanceDate <= :balanceDate order by b.balanceDate desc")
                 .parameter("accountId", account.getId())
                 .parameter("balanceDate", opDate)

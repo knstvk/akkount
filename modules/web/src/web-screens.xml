@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
-    <screen id="akk$Category.edit"
+    <screen id="akk_Category.edit"
             template="/akkount/web/category/category-edit.xml"/>
-    <screen id="akk$Account.lookup"
+    <screen id="akk_Account.lookup"
             template="/akkount/web/account/account-browse.xml"/>
-    <screen id="akk$Account.edit"
+    <screen id="akk_Account.edit"
             template="/akkount/web/account/account-edit.xml"/>
     <screen id="categories-report"
             template="akkount/web/report/categories/categories-report.xml"/>

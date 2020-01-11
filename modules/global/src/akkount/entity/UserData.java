@@ -12,7 +12,7 @@ import com.haulmont.cuba.core.entity.Creatable;
 import java.util.Date;
 
 @Table(name = "AKK_USER_DATA")
-@Entity(name = "akk$UserData")
+@Entity(name = "akk_UserData")
 public class UserData extends BaseUuidEntity implements Creatable {
     private static final long serialVersionUID = 3110000356480013115L;
 

@@ -35,7 +35,7 @@ public class PortalServiceBean implements PortalService {
     public Balance getBalance() {
         Balance result = new Balance();
         List<Account> accounts = dataManager.load(Account.class)
-                .query("select a from akk$Account a where a.active = true order by a.name")
+                .query("select a from akk_Account a where a.active = true order by a.name")
                 .list();
         if (accounts.size() > 0) {
             DecimalFormat format = new DecimalFormat("#,###");

@@ -8,7 +8,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 
 @NamePattern("%s|name")
 @Table(name = "AKK_CATEGORY")
-@Entity(name = "akk$Category")
+@Entity(name = "akk_Category")
 public class Category extends StandardEntity {
     @Column(name = "NAME", nullable = false, length = 50)
     protected String name;
