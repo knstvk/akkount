@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editCaption"
-        class="akkount.web.account.AccountEdit"
-        datasource="accountDs"
         messagesPack="akkount.web.account">
-    <dsContext>
-        <datasource id="accountDs"
+    <data>
+        <instance id="accountDc"
                     class="akkount.entity.Account"
-                    view="account-with-currency"/>
-        <collectionDatasource id="currenciesDs"
-                              class="akkount.entity.Currency"
-                              view="_minimal">
-            <query>
-                <![CDATA[select e from akk_Currency e order by e.code]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
+                    view="account-with-currency">
+            <loader/>
+        </instance>
+        <collection id="currenciesDc"
+                    class="akkount.entity.Currency"
+                    view="_minimal">
+            <loader>
+                <query>
+                    <![CDATA[select e from akk_Currency e order by e.code]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <dialogMode forceDialog="true"
                 width="AUTO"/>
     <layout spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="accountDs">
-            <field id="name"
-                   width="250px"/>
-            <field id="description"
-                   width="250px"/>
-            <field id="currency"
-                   optionsDatasource="currenciesDs"
-                   width="250px"/>
-            <field id="active"
-                   width="250px"/>
-            <field id="includeInTotal"
-                   width="250px"/>
-        </fieldGroup>
-        <frame id="windowActions"
-               align="TOP_CENTER"
-               screen="editWindowActions"
-               width="AUTO"/>
+        <form id="fieldGroup"
+                    dataContainer="accountDc">
+            <column width="250px">
+                <field property="name"/>
+                <field property="description"/>
+                <lookupPickerField property="currency"
+                       optionsContainer="currenciesDc">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                    </actions>
+                </lookupPickerField>
+                <field property="active"/>
+                <field property="group"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true" align="TOP_CENTER">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
     </layout>
 </window>

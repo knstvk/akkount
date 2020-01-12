@@ -27,17 +27,17 @@ public class Account extends StandardEntity {
     @Column(name = "ACTIVE")
     protected Boolean active = true;
 
-    @Column(name = "INCLUDE_IN_TOTAL")
-    protected Boolean includeInTotal = true;
+    @Column(name = "GROUP_")
+    protected Integer group;
 
     private static final long serialVersionUID = 1024314820562143050L;
 
-    public void setIncludeInTotal(Boolean includeInTotal) {
-        this.includeInTotal = includeInTotal;
+    public Integer getGroup() {
+        return group;
     }
 
-    public Boolean getIncludeInTotal() {
-        return includeInTotal;
+    public void setGroup(Integer group) {
+        this.group = group;
     }
 
 

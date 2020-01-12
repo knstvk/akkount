@@ -48,7 +48,6 @@ public class SampleDataGenerator implements SampleDataGeneratorMBean {
 
     private class Context {
 
-        Currency usdCurrency;
         Currency rubCurrency;
         Currency eurCurrency;
 
@@ -64,8 +63,7 @@ public class SampleDataGenerator implements SampleDataGeneratorMBean {
 
     public SampleDataGenerator() {
         currencyRates.put("rub", BigDecimal.ONE);
-        currencyRates.put("usd", new BigDecimal("30"));
-        currencyRates.put("eur", new BigDecimal("40"));
+        currencyRates.put("eur", new BigDecimal("70"));
     }
 
     @Override
@@ -104,6 +102,8 @@ public class SampleDataGenerator implements SampleDataGeneratorMBean {
             cleanupTable("AKK_CATEGORY");
             cleanupTable("AKK_CURRENCY");
 
+            events.publish(new BalanceChangedEvent(this));
+
             return "Done";
         } catch (Throwable e) {
             log.error("Error", e);
@@ -125,12 +125,6 @@ public class SampleDataGenerator implements SampleDataGeneratorMBean {
             context.rubCurrency = currency;
 
             currency = metadata.create(Currency.class);
-            currency.setCode("usd");
-            currency.setName("US Dollars");
-            em.persist(currency);
-            context.usdCurrency = currency;
-
-            currency = metadata.create(Currency.class);
             currency.setCode("eur");
             currency.setName("Euro");
             em.persist(currency);
@@ -145,30 +139,28 @@ public class SampleDataGenerator implements SampleDataGeneratorMBean {
             account = metadata.create(Account.class);
             account.setName("Credit card");
             account.setCurrency(context.rubCurrency);
+            account.setGroup(1);
             em.persist(account);
             context.accounts.add(account);
 
             account = metadata.create(Account.class);
             account.setName("Cash");
             account.setCurrency(context.rubCurrency);
+            account.setGroup(1);
             em.persist(account);
             context.accounts.add(account);
 
             account = metadata.create(Account.class);
             account.setName("Deposit");
             account.setCurrency(context.rubCurrency);
-            em.persist(account);
-            context.accounts.add(account);
-
-            account = metadata.create(Account.class);
-            account.setName("Deposit USD");
-            account.setCurrency(context.usdCurrency);
+            account.setGroup(2);
             em.persist(account);
             context.accounts.add(account);
 
             account = metadata.create(Account.class);
             account.setName("Deposit EUR");
             account.setCurrency(context.eurCurrency);
+            account.setGroup(2);
             em.persist(account);
             context.accounts.add(account);
 
@@ -236,7 +228,7 @@ public class SampleDataGenerator implements SampleDataGeneratorMBean {
                 Date date = DateUtils.addDays(startDate, i);
 
                 if (i % 7 == 0) {
-                    income(date, context.accounts.get(0), context.salaryCategory, new BigDecimal("16000"));
+                    income(date, context.accounts.get(0), context.salaryCategory, new BigDecimal("100000"));
                 }
                 if (i % 5 == 0) {
                     income(date, context.accounts.get(1), context.otherIncomeCategory, new BigDecimal(1000 + Math.round(Math.random() * 5000)));

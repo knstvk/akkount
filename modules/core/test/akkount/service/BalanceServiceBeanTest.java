@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -28,10 +29,14 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
     }
 
     private UUID income(Date day, BigDecimal amount) {
+        return income(day, amount, account1Id);
+    }
+
+    private UUID income(Date day, BigDecimal amount, UUID accountId) {
         Operation operation = cont.metadata().create(Operation.class);
         operation.setOpType(OperationType.INCOME);
         operation.setOpDate(day);
-        operation.setAcc2(dataManager.getReference(Account.class, account1Id));
+        operation.setAcc2(dataManager.getReference(Account.class, accountId));
         operation.setAmount2(amount);
         dataManager.commit(operation);
         return operation.getId();
@@ -326,5 +331,24 @@ public class BalanceServiceBeanTest extends AkkountTestCase {
 
         balance = balanceService.getBalance(account1Id, date("2014-04-10"));
         checkEquality(new BigDecimal("30"), balance);
+    }
+
+    @Test
+    public void testGetBalanceData() {
+        BalanceService balanceService = AppBeans.get(BalanceService.class);
+
+        income(date("2020-01-01"), BigDecimal.ONE, account1Id);
+        income(date("2020-01-02"), BigDecimal.TEN, account2Id);
+
+        List<BalanceData> balanceData = balanceService.getBalanceData(date("2020-01-03"));
+        assertEquals(2, balanceData.size());
+
+        List<BalanceData.AccountBalance> totals1 = balanceData.get(0).totals;
+        assertEquals(1, totals1.size());
+        assertEquals(0, BigDecimal.ONE.compareTo(totals1.get(0).amount));
+
+        List<BalanceData.AccountBalance> totals2 = balanceData.get(1).totals;
+        assertEquals(1, totals2.size());
+        assertEquals(0, BigDecimal.TEN.compareTo(totals2.get(0).amount));
     }
 }

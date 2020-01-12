@@ -54,7 +54,7 @@ class AccountEditComponent extends React.Component<
     "description",
     "currency",
     "active",
-    "includeInTotal"
+    "group"
   ];
 
   @observable
@@ -168,12 +168,10 @@ class AccountEditComponent extends React.Component<
 
           <Field
             entityName={Account.NAME}
-            propertyName="includeInTotal"
+            propertyName="group"
             form={this.props.form}
             formItemOpts={{ style: { marginBottom: "12px" } }}
-            getFieldDecoratorOpts={{
-              valuePropName: "checked"
-            }}
+            getFieldDecoratorOpts={{}}
           />
 
           {this.globalErrors.length > 0 && (

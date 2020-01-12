@@ -10,10 +10,11 @@
               spacing="true"
               stylename="c-app-menubar c-inverse-header"
               width="100%">
-            <embedded id="logoImage"
+            <image id="logoImage"
                       align="MIDDLE_LEFT"
-                      stylename="c-app-icon"
-                      type="IMAGE"/>
+                      stylename="c-app-icon">
+                <theme path="branding/app-icon-menu.png"/>
+            </image>
             <main:menu id="mainMenu"
                        align="MIDDLE_LEFT"/>
             <main:userIndicator id="userIndicator"
@@ -35,15 +36,12 @@
                orientation="horizontal"
                pos="20"
                width="100%">
-            <vbox expand="foldersPane"
+            <vbox expand="balanceLayout"
                   height="100%"
                   stylename="c-folders-pane">
                 <vbox id="balanceLayout"
                       margin="true">
-                    <label stylename="c-folders-pane-caption"
-                           value="Balance"/>
                 </vbox>
-                <main:foldersPane id="foldersPane"/>
             </vbox>
             <main:workArea id="workArea"
                            height="100%"

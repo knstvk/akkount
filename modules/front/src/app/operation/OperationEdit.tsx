@@ -42,11 +42,11 @@ class OperationEditComponent extends React.Component<Props & WrappedComponentPro
     loadImmediately: false
   });
 
-  acc1sDc = collection<Account>(Account.NAME, { view: "_minimal" });
+  acc1sDc = collection<Account>(Account.NAME, { view: "_minimal", sort: "name" });
 
-  acc2sDc = collection<Account>(Account.NAME, { view: "_minimal" });
+  acc2sDc = collection<Account>(Account.NAME, { view: "_minimal", sort: "name" });
 
-  categorysDc = collection<Category>(Category.NAME, { view: "_minimal" });
+  categorysDc = collection<Category>(Category.NAME, { view: "_minimal", sort: "name" });
 
   @observable
   updated = false;

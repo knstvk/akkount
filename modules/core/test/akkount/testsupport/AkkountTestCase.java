@@ -49,6 +49,7 @@ public class AkkountTestCase {
         Account account2 = cont.metadata().create(Account.class);
         account2.setCurrency(currency1);
         account2.setName("TestAccount2");
+        account2.setGroup(1);
         dataManager.commit(account2);
         account2Id = account2.getId();
     }

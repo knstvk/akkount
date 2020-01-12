@@ -8,6 +8,7 @@ export class Account extends StandardEntity {
   currencyCode?: string | null;
   active?: boolean | null;
   includeInTotal?: boolean | null;
+  group?: number | null;
 }
 export type AccountViewName =
   | "_minimal"
@@ -25,6 +26,7 @@ export type AccountView<V extends AccountViewName> = V extends "_minimal"
       | "currencyCode"
       | "active"
       | "includeInTotal"
+      | "group"
     >
   : V extends "_base"
   ? Pick<
@@ -35,6 +37,7 @@ export type AccountView<V extends AccountViewName> = V extends "_minimal"
       | "currencyCode"
       | "active"
       | "includeInTotal"
+      | "group"
     >
   : V extends "account-with-currency"
   ? Pick<
@@ -45,6 +48,7 @@ export type AccountView<V extends AccountViewName> = V extends "_minimal"
       | "currencyCode"
       | "active"
       | "includeInTotal"
+      | "group"
       | "currency"
     >
   : never;

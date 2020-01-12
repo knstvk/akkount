@@ -27,7 +27,7 @@ class AccountListComponent extends React.Component<MainStoreInjected & WrappedCo
     "description",
     "currency",
     "active",
-    "includeInTotal"
+    "group"
   ];
 
   showDeletionDialog = (e: SerializedEntity<Account>) => {

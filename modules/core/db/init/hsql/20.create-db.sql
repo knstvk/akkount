@@ -1,4 +1,5 @@
--- begin AKK_ACCOUNTalter table AKK_ACCOUNT add constraint FK_AKK_ACCOUNT_CURRENCY_ID foreign key (CURRENCY_ID) references AKK_CURRENCY(ID)^
+-- begin AKK_ACCOUNT
+alter table AKK_ACCOUNT add constraint FK_AKK_ACCOUNT_CURRENCY foreign key (CURRENCY_ID) references AKK_CURRENCY(ID)^
 create unique index IDX_AKK_ACCOUNT_UNIQ_NAME on AKK_ACCOUNT (NAME) ^
 create index IDX_AKK_ACCOUNT_CURRENCY on AKK_ACCOUNT (CURRENCY_ID)^
 -- end AKK_ACCOUNT

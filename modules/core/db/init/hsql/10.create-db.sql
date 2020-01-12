@@ -1,8 +1,9 @@
--- begin AKK_ACCOUNTcreate table AKK_ACCOUNT (
+-- begin AKK_ACCOUNT
+create table AKK_ACCOUNT (
     ID varchar(36) not null,
+    VERSION integer not null,
     CREATE_TS timestamp,
     CREATED_BY varchar(50),
-    VERSION integer,
     UPDATE_TS timestamp,
     UPDATED_BY varchar(50),
     DELETE_TS timestamp,
@@ -13,10 +14,11 @@
     CURRENCY_ID varchar(36) not null,
     CURRENCY_CODE varchar(3) not null,
     ACTIVE boolean,
-    INCLUDE_IN_TOTAL boolean,
+    GROUP_ integer,
     --
     primary key (ID)
-)^-- end AKK_ACCOUNT
+)^
+-- end AKK_ACCOUNT
 -- begin AKK_CURRENCY
 create table AKK_CURRENCY (
     ID varchar(36) not null,

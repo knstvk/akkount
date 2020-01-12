@@ -2,12 +2,21 @@ package akkount.web.account;
 
 import akkount.entity.Account;
 import akkount.service.BalanceService;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.Dialogs;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.DialogAction;
+import com.haulmont.cuba.gui.components.Table;
+import com.haulmont.cuba.gui.screen.*;
 
 import javax.inject.Inject;
 import java.util.Set;
 
-public class AccountBrowse extends AbstractLookup {
+@UiController("akk_Account.lookup")
+@UiDescriptor("account-browse.xml")
+@LookupComponent("accountTable")
+@LoadDataBeforeShow
+public class AccountBrowse extends StandardLookup<Account> {
 
     @Inject
     private Table<Account> accountTable;
@@ -15,14 +24,20 @@ public class AccountBrowse extends AbstractLookup {
     @Inject
     private BalanceService balanceService;
 
-    public void onRecalcBalance(Component source) {
-        final Set<Account> selected = accountTable.getSelected();
+    @Inject
+    private Dialogs dialogs;
+
+    @Inject
+    private MessageBundle messageBundle;
+
+    @Subscribe("accountTable.recalcBalance")
+    public void onAccountTableRecalcBalance(Action.ActionPerformedEvent event) {
+        Set<Account> selected = accountTable.getSelected();
         if (!selected.isEmpty()) {
-            showOptionDialog(
-                    getMessage("recalcBalance.title"),
-                    getMessage("recalcBalance.msg"),
-                    MessageType.CONFIRMATION,
-                    new Action[] {
+            dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                    .withCaption(messageBundle.getMessage("recalcBalance.title"))
+                    .withMessage(messageBundle.getMessage("recalcBalance.msg"))
+                    .withActions(
                             new DialogAction(DialogAction.Type.OK) {
                                 @Override
                                 public void actionPerform(Component component) {
@@ -32,8 +47,8 @@ public class AccountBrowse extends AbstractLookup {
                                 }
                             },
                             new DialogAction(DialogAction.Type.CANCEL)
-                    }
-            );
+                    )
+                    .show();
         }
     }
 }
