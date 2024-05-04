@@ -4,6 +4,8 @@
 
 A simple personal finance application built on [CUBA Platform](https://www.cuba-platform.com).
 
+**The modern version of this application is located in the [akkount-jmix](https://github.com/knstvk/akkount-jmix) repository.**
+
 ![generic-ui](https://github.com/knstvk/akkount/blob/master/img/generic-ui.png)
 
 <p align="center">
